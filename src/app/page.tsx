@@ -1,8 +1,6 @@
 import { ProductsRecord } from "@/api/api_types";
 import { pocketbase } from "@/api/pocketbase";
 import ProductCard from "@/components/catalog/ProductCard";
-import { Card } from "@/components/ui/card";
-import Image from "next/image";
 
 export default async function Home() {
   const pb = await pocketbase();
