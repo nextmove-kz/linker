@@ -8,7 +8,7 @@ export default function Branding({ title }: { title: string }) {
         <ArrowLeft className="" />
       </Link>
       <span className="max-w-full text-center flex-1">{title}</span>
-      <ShoppingCart className="w-12" />
+      <ShoppingCart className="w-12 cursor-pointer" />
     </div>
   );
 }

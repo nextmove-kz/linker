@@ -1,26 +1,28 @@
+"use client";
 import Branding from "@/components/branding";
+import AddressField from "@/components/formFields/addressField";
+import PhoneField from "@/components/formFields/phoneField";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function FormPage() {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const formDataJson = Object.fromEntries(formData);
+    console.log(formDataJson);
+  };
+
   return (
-    <div className="flex flex-col gap-4 w-[400px] p-2 mx-auto">
+    <form
+      className="flex flex-col gap-4 w-[400px] p-2 mx-auto"
+      onSubmit={onSubmit}
+    >
       <Branding title="Linkin Burger" />
-      <div className="flex flex-col gap-2">
-        <p>Адрес</p>
-        <Input placeholder="Улица" />
-        <div className="flex gap-2">
-          <Input placeholder="Дом" />
-          <Input placeholder="Квартира" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <p>Телефон</p>
-        <Input placeholder="+7 (___) ___ - __ - __" />
-      </div>
+      <AddressField />
+      <PhoneField />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>
-    </div>
+    </form>
   );
 }
