@@ -13,7 +13,10 @@ export default function Card({ product }: { product: ProductsRecord }) {
             {product.description ? product.description : "Без описания"}
           </p>
         </div>
-        <Button className="w-24" variant={"outline"}>
+        <Button
+          className="w-24 border-green-500 text-green-500"
+          variant={"outline"}
+        >
           {product.price} ₸
         </Button>
       </div>
