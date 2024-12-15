@@ -12,6 +12,7 @@ export enum Collections {
 	Otps = "_otps",
 	Superusers = "_superusers",
 	Products = "products",
+	ShoppingBasket = "shoppingBasket",
 	Users = "users",
 }
 
@@ -97,6 +98,17 @@ export type ProductsRecord = {
 	updated?: IsoDateString
 }
 
+export type ShoppingBasketRecord = {
+	category_name?: string
+	created?: IsoDateString
+	description?: string
+	id: string
+	photo?: string
+	price?: number
+	title: string
+	updated?: IsoDateString
+}
+
 export type UsersRecord = {
 	avatar?: string
 	created?: IsoDateString
@@ -117,6 +129,7 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
+export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -128,6 +141,7 @@ export type CollectionRecords = {
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
 	products: ProductsRecord
+	shoppingBasket: ShoppingBasketRecord
 	users: UsersRecord
 }
 
@@ -138,6 +152,7 @@ export type CollectionResponses = {
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
 	products: ProductsResponse
+	shoppingBasket: ShoppingBasketResponse
 	users: UsersResponse
 }
 
@@ -151,5 +166,6 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
+	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }

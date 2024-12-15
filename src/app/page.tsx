@@ -16,9 +16,9 @@ export default async function Home() {
   return (
     <div className="w-full flex justify-center">
       <div className="w-[400px] flex flex-col">
-        <div className="fixed w-full h-[13%] bg-white  border-b-black border-b">
+        <div className="fixed  h-[13%] bg-white  border-b-black border-b">
           <Branding title="Linkin burger"></Branding>
-          <div className="flex overflow-x-scroll">
+          <div className="flex max-w-[400px] overflow-x-scroll">
             {data.map((category: any) => {
               return (
                 <Link href={`${"#"}${category}`} key={category}>
