@@ -1,6 +1,23 @@
-import { ProductsRecord } from "@/api/api_types";
+"use client";
+import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
+import clientPocketBase from "@/api/client_pb";
+
+//Это не работает
+async function setData({ item }: { item: ShoppingBasketRecord }) {
+  console.log(item);
+  try {
+    const data = await clientPocketBase
+      .collection("shoppingBasket")
+      .create(item);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
 
 export default function Card({ product }: { product: ProductsRecord }) {
   return (
@@ -13,7 +30,13 @@ export default function Card({ product }: { product: ProductsRecord }) {
             {product.description ? product.description : "Без описания"}
           </p>
         </div>
-        <Button className="w-24" variant={"outline"}>
+        <Button
+          onClick={() => {
+            setData({ item: product });
+          }}
+          className="w-24 border-green-500 text-green-500"
+          variant={"outline"}
+        >
           {product.price} ₸
         </Button>
       </div>
