@@ -87,17 +87,36 @@ const ComingSoonPage: React.FC = () => {
       formData.append("email", email);
       const result = await subscribeEmail(formData);
 
-      toast(result.success ? "✨ Спасибо!" : "❌ Ошибка", {
-        description: result.success
-          ? "Мы сообщим вам о запуске Linker.kz"
-          : result.error,
-      });
-
       if (result.success) {
+        toast.custom(
+          (_t) => (
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-4 text-white">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Send className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-lg">Спасибо за подписку! ✨</p>
+                  <p className="text-blue-100 text-sm">
+                    Мы сообщим когда запустим Linker.kz
+                  </p>
+                </div>
+              </div>
+            </div>
+          ),
+          {
+            duration: 5000,
+            position: "top-center",
+          },
+        );
         setEmail("");
+      } else {
+        toast.error("Ошибка", {
+          description: result.error,
+        });
       }
     } catch (error) {
-      toast("❌ Ошибка", {
+      toast.error("Ошибка", {
         description: "Что-то пошло не так",
       });
     } finally {
