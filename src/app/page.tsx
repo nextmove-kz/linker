@@ -38,12 +38,18 @@ const ComingSoonPage: React.FC = () => {
   const [currentBusinessIndex, setCurrentBusinessIndex] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pauseErrors, setPauseErrors] = useState(false);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     const interval = setInterval(() => {
       if (messageCount < 15) {
-        if (messageCount >= 12 && messageCount <= 14 && Math.random() < 0.2) {
+        if (
+          messageCount >= 12 &&
+          messageCount <= 14 &&
+          Math.random() < 0.2 &&
+          !pauseErrors
+        ) {
           const errorMessage =
             errorMessages[Math.floor(Math.random() * errorMessages.length)];
           toast(`❌ Ошибка ${businesses[currentBusinessIndex].type}а`, {
@@ -87,17 +93,39 @@ const ComingSoonPage: React.FC = () => {
       formData.append("email", email);
       const result = await subscribeEmail(formData);
 
-      toast(result.success ? "✨ Спасибо!" : "❌ Ошибка", {
-        description: result.success
-          ? "Мы сообщим вам о запуске Linker.kz"
-          : result.error,
-      });
-
       if (result.success) {
+        toast.dismiss();
+        setPauseErrors(true);
+        setTimeout(() => setPauseErrors(false), 5000);
+
+        toast.custom(
+          (_t) => (
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-4 text-white">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Send className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-lg">Спасибо за подписку! ✨</p>
+                  <p className="text-blue-100 text-sm">
+                    Мы сообщим когда запустим Linker.kz
+                  </p>
+                </div>
+              </div>
+            </div>
+          ),
+          {
+            duration: 5000,
+          },
+        );
         setEmail("");
+      } else {
+        toast.error("Ошибка", {
+          description: result.error,
+        });
       }
     } catch (error) {
-      toast("❌ Ошибка", {
+      toast.error("Ошибка", {
         description: "Что-то пошло не так",
       });
     } finally {
@@ -135,23 +163,24 @@ const ComingSoonPage: React.FC = () => {
               {currentBusiness.item}...
             </div>
           </div>
-
-          {showMessage && messageCount > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {Array.from({ length: messageCount }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-gray-100 rounded-lg p-2 text-sm animate-fade-in"
-                >
-                  <MessageSquare className="w-4 h-4 text-gray-500" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-1 text-muted-foreground">
-              Нет сообщений! Занимается улучшением продукта!
-            </div>
-          )}
+          <div className="xs:h-16 h-24 md:h-8 flex items-center">
+            {showMessage && messageCount > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: messageCount }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-gray-100 rounded-lg p-2 text-sm animate-fade-in"
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-500" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-1 text-muted-foreground">
+                Нет сообщений! Занимается улучшением продукта!
+              </div>
+            )}
+          </div>
 
           <div className="text-center space-y-2">
             <div className="text-sm text-emerald-700">
