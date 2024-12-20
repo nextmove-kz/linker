@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { MessageSquare, Clock, Send, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { subscribeEmail } from "@/api/subscribe";
+import { toast } from "sonner";
 
 interface Business {
   type: string;
@@ -38,7 +38,6 @@ const ComingSoonPage: React.FC = () => {
   const [currentBusinessIndex, setCurrentBusinessIndex] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -47,8 +46,7 @@ const ComingSoonPage: React.FC = () => {
         if (messageCount >= 12 && messageCount <= 14 && Math.random() < 0.2) {
           const errorMessage =
             errorMessages[Math.floor(Math.random() * errorMessages.length)];
-          toast({
-            title: `❌ Ошибка ${businesses[currentBusinessIndex].type}а`,
+          toast(`❌ Ошибка ${businesses[currentBusinessIndex].type}а`, {
             description: errorMessage,
           });
         }
@@ -89,8 +87,7 @@ const ComingSoonPage: React.FC = () => {
       formData.append("email", email);
       const result = await subscribeEmail(formData);
 
-      toast({
-        title: result.success ? "✨ Спасибо!" : "❌ Ошибка",
+      toast(result.success ? "✨ Спасибо!" : "❌ Ошибка", {
         description: result.success
           ? "Мы сообщим вам о запуске Linker.kz"
           : result.error,
@@ -100,8 +97,7 @@ const ComingSoonPage: React.FC = () => {
         setEmail("");
       }
     } catch (error) {
-      toast({
-        title: "❌ Ошибка",
+      toast("❌ Ошибка", {
         description: "Что-то пошло не так",
       });
     } finally {
