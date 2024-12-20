@@ -37,6 +37,7 @@ const ComingSoonPage: React.FC = () => {
   const [showMessage, setShowMessage] = useState<boolean>(true);
   const [currentBusinessIndex, setCurrentBusinessIndex] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -74,22 +75,41 @@ const ComingSoonPage: React.FC = () => {
     };
   }, [messageCount, currentBusinessIndex, toast]);
 
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const result = await subscribeEmail(formData);
+    if (!email || !isValidEmail(email)) return;
 
-    toast({
-      title: result.success ? "✨ Спасибо!" : "❌ Ошибка",
-      description: result.success
-        ? "Мы сообщим вам о запуске Linker.kz"
-        : result.error,
-    });
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      const result = await subscribeEmail(formData);
 
-    if (result.success) {
-      setEmail("");
+      toast({
+        title: result.success ? "✨ Спасибо!" : "❌ Ошибка",
+        description: result.success
+          ? "Мы сообщим вам о запуске Linker.kz"
+          : result.error,
+      });
+
+      if (result.success) {
+        setEmail("");
+      }
+    } catch (error) {
+      toast({
+        title: "❌ Ошибка",
+        description: "Что-то пошло не так",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  const isEmailValid = email.length > 0 && isValidEmail(email);
 
   const formatTimeWasted = (totalMessages: number): string => {
     const totalMinutes = totalMessages * TIME_PER_MESSAGE;
@@ -187,10 +207,25 @@ const ComingSoonPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1"
                 name="email"
+                disabled={isSubmitting}
               />
-              <Button type="submit" className="w-full sm:w-auto" size="lg">
-                <Send className="w-4 h-4 mr-2" />
-                Подписаться
+              <Button
+                type="submit"
+                className="w-full sm:w-auto"
+                size="lg"
+                disabled={!isEmailValid || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Отправка...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Подписаться
+                  </>
+                )}
               </Button>
             </div>
           </form>
