@@ -13,12 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import { ShoppingBasketRecord } from "@/api/api_types";
 
-// Это не работает
 const getData = async () => {
   const records = await clientPocketBase
     .collection("shoppingBasket")
     .getFullList<ShoppingBasketRecord>();
-  console.log(records);
   return records;
 };
 
