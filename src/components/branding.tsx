@@ -31,11 +31,7 @@ export default function Branding({ title }: { title: string }) {
       <span className="max-w-full text-center flex-1">{title}</span>
 
       <Dialog>
-        <DialogTrigger
-          onClick={() => {
-            getData();
-          }}
-        >
+        <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
         </DialogTrigger>
         <DialogContent>
