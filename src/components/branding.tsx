@@ -24,23 +24,23 @@ const getData = async () => {
 
 export default function Branding({ title }: { title: string }) {
   return (
-    <div className="flex items-center justify-center gap-2 text-3xl font-semibold p-4">
-      <Link href="/">
-        <ArrowLeft className="" />
-      </Link>
-      <span className="max-w-full text-center flex-1">{title}</span>
+    <Dialog>
+      <div className="flex items-center justify-center gap-2 text-3xl font-semibold p-4">
+        <Link href="/">
+          <ArrowLeft />
+        </Link>
+        <span className="max-w-full text-center flex-1">{title}</span>
 
-      <Dialog>
         <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle></DialogTitle>
-            <DialogDescription></DialogDescription>
+            <DialogTitle>Корзина</DialogTitle>
+            Ваша корзина пуста
           </DialogHeader>
         </DialogContent>
-      </Dialog>
-    </div>
+      </div>
+    </Dialog>
   );
 }

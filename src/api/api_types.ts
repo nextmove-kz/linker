@@ -100,13 +100,9 @@ export type ProductsRecord = {
 }
 
 export type ShoppingBasketRecord = {
-	category_name?: string
 	created?: IsoDateString
-	description?: string
 	id: string
-	photo?: string
-	price?: number
-	title: string
+	product?: RecordIdString
 	updated?: IsoDateString
 }
 

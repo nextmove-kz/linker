@@ -4,19 +4,9 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import clientPocketBase from "@/api/client_pb";
 
-//Это не работает
-async function setData({ item }: { item: ShoppingBasketRecord }) {
-  console.log(item);
-  try {
-    const data = await clientPocketBase
-      .collection("shoppingBasket")
-      .create(item);
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
+function setData(productId: string) {
+  const item: ShoppingBasketRecord = { product: productId, id: "" };
+  clientPocketBase.collection("shoppingBasket").create(item);
 }
 
 export default function Card({ product }: { product: ProductsRecord }) {
@@ -32,9 +22,9 @@ export default function Card({ product }: { product: ProductsRecord }) {
         </div>
         <Button
           onClick={() => {
-            setData({ item: product });
+            setData(product.id);
           }}
-          className="w-24 border-green-500 text-green-500"
+          className="w-24 border-primary text-primary"
           variant={"outline"}
         >
           {product.price} ₸
