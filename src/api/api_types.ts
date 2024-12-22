@@ -13,6 +13,7 @@ export enum Collections {
 	Superusers = "_superusers",
 	Products = "products",
 	ShoppingBasket = "shoppingBasket",
+	Subscribers = "subscribers",
 	Users = "users",
 }
 
@@ -109,6 +110,13 @@ export type ShoppingBasketRecord = {
 	updated?: IsoDateString
 }
 
+export type SubscribersRecord = {
+	created?: IsoDateString
+	email: string
+	id: string
+	updated?: IsoDateString
+}
+
 export type UsersRecord = {
 	avatar?: string
 	created?: IsoDateString
@@ -130,6 +138,7 @@ export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemF
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
 export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
+export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -142,6 +151,7 @@ export type CollectionRecords = {
 	_superusers: SuperusersRecord
 	products: ProductsRecord
 	shoppingBasket: ShoppingBasketRecord
+	subscribers: SubscribersRecord
 	users: UsersRecord
 }
 
@@ -153,6 +163,7 @@ export type CollectionResponses = {
 	_superusers: SuperusersResponse
 	products: ProductsResponse
 	shoppingBasket: ShoppingBasketResponse
+	subscribers: SubscribersResponse
 	users: UsersResponse
 }
 
@@ -167,5 +178,6 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
 	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
+	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }
