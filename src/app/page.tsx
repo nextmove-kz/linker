@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { MessageSquare, Clock, Send, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { subscribeEmail } from "@/api/subscribe";
+import { toast } from "sonner";
 
 interface Business {
   type: string;
@@ -37,17 +37,22 @@ const ComingSoonPage: React.FC = () => {
   const [showMessage, setShowMessage] = useState<boolean>(true);
   const [currentBusinessIndex, setCurrentBusinessIndex] = useState<number>(0);
   const [email, setEmail] = useState<string>("");
-  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pauseErrors, setPauseErrors] = useState(false);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     const interval = setInterval(() => {
       if (messageCount < 15) {
-        if (messageCount >= 12 && messageCount <= 14 && Math.random() < 0.2) {
+        if (
+          messageCount >= 12 &&
+          messageCount <= 14 &&
+          Math.random() < 0.2 &&
+          !pauseErrors
+        ) {
           const errorMessage =
             errorMessages[Math.floor(Math.random() * errorMessages.length)];
-          toast({
-            title: `❌ Ошибка ${businesses[currentBusinessIndex].type}а`,
+          toast(`❌ Ошибка ${businesses[currentBusinessIndex].type}а`, {
             description: errorMessage,
           });
         }
@@ -74,22 +79,61 @@ const ComingSoonPage: React.FC = () => {
     };
   }, [messageCount, currentBusinessIndex, toast]);
 
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const result = await subscribeEmail(formData);
+    if (!email || !isValidEmail(email)) return;
 
-    toast({
-      title: result.success ? "✨ Спасибо!" : "❌ Ошибка",
-      description: result.success
-        ? "Мы сообщим вам о запуске Linker.kz"
-        : result.error,
-    });
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+      const result = await subscribeEmail(formData);
 
-    if (result.success) {
-      setEmail("");
+      if (result.success) {
+        toast.dismiss();
+        setPauseErrors(true);
+        setTimeout(() => setPauseErrors(false), 5000);
+
+        toast.custom(
+          (_t) => (
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-4 text-white">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 rounded-full p-2">
+                  <Send className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium text-lg">Спасибо за подписку! ✨</p>
+                  <p className="text-blue-100 text-sm">
+                    Мы сообщим когда запустим Linker.kz
+                  </p>
+                </div>
+              </div>
+            </div>
+          ),
+          {
+            duration: 5000,
+          },
+        );
+        setEmail("");
+      } else {
+        toast.error("Ошибка", {
+          description: result.error,
+        });
+      }
+    } catch (error) {
+      toast.error("Ошибка", {
+        description: "Что-то пошло не так",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  const isEmailValid = email.length > 0 && isValidEmail(email);
 
   const formatTimeWasted = (totalMessages: number): string => {
     const totalMinutes = totalMessages * TIME_PER_MESSAGE;
@@ -119,23 +163,24 @@ const ComingSoonPage: React.FC = () => {
               {currentBusiness.item}...
             </div>
           </div>
-
-          {showMessage && messageCount > 0 ? (
-            <div className="flex flex-wrap gap-2">
-              {Array.from({ length: messageCount }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-gray-100 rounded-lg p-2 text-sm animate-fade-in"
-                >
-                  <MessageSquare className="w-4 h-4 text-gray-500" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-1 text-muted-foreground">
-              Нет сообщений! Занимается улучшением продукта!
-            </div>
-          )}
+          <div className="xs:h-16 h-24 md:h-8 flex items-center">
+            {showMessage && messageCount > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: messageCount }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-gray-100 rounded-lg p-2 text-sm animate-fade-in"
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-500" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-1 text-muted-foreground">
+                Нет сообщений! Занимается улучшением продукта!
+              </div>
+            )}
+          </div>
 
           <div className="text-center space-y-2">
             <div className="text-sm text-emerald-700">
@@ -187,10 +232,25 @@ const ComingSoonPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1"
                 name="email"
+                disabled={isSubmitting}
               />
-              <Button type="submit" className="w-full sm:w-auto" size="lg">
-                <Send className="w-4 h-4 mr-2" />
-                Подписаться
+              <Button
+                type="submit"
+                className="w-full sm:w-auto"
+                size="lg"
+                disabled={!isEmailValid || isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Отправка...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Подписаться
+                  </>
+                )}
               </Button>
             </div>
           </form>
