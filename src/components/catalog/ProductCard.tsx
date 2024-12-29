@@ -1,15 +1,34 @@
 "use client";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
+import { ProductsRecord } from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import clientPocketBase from "@/api/client_pb";
+import { useState } from "react";
+import Counter from "./Counter";
 
-function setData(productId: string) {
-  const item: ShoppingBasketRecord = { product: productId, id: "" };
-  clientPocketBase.collection("shoppingBasket").create(item);
-}
+export default function Card({
+  product,
+  initialCount,
+  shoppingId,
+}: {
+  product: ProductsRecord;
+  initialCount: number;
+  shoppingId: any;
+}) {
+  const [count, setCount] = useState(initialCount);
+  const [isActive, setIsActive] = useState(initialCount > 0);
 
-export default function Card({ product }: { product: ProductsRecord }) {
+  const CountChange = (newCount: number) => {
+    setCount(newCount);
+    if (newCount === 0) {
+      setIsActive(false);
+    }
+  };
+
+  const Initial = () => {
+    setIsActive(true);
+    setCount(1);
+  };
+
   return (
     <div className="flex gap-2 items-stretch">
       <ProductImage photo={product.photo} alt={product.title} id={product.id} />
@@ -17,30 +36,39 @@ export default function Card({ product }: { product: ProductsRecord }) {
         <div className="flex flex-col gap-1">
           <p className="text-lg font-bold">{product.title}</p>
           <p className="line-clamp-3 text-sm">
-            {product.description ? product.description : "Без описания"}
+            {product.description || "Без описания"}
           </p>
         </div>
-        <Button
-          onClick={() => {
-            setData(product.id);
-          }}
-          className="w-24 border-primary text-primary"
-          variant={"outline"}
-        >
-          {product.price} ₸
-        </Button>
+        {isActive || count > 0 ? (
+          <Counter
+            initialCount={count}
+            shoppingId={shoppingId}
+            product={product}
+            onCountChange={CountChange}
+          />
+        ) : (
+          <Button
+            onClick={Initial}
+            className="w-24 border-primary text-primary"
+            variant="outline"
+          >
+            {product.price}
+          </Button>
+        )}
       </div>
     </div>
   );
 }
 
-type ImageProps = {
+function ProductImage({
+  photo,
+  alt,
+  id,
+}: {
   photo?: string;
   alt: string;
   id: string;
-};
-
-function ProductImage({ photo, alt, id }: ImageProps) {
+}) {
   if (!photo) {
     return (
       <div className="border rounded w-32 h-32 text-center align-middle flex bg-gray-100">
@@ -48,8 +76,8 @@ function ProductImage({ photo, alt, id }: ImageProps) {
       </div>
     );
   }
+
   const photoUrl = `http://127.0.0.1:8090/api/files/products/${id}/${photo}`;
-  console.log("URL", photoUrl);
 
   return (
     <Image

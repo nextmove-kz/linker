@@ -11,19 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ShoppingBasketRecord } from "@/api/api_types";
-
-const getData = async () => {
-  const records = await clientPocketBase
-    .collection("shoppingBasket")
-    .getFullList<ShoppingBasketRecord>();
-  return records;
-};
+import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
+import ShoppingCard from "./catalog/ShoppingCard";
+import { useState } from "react";
 
 export default function Branding({ title }: { title: string }) {
+  const [data, setData] = useState<ShoppingBasketRecord[]>();
+  const getData = async () => {
+    const records = await clientPocketBase
+      .collection("shoppingBasket")
+      .getFullList<ShoppingBasketRecord>({ expand: "product" });
+    setData(records);
+    return records;
+  };
   return (
     <Dialog>
-      <div className="flex items-center justify-center gap-2 text-3xl font-semibold p-4">
+      <div className="flex mx-auto items-center justify-center gap-2 text-3xl font-semibold p-4">
         <Link href="/">
           <ArrowLeft />
         </Link>
@@ -32,11 +35,23 @@ export default function Branding({ title }: { title: string }) {
         <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="w-[300px]">
           <DialogHeader>
             <DialogTitle>Корзина</DialogTitle>
-            Ваша корзина пуста
           </DialogHeader>
+          {data != undefined && data.length > 0 ? (
+            data.map((record) => {
+              return (
+                <ShoppingCard
+                  key={record.id}
+                  product={record}
+                  initialCount={record.amount}
+                />
+              );
+            })
+          ) : (
+            <p>Нет данных</p>
+          )}
         </DialogContent>
       </div>
     </Dialog>

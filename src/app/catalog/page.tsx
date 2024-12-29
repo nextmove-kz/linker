@@ -1,4 +1,4 @@
-import { ProductsRecord } from "@/api/api_types";
+import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import { pocketbase } from "@/api/pocketbase";
 import Branding from "@/components/branding";
 import ProductCard from "@/components/catalog/ProductCard";
@@ -11,20 +11,28 @@ export default async function Home() {
     .collection("products")
     .getFullList<ProductsRecord>();
 
-  const categorizedProducts = products.reduce(
-    (acc, product) => {
-      const category = getCategory(product);
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(product);
-      return acc;
-    },
-    {} as Record<string, ProductsRecord[]>,
-  );
+  const shoppingRecords = await pb
+    .collection("shoppingBasket")
+    .getFullList<ShoppingBasketRecord>();
+
+  const categorizedProducts = products.reduce((acc, product) => {
+    const category = getCategory(product);
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(product);
+    return acc;
+  }, {} as Record<string, ProductsRecord[]>);
 
   const categories = Object.keys(categorizedProducts);
 
+  const getCount = (productId: any) => {
+    const record = shoppingRecords.find(
+      (record) => record.product === productId
+    );
+    if (record === undefined) return { amount: 0, shoppingId: 0 };
+    return { amount: record.amount, shoppingId: record.id };
+  };
   return (
     <div className="w-full flex justify-center">
       <div className="w-[400px] flex flex-col">
@@ -46,9 +54,17 @@ export default async function Home() {
           {Object.entries(categorizedProducts).map(([category, products]) => (
             <div key={category} id={category} className="flex flex-col gap-2">
               <h2 className="font-semibold mt-2">{category}</h2>
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {products.map((product) => {
+                const count = getCount(product.id);
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    initialCount={count.amount}
+                    shoppingId={count.shoppingId}
+                  />
+                );
+              })}
             </div>
           ))}
         </div>
