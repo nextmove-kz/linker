@@ -1,11 +1,12 @@
+import { pocketbase } from "@/api/pocketbase";
 import Branding from "@/components/branding";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function FormPage() {
+export default async function FormPage() {
   return (
     <div className="flex flex-col gap-4 w-[400px] p-2 mx-auto">
-      <Branding title="Linkin Burger" />
+      <Branding/>
       <div className="flex flex-col gap-2">
         <p>Адрес</p>
         <Input placeholder="Улица" />

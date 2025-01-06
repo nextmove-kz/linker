@@ -11,26 +11,48 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
+import { BusinessRecord, ProductsRecord, ShoppingBasketRecord} from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-export default function Branding({ title }: { title: string }) {
+export default function Branding() {
+  const { id } = useParams(); 
   const [data, setData] = useState<ShoppingBasketRecord[]>();
+  const [title, setTitle] = useState<string>();
   const getData = async () => {
     const records = await clientPocketBase
       .collection("shoppingBasket")
       .getFullList<ShoppingBasketRecord>({ expand: "product" });
     setData(records);
+
+// немного изменить
+    const businesses = await clientPocketBase
+      .collection("business")
+      .getList<BusinessRecord>(1, 1, {
+        filter: `name="${id}"`,
+      });
+      if (businesses.items.length > 0) {
+        const business = businesses.items[0]; 
+        setTitle(business.displayName || "Без названия");
+      } else {
+        setTitle("Бизнес не найден");
+      }
+
     return records;
   };
+
+  useEffect(() => {
+    getData();
+  }, [id]);
+
   return (
     <Dialog>
-      <div className="flex mx-auto items-center justify-center gap-2 text-3xl font-semibold p-4">
+      <div className="flex items-center justify-between gap-2 text-3xl font-semibold p-4">
         <Link href="/">
           <ArrowLeft />
         </Link>
-        <span className="max-w-full text-center flex-1">{title}</span>
+        <span className="max-w-full text-center flex-1 truncate">{title}</span>
 
         <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
