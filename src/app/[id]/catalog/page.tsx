@@ -8,15 +8,13 @@ import Link from "next/link";
 export default async function Home({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const id = (await params).id
+  const id = (await params).id;
   const pb = await pocketbase();
-  const products = await pb
-  .collection("products")
-  .getFullList<ProductsRecord>({
-      filter: `business.name = "${id}"`,
-      expand: "business",
+  const products = await pb.collection("products").getFullList<ProductsRecord>({
+    filter: `business.name = "${id}"`,
+    expand: "business",
   });
 
   const shoppingRecords = await pb
@@ -41,7 +39,7 @@ export default async function Home({
     if (record === undefined) return { amount: 0, shoppingId: 0 };
     return { amount: record.amount, shoppingId: record.id };
   };
-  console.log(products)
+  console.log(products);
 
   return (
     <div className="w-full flex justify-center">
