@@ -1,53 +1,81 @@
+"use client";
 import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import { pocketbase } from "@/api/pocketbase";
+
 import Branding from "@/components/branding";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useQuery } from "@tanstack/react-query";
+import clientPocketBase from "@/api/client_pb";
 
-export default async function Home() {
-  const pb = await pocketbase();
-  const products = await pb
-    .collection("products")
-    .getFullList<ProductsRecord>();
+export default function Home() {
+  const getCount = (productId: any) => {
+    const record = shoppingQuery.data?.find(
+      (record) => record.product === productId
+    );
+    if (record === undefined) return { amount: 0, shoppingId: undefined };
+    return { amount: record.amount, shoppingId: record.id };
+  };
 
-  const shoppingRecords = await pb
-    .collection("shoppingBasket")
-    .getFullList<ShoppingBasketRecord>();
+  const getShoppingCarts = async () => {
+    const result = await clientPocketBase
+      .collection("shoppingBasket")
+      .getFullList<ShoppingBasketRecord>({
+        expand: "product",
+      });
+    return result;
+  };
+  const shoppingQuery = useQuery<ShoppingBasketRecord[]>({
+    queryKey: ["shoppingBasket"],
+    queryFn: getShoppingCarts,
+  });
 
-  const categorizedProducts = products.reduce((acc, product) => {
-    const category = getCategory(product);
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(product);
-    return acc;
-  }, {} as Record<string, ProductsRecord[]>);
+  const getProducts = async () => {
+    const result = await clientPocketBase
+      .collection("products")
+      .getFullList<ProductsRecord>();
+    return result;
+  };
+  const productQuery = useQuery<ProductsRecord[]>({
+    queryKey: ["products"],
+    queryFn: getProducts,
+  });
+
+  const categorizedProducts =
+    productQuery.data?.reduce((acc, product) => {
+      const category = getCategory(product);
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(product);
+      return acc;
+    }, {} as Record<string, ProductsRecord[]>) || {};
 
   const categories = Object.keys(categorizedProducts);
 
-  const getCount = (productId: any) => {
-    const record = shoppingRecords.find(
-      (record) => record.product === productId
-    );
-    if (record === undefined) return { amount: 0, shoppingId: 0 };
-    return { amount: record.amount, shoppingId: record.id };
-  };
   return (
     <div className="w-full flex justify-center">
       <div className="w-[400px] flex flex-col">
-        <div className="bg-white  border-b-black border-b w-full">
+        <div className="h-28"></div>
+        <div className="bg-white w-[400px] fixed border-b-black border-b h-28">
           <Branding title="Linkin burger"></Branding>
-          <div className="flex max-w-[400px] overflow-x-scroll">
-            {categories.map((category: any) => {
-              return (
-                <Link href={`${"#"}${category}`} key={category}>
-                  <Button className="font-bold uppercase" variant={"ghost"}>
-                    {category}
-                  </Button>
-                </Link>
-              );
-            })}
+          <div className="flex max-w-[400px] ">
+            <ScrollArea className="whitespace-nowrap rounded-md">
+              <div className="flex w-max space-x-4 pb-2">
+                {categories.map((category: any) => {
+                  return (
+                    <Link href={`${"#"}${category}`} key={category}>
+                      <Button className="font-bold uppercase" variant={"ghost"}>
+                        {category}
+                      </Button>
+                    </Link>
+                  );
+                })}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </div>
         </div>
         <div className="gap-4 w-full flex flex-col justify-start px-2 mx-auto">

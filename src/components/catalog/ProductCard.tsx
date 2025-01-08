@@ -1,14 +1,16 @@
 "use client";
-import { ProductsRecord } from "@/api/api_types";
+import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import Counter from "./Counter";
+import clientPocketBase from "@/api/client_pb";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Card({
   product,
   initialCount,
-  shoppingId,
+  shoppingId: initialShoppingId,
 }: {
   product: ProductsRecord;
   initialCount: number;
@@ -16,17 +18,68 @@ export default function Card({
 }) {
   const [count, setCount] = useState(initialCount);
   const [isActive, setIsActive] = useState(initialCount > 0);
+  const [shoppingId, setShoppingId] = useState(initialShoppingId);
 
-  const CountChange = (newCount: number) => {
-    setCount(newCount);
-    if (newCount === 0) {
-      setIsActive(false);
+  // const getShoppingCart = async () => {
+  //   const result = await clientPocketBase
+  //     .collection("shoppingBasket")
+  //     .getFullList<ShoppingBasketRecord>({
+  //       filter: `product.id = "${product.id}"`,
+  //       expand: "product",
+  //     });
+  //   return result;
+  // };
+
+  // const { data, isPending, isError, error } = useQuery({
+  //   queryKey: ["shoppingBasket"],
+  //   queryFn: getShoppingCart,
+  // });
+
+  async function updateShoppingBasket(newCount: number) {
+    try {
+      if (newCount === 0) {
+        if (shoppingId) {
+          await clientPocketBase
+            .collection("shoppingBasket")
+            .delete(shoppingId);
+          setShoppingId(null);
+        }
+        setIsActive(false);
+      } else if (shoppingId) {
+        await clientPocketBase.collection("shoppingBasket").update(shoppingId, {
+          product: product.id,
+          amount: newCount,
+        });
+      } else {
+        const item: ShoppingBasketRecord = {
+          product: product.id,
+          id: "",
+          amount: newCount,
+        };
+        const record = await clientPocketBase
+          .collection("shoppingBasket")
+          .create(item);
+        setShoppingId(record.id);
+      }
+      setCount(newCount);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const plus = () => {
+    updateShoppingBasket(count + 1);
+  };
+
+  const minus = () => {
+    if (count > 0) {
+      updateShoppingBasket(count - 1);
     }
   };
 
   const Initial = () => {
     setIsActive(true);
-    setCount(1);
+    updateShoppingBasket(1);
   };
 
   return (
@@ -39,20 +92,11 @@ export default function Card({
             {product.description || "Без описания"}
           </p>
         </div>
-        {isActive || count > 0 ? (
-          <Counter
-            initialCount={count}
-            shoppingId={shoppingId}
-            product={product}
-            onCountChange={CountChange}
-          />
+        {count > 0 && isActive ? (
+          <Counter count={count} plus={plus} minus={minus} />
         ) : (
-          <Button
-            onClick={Initial}
-            className="w-24 border-primary text-primary"
-            variant="outline"
-          >
-            {product.price}
+          <Button onClick={Initial} className="w-24">
+            {product.price} ₸
           </Button>
         )}
       </div>
