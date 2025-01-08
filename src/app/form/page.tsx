@@ -1,7 +1,10 @@
 "use client";
 import Branding from "@/components/branding";
-import AddressField from "@/components/formFields/addressField";
-import PhoneField from "@/components/formFields/phoneField";
+import AddressField from "@/components/formFields/AddressField";
+import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
+import PhoneField from "@/components/formFields/phone/PhoneField";
+import { QuantityField } from "@/components/formFields/QuantityField";
+
 import { Button } from "@/components/ui/button";
 
 export default function FormPage() {
@@ -20,6 +23,8 @@ export default function FormPage() {
       <Branding title="Linkin Burger" />
       <AddressField />
       <PhoneField />
+      <QuantityField min={0} />
+      <DateTimeField />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>
