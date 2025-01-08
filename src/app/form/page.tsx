@@ -2,6 +2,7 @@
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
+import { InputField } from "@/components/formFields/FormInput";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { QuantityField } from "@/components/formFields/QuantityField";
 
@@ -25,6 +26,7 @@ export default function FormPage() {
       <PhoneField />
       <QuantityField min={0} />
       <DateTimeField />
+      <InputField name="Проверка" />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>
