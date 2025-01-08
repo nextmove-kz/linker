@@ -57,6 +57,10 @@ export default function Branding() {
     queryFn: getData,
   });
   
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
   return (
     <Dialog>
       <div className="flex items-center justify-between gap-2 text-3xl font-semibold p-4">
