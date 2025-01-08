@@ -15,10 +15,23 @@ import { BusinessRecord, ProductsRecord, ShoppingBasketRecord} from "@/api/api_t
 import ShoppingCard from "./catalog/ShoppingCard";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function Branding() {
-  const { id } = useParams(); 
-  const [data, setData] = useState<ShoppingBasketRecord[]>();
+export default function Branding({
+  params
+} : {
+  params: Promise<{ id:string }>
+}
+) {
+  const queryClient = useQueryClient()
+  const { id }= useQuery({
+    queryKey: ['id'],
+    queryFn: async () => {
+      const data = await params;
+      return data.id; 
+    },
+  });
+    const [data, setData] = useState<ShoppingBasketRecord[]>();
   const [title, setTitle] = useState<string>();
   const getData = async () => {
     const records = await clientPocketBase
