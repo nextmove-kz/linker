@@ -12,6 +12,7 @@ export enum Collections {
 	Otps = "_otps",
 	Superusers = "_superusers",
 	Products = "products",
+	ShoppingBasket = "shoppingBasket",
 	Subscribers = "subscribers",
 	Users = "users",
 }
@@ -98,6 +99,14 @@ export type ProductsRecord = {
 	updated?: IsoDateString
 }
 
+export type ShoppingBasketRecord = {
+	amount: number
+	created?: IsoDateString
+	id: string
+	product?: RecordIdString
+	updated?: IsoDateString
+}
+
 export type SubscribersRecord = {
 	created?: IsoDateString
 	email: string
@@ -125,6 +134,7 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
+export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
 export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
@@ -137,6 +147,7 @@ export type CollectionRecords = {
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
 	products: ProductsRecord
+	shoppingBasket: ShoppingBasketRecord
 	subscribers: SubscribersRecord
 	users: UsersRecord
 }
@@ -148,6 +159,7 @@ export type CollectionResponses = {
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
 	products: ProductsResponse
+	shoppingBasket: ShoppingBasketResponse
 	subscribers: SubscribersResponse
 	users: UsersResponse
 }
@@ -162,6 +174,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
+	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
 	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
 }
