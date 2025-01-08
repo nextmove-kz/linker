@@ -14,8 +14,9 @@ import {
 import { BusinessRecord, ProductsRecord, ShoppingBasketRecord} from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Branding() {
   const queryClient = useQueryClient()
@@ -23,9 +24,7 @@ export default function Branding() {
   const [title, setTitle] = useState<string>();
   const getData = async () => {
     if (!id) {
-      console.log("ID не определен");
-      setTitle("Бизнес не найден");
-      return { records: [], businesses: [] };
+      notFound();
     }
     try {
       const records = await clientPocketBase
@@ -64,8 +63,7 @@ export default function Branding() {
         <Link href="/">
           <ArrowLeft />
         </Link>
-        <span className="max-w-full text-center flex-1 truncate">{isPending ?  "Загрузка..." : title}</span>
-
+        <span className="max-w-full text-center flex-1 truncate">{title}</span>
         <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
         </DialogTrigger>
