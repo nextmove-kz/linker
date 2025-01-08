@@ -15,57 +15,56 @@ import { BusinessRecord, ProductsRecord, ShoppingBasketRecord} from "@/api/api_t
 import ShoppingCard from "./catalog/ShoppingCard";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function Branding({
-  params
-} : {
-  params: Promise<{ id:string }>
-}
-) {
+export default function Branding() {
   const queryClient = useQueryClient()
-  const { id }= useQuery({
-    queryKey: ['id'],
-    queryFn: async () => {
-      const data = await params;
-      return data.id; 
-    },
-  });
-    const [data, setData] = useState<ShoppingBasketRecord[]>();
+  const { id } = useParams<{ id: string }>() 
   const [title, setTitle] = useState<string>();
   const getData = async () => {
-    const records = await clientPocketBase
-      .collection("shoppingBasket")
-      .getFullList<ShoppingBasketRecord>({ expand: "product" });
-    setData(records);
+    if (!id) {
+      console.log("ID не определен");
+      setTitle("Бизнес не найден");
+      return { records: [], businesses: [] };
+    }
+    try {
+      const records = await clientPocketBase
+        .collection("shoppingBasket")
+        .getFullList<ShoppingBasketRecord>({ expand: "product" });
 
-// немного изменить
-    const businesses = await clientPocketBase
-      .collection("business")
-      .getList<BusinessRecord>(1, 1, {
-        filter: `name="${id}"`,
-      });
+      const businesses = await clientPocketBase
+        .collection("business")
+        .getList<BusinessRecord>(1, 1, {
+          filter: `name="${id}"`,
+        });
+
       if (businesses.items.length > 0) {
-        const business = businesses.items[0]; 
+        const business = businesses.items[0];
         setTitle(business.displayName || "Без названия");
       } else {
         setTitle("Бизнес не найден");
       }
 
-    return records;
+      return { records, businesses };
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+      setTitle("Ошибка загрузки данных");
+      throw error;
+    }
   };
-
-  useEffect(() => {
-    getData();
-  }, [id]);
-
+  
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['shoppingBasket', 'business', id],
+    queryFn: getData,
+  });
+  
   return (
     <Dialog>
       <div className="flex items-center justify-between gap-2 text-3xl font-semibold p-4">
         <Link href="/">
           <ArrowLeft />
         </Link>
-        <span className="max-w-full text-center flex-1 truncate">{title}</span>
+        <span className="max-w-full text-center flex-1 truncate">{isPending ?  "Загрузка..." : title}</span>
 
         <DialogTrigger onClick={getData}>
           <ShoppingCart className="w-12" />
@@ -74,8 +73,8 @@ export default function Branding({
           <DialogHeader>
             <DialogTitle>Корзина</DialogTitle>
           </DialogHeader>
-          {data != undefined && data.length > 0 ? (
-            data.map((record) => {
+          {data != undefined && data.records.length > 0 ? (
+            data.records.map((record) => {
               return (
                 <ShoppingCard
                   key={record.id}
