@@ -1,17 +1,17 @@
 "use client";
-// "use using"
+// "use using";
+
 import { useRef, useState } from "react";
 import FormField from "./FormField";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
-import { uploadImages } from "@/lib/uploadImages";
 interface ImageFile extends File {
   preview: string;
 }
 
+// C4
 const ImageUploader = ({ name = "Изображение" }: { name?: string }) => {
   const [files, setFiles] = useState<ImageFile[]>([]);
-  const [uploading, setUploading] = useState(false);
   const [uploadedImagePaths, setUploadedImagePaths] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,6 +35,7 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ) as ImageFile[];
       setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+      console.log(files);
     }
   };
 
@@ -43,51 +44,12 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
     URL.revokeObjectURL(fileToRemove.preview);
   };
 
-  const handleUpload = async () => {
-    if (files.length === 0) return;
-
-    setUploading(true);
-    const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
-
-    try {
-      const result = await uploadImages(formData);
-      if (result.success) {
-        setUploadedImagePaths(result.paths);
-        setFiles([]);
-      }
-    } catch (error) {
-      console.error("Upload failed:", error);
-    } finally {
-      setUploading(false);
-    }
-  };
-
   return (
     <FormField name={name}>
       <div className="max-w-3xl mx-auto mt-4">
-        <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center cursor-pointer"
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <Upload className="mx-auto h-8 w-8 text-gray-400" />
-          <p className="mt-2 text-sm text-gray-600">
-            Сбросьте изображения сюда, или нажмите, чтобы выбрать файлы
-          </p>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-            ref={fileInputRef}
-            multiple
-          />
-        </div>
         {files.length > 0 && (
-          <div className="mt-4">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+          <div className="mb-4">
+            <div className="grid grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-2">
               {files.map((file, index) => (
                 <div key={index} className="relative w-fit">
                   <Image
@@ -95,7 +57,7 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
                     alt={file.name}
                     width={60}
                     height={60}
-                    className="rounded-md object-cover"
+                    className="rounded-md object-fit w-[60px] h-[60px]"
                   />
                   <button
                     onClick={() => removeFile(file)}
@@ -117,6 +79,25 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
             </button> */}
           </div>
         )}
+        <div
+          className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center cursor-pointer"
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload className="mx-auto h-8 w-8 text-gray-400" />
+          <p className="mt-2 text-sm text-gray-600">
+            Сбросьте изображения сюда, или нажмите, чтобы выбрать файлы
+          </p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            ref={fileInputRef}
+            multiple
+          />
+        </div>
         {uploadedImagePaths.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xl font-semibold mb-4">Uploaded Images:</h2>
