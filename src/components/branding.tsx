@@ -16,6 +16,7 @@ import ShoppingCard from "./catalog/ShoppingCard";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { ExpandedShoppingRecord } from "@/api/custom_types";
 
 export default function Branding({ title }: { title: string }) {
   const queryClient = useQueryClient();
@@ -26,7 +27,7 @@ export default function Branding({ title }: { title: string }) {
     queryFn: async () => {
       const result = await clientPocketBase
         .collection("shoppingBasket")
-        .getFullList<ShoppingBasketRecord>({ expand: "product" });
+        .getFullList<ExpandedShoppingRecord>({ expand: "product" });
       return result;
     },
   });
@@ -38,11 +39,11 @@ export default function Branding({ title }: { title: string }) {
     onMutate: async (deletedId) => {
       await queryClient.cancelQueries({ queryKey: ["shoppingBasket"] });
 
-      const previousItems = queryClient.getQueryData<ShoppingBasketRecord[]>([
+      const previousItems = queryClient.getQueryData<ExpandedShoppingRecord[]>([
         "shoppingBasket",
       ]);
 
-      queryClient.setQueryData<ShoppingBasketRecord[]>(
+      queryClient.setQueryData<ExpandedShoppingRecord[]>(
         ["shoppingBasket"],
         (old) => (old ? old.filter((item) => item.id !== deletedId) : [])
       );
