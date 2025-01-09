@@ -2,9 +2,13 @@
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
+import DropdownField from "@/components/formFields/DropdownField";
 import { InputField } from "@/components/formFields/FormInput";
+import MultiChoice from "@/components/formFields/MultiChoice";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { QuantityField } from "@/components/formFields/QuantityField";
+import SingleChoice from "@/components/formFields/SingleChoice";
+import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
 
@@ -27,6 +31,19 @@ export default function FormPage() {
       <QuantityField min={0} />
       <DateTimeField />
       <InputField name="Проверка" />
+      <TextAreaField name="Текстовое поле" />
+      <DropdownField
+        name="Выпадающее меню"
+        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
+      />
+      <MultiChoice
+        name="Множественный выбор"
+        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
+      />
+      <SingleChoice
+        name="Единичный выбор"
+        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
+      />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>
