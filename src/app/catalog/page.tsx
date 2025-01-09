@@ -9,14 +9,22 @@ import Link from "next/link";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import clientPocketBase from "@/api/client_pb";
+import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
+import { Separator } from "@/components/ui/separator";
+
+import { useAtom } from "jotai";
+import { hasImages } from "..//../hooks/jotai/atom";
 
 export default function Home() {
-  const getCount = (productId: any) => {
-    const record = shoppingQuery.data?.find(
-      (record) => record.product === productId
-    );
-    if (record === undefined) return { amount: 0, shoppingId: undefined };
-    return { amount: record.amount, shoppingId: record.id };
+  const { data: shoppingData } = useShoppingBasketQuery();
+  const [images, setHasImages] = useAtom(hasImages);
+
+  const getCount = (productId: string) => {
+    const record = shoppingData?.find((record) => record.product === productId);
+    return {
+      amount: record?.amount || 0,
+      shoppingId: record?.id,
+    };
   };
 
   const getShoppingCarts = async () => {
@@ -36,6 +44,9 @@ export default function Home() {
     const result = await clientPocketBase
       .collection("products")
       .getFullList<ProductsRecord>();
+
+    const imageCount = result?.filter((item) => item.photo).length;
+    setHasImages(imageCount > 0);
     return result;
   };
   const productQuery = useQuery<ProductsRecord[]>({
@@ -57,7 +68,7 @@ export default function Home() {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-[400px] flex flex-col">
+      <div className="w-[400px] flex flex-col pb-10">
         <div className="h-28"></div>
         <div className="bg-white w-[400px] fixed border-b-black border-b h-28">
           <Branding title="Linkin burger"></Branding>
@@ -66,7 +77,11 @@ export default function Home() {
               <div className="flex w-max space-x-4 pb-2">
                 {categories.map((category: any) => {
                   return (
-                    <Link href={`${"#"}${category}`} key={category}>
+                    <Link
+                      href={`${"#"}${category}`}
+                      key={category}
+                      className="select-none"
+                    >
                       <Button className="font-bold uppercase" variant={"ghost"}>
                         {category}
                       </Button>
@@ -78,7 +93,7 @@ export default function Home() {
             </ScrollArea>
           </div>
         </div>
-        <div className="gap-4 w-full flex flex-col justify-start px-2 mx-auto">
+        <div className="gap-4 w-full flex flex-col pb-10 justify-start px-2 mx-auto">
           {Object.entries(categorizedProducts).map(([category, products]) => (
             <div key={category} id={category} className="flex flex-col gap-2">
               <h2 className="font-semibold mt-2">{category}</h2>
@@ -95,6 +110,10 @@ export default function Home() {
               })}
             </div>
           ))}
+        </div>
+        <Separator />
+        <div className="text-center">
+          <p className="text-muted-foreground py-2">Конец каталога</p>
         </div>
       </div>
     </div>

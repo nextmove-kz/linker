@@ -3,8 +3,9 @@ import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import Image from "next/image";
 import Counter from "./Counter";
 import { useState } from "react";
-import clientPocketBase from "@/api/client_pb";
-
+import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
+import { useAtom } from "jotai";
+import { hasImages } from "..//../hooks/jotai/atom";
 type ExpandedShoppingRecord = ShoppingBasketRecord & {
   expand: { product: ProductsRecord };
 };
@@ -12,37 +13,36 @@ type ExpandedShoppingRecord = ShoppingBasketRecord & {
 const ShoppingCard = ({
   product,
   initialCount,
-  Delete,
 }: {
   product: ExpandedShoppingRecord;
   initialCount: number;
-  Delete: (id: string) => void;
 }) => {
+  const [image, setCountImg] = useAtom(hasImages);
+  const { updateShoppingBasket, isLoading } = useShoppingBasketOperations();
   const [count, setCount] = useState(initialCount);
-  async function updateShoppingBasket(newCount: number) {
+
+  async function handleUpdateBasket(newCount: number) {
     try {
-      if (newCount === 0) {
-        await clientPocketBase.collection("shoppingBasket").delete(product.id);
-        Delete(product.id);
-      } else {
-        await clientPocketBase.collection("shoppingBasket").update(product.id, {
-          product: product.expand.product.id,
-          amount: newCount,
-        });
+      await updateShoppingBasket({
+        newCount,
+        productId: product.expand.product.id,
+        shoppingId: product.id,
+      });
+      if (newCount > 0) {
         setCount(newCount);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   const plus = () => {
-    updateShoppingBasket(count + 1);
+    handleUpdateBasket(count + 1);
   };
 
   const minus = () => {
     if (count > 0) {
-      updateShoppingBasket(count - 1);
+      handleUpdateBasket(count - 1);
     }
   };
 
@@ -50,21 +50,28 @@ const ShoppingCard = ({
     <div className="flex flex-col">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <ProductImage
-            photo={product.expand.product.photo}
-            alt={product.expand.product.title}
-            id={product.expand.product.id}
-          />
+          {image && (
+            <ProductImage
+              photo={product.expand.product.photo}
+              alt={product.expand.product.title}
+              id={product.expand.product.id}
+            />
+          )}
           <div>
             <div className="font-medium">{product.expand.product.title}</div>
             <div className="text-primary">
-              {product.expand.product.price || 0 * count} ₸
+              {(product.expand.product.price || 0) * count} ₸
             </div>
           </div>
         </div>
 
         <div>
-          <Counter count={count} plus={plus} minus={minus} />
+          <Counter
+            count={count}
+            plus={plus}
+            minus={minus}
+            disabled={isLoading}
+          />
         </div>
       </div>
     </div>
@@ -82,7 +89,7 @@ type ImageProps = {
 function ProductImage({ photo, alt, id }: ImageProps) {
   if (!photo) {
     return (
-      <div className="border rounded w-20 h-20 text-center align-middle flex bg-gray-100">
+      <div className="select-none border rounded w-20 h-20 text-center align-middle flex bg-gray-100">
         <span className="m-auto">No Image</span>
       </div>
     );
@@ -95,7 +102,7 @@ function ProductImage({ photo, alt, id }: ImageProps) {
       alt={alt}
       width={56}
       height={56}
-      className="rounded object-cover w-20 h-20"
+      className="rounded object-cover w-20 h-20 select-none"
     />
   );
 }
