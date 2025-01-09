@@ -4,6 +4,7 @@ import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
 import DropdownField from "@/components/formFields/DropdownField";
 import { InputField } from "@/components/formFields/FormInput";
+import ImageUploader from "@/components/formFields/ImageUploader";
 import MultiChoice from "@/components/formFields/MultiChoice";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { QuantityField } from "@/components/formFields/QuantityField";
@@ -31,7 +32,7 @@ export default function FormPage() {
       <QuantityField min={0} />
       <DateTimeField />
       <InputField name="Проверка" />
-      <TextAreaField name="Текстовое поле" />
+      <TextAreaField />
       <DropdownField
         name="Выпадающее меню"
         items={["Пункт 1", "Пункт 2", "Пункт 3"]}
@@ -44,6 +45,7 @@ export default function FormPage() {
         name="Единичный выбор"
         items={["Пункт 1", "Пункт 2", "Пункт 3"]}
       />
+      <ImageUploader />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>

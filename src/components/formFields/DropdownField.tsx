@@ -10,10 +10,16 @@ import {
   SelectValue,
 } from "../ui/select";
 
-const DropdownField = ({ name, items }: { name: string; items: string[] }) => {
+const DropdownField = ({
+  name = "Выберите",
+  items,
+}: {
+  name?: string;
+  items: string[];
+}) => {
   return (
     <FormField name={name}>
-      <Select>
+      <Select name={name}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Выберите" />
         </SelectTrigger>
