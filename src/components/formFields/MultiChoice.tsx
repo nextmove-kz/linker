@@ -14,7 +14,11 @@ const MultiChoice = ({
     <FormField name={name}>
       {items.map((item) => (
         <div className="flex gap-2" key={item}>
-          <Checkbox name={name} id={item + name}></Checkbox>
+          <Checkbox
+            name={name + "_multichoice"}
+            id={item + name}
+            value={item}
+          ></Checkbox>
           <Label htmlFor={item + name}>{item}</Label>
         </div>
       ))}

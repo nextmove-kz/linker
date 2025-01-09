@@ -19,7 +19,7 @@ const DropdownField = ({
 }) => {
   return (
     <FormField name={name}>
-      <Select name={name}>
+      <Select name={name + "_select"}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Выберите" />
         </SelectTrigger>

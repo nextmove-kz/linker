@@ -7,7 +7,7 @@ const TextAreaField = ({ name = "Текст" }: { name?: string }) => {
       <Textarea
         className="w-full p-2 border rounded"
         placeholder="Введите текст"
-        name={name}
+        name={name + "_textarea"}
       />
     </FormField>
   );

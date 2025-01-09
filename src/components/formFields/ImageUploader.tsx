@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import FormField from "./FormField";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
+import { Input } from "../ui/input";
 interface ImageFile extends File {
   preview: string;
 }
@@ -12,7 +13,6 @@ interface ImageFile extends File {
 // C4
 const ImageUploader = ({ name = "Изображение" }: { name?: string }) => {
   const [files, setFiles] = useState<ImageFile[]>([]);
-  const [uploadedImagePaths, setUploadedImagePaths] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,26 +96,10 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
             className="hidden"
             ref={fileInputRef}
             multiple
+            name="files"
+            id="files"
           />
         </div>
-        {uploadedImagePaths.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-4">Uploaded Images:</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {uploadedImagePaths.map((path, index) => (
-                <div key={index}>
-                  <Image
-                    src={path}
-                    alt={`Uploaded ${index + 1}`}
-                    width={150}
-                    height={150}
-                    className="rounded-md object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </FormField>
   );
