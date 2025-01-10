@@ -10,6 +10,7 @@ import {
 } from "@/hooks/useShoppingBasket";
 import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
+import { ImageIcon } from "lucide-react";
 
 export default function Card({
   product,
@@ -83,32 +84,44 @@ export default function Card({
   };
 
   return (
-    <div className="flex gap-2 items-stretch">
-      {image && (
-        <ProductImage
-          photo={product.photo}
-          alt={product.title}
-          id={product.id}
-        />
-      )}
-      <div className="flex flex-col min-h-full justify-between">
-        <div className="flex flex-col gap-1">
-          <p className="text-lg font-bold">{product.title}</p>
-          <p className="line-clamp-3 text-sm">
-            {product.description || "Без описания"}
-          </p>
-        </div>
-        {count > 0 && isActive ? (
-          <Counter count={count} plus={plus} minus={minus} />
-        ) : (
-          <Button
-            onClick={Initial}
-            className="w-24 select-none"
-            disabled={isLoading}
+    <div className="py-1">
+      <div
+        className={`${
+          !image ? "border shadow-sm p-3" : "flex gap-2"
+        }  rounded-lg`}
+      >
+        {image ? (
+          <ProductImage
+            photo={product.photo}
+            alt={product.title}
+            id={product.id}
+          />
+        ) : null}
+        <div className="flex w-full flex-col justify-between ">
+          <div className="flex flex-col gap-1">
+            <p className="text-lg font-bold leading-none">{product.title}</p>
+            <p className="line-clamp-3 text-sm text-gray-600 break-all pr-2">
+              {product.description || "Без описания"}
+            </p>
+          </div>
+          <div
+            className={`${
+              !image ? "mt-3 justify-end flex" : "justify-start flex"
+            }`}
           >
-            {product.price} ₸
-          </Button>
-        )}
+            {count > 0 && isActive ? (
+              <Counter count={count} plus={plus} minus={minus} />
+            ) : (
+              <Button
+                onClick={Initial}
+                className="w-24 select-none"
+                disabled={isLoading}
+              >
+                {product.price} ₸
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -123,10 +136,13 @@ function ProductImage({
   alt: string;
   id: string;
 }) {
+  const photoContainer =
+    "select-none object-cover border rounded min-w-32 h-32 flex items-center justify-center bg-gray-50";
+
   if (!photo) {
     return (
-      <div className=" select-none border rounded w-32 h-32 text-center align-middle flex bg-gray-100">
-        <span className="m-auto">No Image</span>
+      <div className={photoContainer}>
+        <ImageIcon className="w-8 h-8 text-gray-400" />
       </div>
     );
   }
@@ -134,12 +150,14 @@ function ProductImage({
   const photoUrl = `http://127.0.0.1:8090/api/files/products/${id}/${photo}`;
 
   return (
-    <Image
-      src={photoUrl}
-      alt={alt}
-      width={128}
-      height={128}
-      className="rounded object-cover w-32 h-32 select-none"
-    />
+    <div className={photoContainer}>
+      <Image
+        src={photoUrl}
+        alt={alt}
+        width={128}
+        height={128}
+        className="rounded w-full h-full aspect-square object-cover select-none"
+      />
+    </div>
   );
 }
