@@ -5,11 +5,17 @@ import ProductCard from "@/components/catalog/ProductCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const id = (await params).id;
   const pb = await pocketbase();
-  const products = await pb
-    .collection("products")
-    .getFullList<ProductsRecord>();
+  const products = await pb.collection("products").getFullList<ProductsRecord>({
+    filter: `business.name = "${id}"`,
+    expand: "business",
+  });
 
   const shoppingRecords = await pb
     .collection("shoppingBasket")
@@ -33,11 +39,13 @@ export default async function Home() {
     if (record === undefined) return { amount: 0, shoppingId: 0 };
     return { amount: record.amount, shoppingId: record.id };
   };
+  console.log(products);
+
   return (
     <div className="w-full flex justify-center">
       <div className="w-[400px] flex flex-col">
         <div className="bg-white  border-b-black border-b w-full">
-          <Branding title="Linkin burger"></Branding>
+          <Branding></Branding>
           <div className="flex max-w-[400px] overflow-x-scroll">
             {categories.map((category: any) => {
               return (
