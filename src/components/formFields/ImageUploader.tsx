@@ -6,11 +6,12 @@ import FormField from "./FormField";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
 import { Input } from "../ui/input";
+
 interface ImageFile extends File {
   preview: string;
 }
 
-// C4
+// ТРОТИЛ ВЗРЫВООПАСНО
 const ImageUploader = ({ name = "Изображение" }: { name?: string }) => {
   const [files, setFiles] = useState<ImageFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,8 +97,8 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
             className="hidden"
             ref={fileInputRef}
             multiple
-            name="files"
-            id="files"
+            name={name + "_files"}
+            id={name + "_files"}
           />
         </div>
       </div>

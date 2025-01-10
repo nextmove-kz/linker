@@ -1,7 +1,6 @@
 "use client";
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
-import { CheckboxOption } from "@/components/formFields/CheckboxGroup";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
 import DropdownField from "@/components/formFields/DropdownField";
 import { InputField } from "@/components/formFields/FormInput";
@@ -14,19 +13,22 @@ import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
 
-const fruits: CheckboxOption[] = [
-  { id: "apple", name: "Apple" },
-  { id: "banana", name: "Banana" },
-  { id: "cherry", name: "Cherry" },
-  { id: "date", name: "Date" },
-  { id: "elderberry", name: "Elderberry" },
-];
-
 export default function FormPage() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const formDataJson = Object.fromEntries(formData);
+
+    const formDataJson: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      if (!formDataJson[key]) {
+        formDataJson[key] = value;
+      } else if (Array.isArray(formDataJson[key])) {
+        formDataJson[key].push(value);
+      } else {
+        formDataJson[key] = [formDataJson[key], value];
+      }
+    });
+
     console.log(formDataJson);
   };
 
@@ -46,7 +48,10 @@ export default function FormPage() {
         name="Выпадающее меню"
         items={["Пункт 1", "Пункт 2", "Пункт 3"]}
       />
-      <MultiChoice name="Множественный выбор" items={["Пункт 1", "Пункт 2"]} />
+      <MultiChoice
+        name="Множественный выбор"
+        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
+      />
       <SingleChoice
         name="Единичный выбор"
         items={["Пункт 1", "Пункт 2", "Пункт 3"]}
