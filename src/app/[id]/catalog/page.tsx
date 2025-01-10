@@ -13,9 +13,11 @@ import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "@/components/ui/separator";
 
 import { useAtom } from "jotai";
-import { hasImages } from "..//../hooks/jotai/atom";
+import { hasImages } from "@/hooks/jotai/atom";
+import { useParams } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const { id } = useParams<{ id: string }>();
   const { data: shoppingData } = useShoppingBasketQuery();
   const [images, setHasImages] = useAtom(hasImages);
 
@@ -31,6 +33,7 @@ export default function Home() {
     const result = await clientPocketBase
       .collection("shoppingBasket")
       .getFullList<ShoppingBasketRecord>({
+        filter: `business.name = "${id}"`,
         expand: "product",
       });
     return result;
@@ -43,7 +46,7 @@ export default function Home() {
   const getProducts = async () => {
     const result = await clientPocketBase
       .collection("products")
-      .getFullList<ProductsRecord>();
+      .getFullList<ProductsRecord>({ filter: `business.name = "${id}"` });
 
     const imageCount = result?.filter((item) => item.photo).length;
     setHasImages(imageCount > 0);

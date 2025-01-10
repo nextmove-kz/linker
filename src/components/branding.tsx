@@ -8,16 +8,64 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { BusinessRecord, ShoppingBasketRecord } from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { notFound, useParams } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
-import { useQueryClient } from "@tanstack/react-query";
 import { Separator } from "./ui/separator";
+import clientPocketBase from "@/api/client_pb";
+import { useRouter } from "next/navigation";
 
-export default function Branding({ title }: { title: string }) {
+export default function Branding() {
   const router = useRouter();
-  const { data, isLoading } = useShoppingBasketQuery();
   const queryClient = useQueryClient();
+  const { id } = useParams<{ id: string }>();
+  const [title, setTitle] = useState<string>();
+
+  const { data, isLoading } = useShoppingBasketQuery();
+
+  const getData = async () => {
+    if (!id) {
+      notFound();
+    }
+    try {
+      const records = await clientPocketBase
+        .collection("shoppingBasket")
+        .getFullList<ShoppingBasketRecord>({ expand: "product" });
+
+      const businesses = await clientPocketBase
+        .collection("business")
+        .getList<BusinessRecord>(1, 1, {
+          filter: `name="${id}"`,
+        });
+
+      if (businesses.items.length > 0) {
+        const business = businesses.items[0];
+        setTitle(business.displayName || "Без названия");
+      } else {
+        setTitle("Бизнес не найден");
+        router.replace("/not-found");
+      }
+
+      return { records, businesses };
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+      setTitle("Ошибка загрузки данных");
+      throw error;
+    }
+  };
+
+  const { isError, error } = useQuery({
+    queryKey: ["shoppingBasket", "business", id],
+    queryFn: getData,
+  });
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   const totalItems =
     data?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
   const totalSum = data?.reduce(
