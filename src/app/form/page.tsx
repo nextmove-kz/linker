@@ -1,5 +1,5 @@
 "use client";
-import { goToPayment } from "@/api/payment";
+import { makeOrder } from "@/api/order";
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
@@ -29,9 +29,9 @@ export default function FormPage() {
         formDataJson[key] = [formDataJson[key], value];
       }
     });
-    const result = await goToPayment(formData);
-    console.log(result);
     console.log(formDataJson);
+    const result = await makeOrder(formData);
+    console.log(result);
   };
 
   return (
