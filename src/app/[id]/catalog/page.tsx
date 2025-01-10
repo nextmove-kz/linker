@@ -16,7 +16,7 @@ import { useAtom } from "jotai";
 import { hasImages } from "@/hooks/jotai/atom";
 import { useParams } from "next/navigation";
 
-export default async function Home() {
+export default function Home() {
   const { id } = useParams<{ id: string }>();
   const { data: shoppingData } = useShoppingBasketQuery();
   const [images, setHasImages] = useAtom(hasImages);
@@ -74,7 +74,7 @@ export default async function Home() {
       <div className="w-[400px] flex flex-col pb-10">
         <div className="h-28"></div>
         <div className="bg-white w-[400px] fixed border-b-black border-b h-28">
-          <Branding title="Linkin burger"></Branding>
+          <Branding></Branding>
           <div className="flex max-w-[400px] ">
             <ScrollArea className="whitespace-nowrap rounded-md">
               <div className="flex w-max space-x-4 pb-2">
