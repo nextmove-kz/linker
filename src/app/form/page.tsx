@@ -1,4 +1,5 @@
 "use client";
+import { goToPayment } from "@/api/payment";
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
@@ -14,7 +15,7 @@ import TextAreaField from "@/components/formFields/TextAreaField";
 import { Button } from "@/components/ui/button";
 
 export default function FormPage() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -28,7 +29,8 @@ export default function FormPage() {
         formDataJson[key] = [formDataJson[key], value];
       }
     });
-
+    const result = await goToPayment(formData);
+    console.log(result);
     console.log(formDataJson);
   };
 
