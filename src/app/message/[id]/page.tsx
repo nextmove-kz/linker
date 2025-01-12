@@ -11,7 +11,11 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
     const addressParts = [];
 
     for (const [key, value] of Object.entries(order)) {
-      if (key.startsWith("Адрес_")) {
+      if (
+        key.endsWith("_apartment") ||
+        key.endsWith("_housenumber") ||
+        key.endsWith("_street")
+      ) {
         addressParts.push(value);
       } else if (key.endsWith("_select")) {
         message += `Выбранный пункт меню: ${value}\n`;
@@ -24,9 +28,9 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
       } else if (key.endsWith("_multichoice")) {
         message += `Выбранные пункты: ${value.join(", ")}\n`;
       } else if (key.endsWith("_text")) {
-        message += `Проверка: ${value}\n`;
+        message += `Текст: ${value}\n`;
       } else if (key.endsWith("_textarea")) {
-        message += `Комментарий: ${value}\n`;
+        message += `Длинный текст: ${value}\n`;
       } else if (key.endsWith("_phone")) {
         message += `Телефон: ${value}\n`;
       }
