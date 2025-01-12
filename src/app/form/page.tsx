@@ -19,6 +19,18 @@ export default function FormPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    const fileInputs = e.currentTarget.querySelectorAll('input[type="file"]');
+    const files: File[] = [];
+
+    fileInputs.forEach((input) => {
+      const fileList = (input as HTMLInputElement).files;
+      if (fileList) {
+        for (let i = 0; i < fileList.length; i++) {
+          files.push(fileList[i]);
+        }
+      }
+    });
+
     const formDataJson: Record<string, any> = {};
     formData.forEach((value, key) => {
       if (!formDataJson[key]) {
@@ -29,8 +41,8 @@ export default function FormPage() {
         formDataJson[key] = [formDataJson[key], value];
       }
     });
-    console.log(formDataJson);
-    const result = await makeOrder(formData);
+    console.log(files);
+    const result = await makeOrder(formData, files);
     console.log(result);
   };
 
