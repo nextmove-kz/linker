@@ -11,6 +11,8 @@ import {
 import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
 import { ImageIcon } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useProductQuantity } from "@/hooks/useUpdate";
 
 export default function Card({
   product,
@@ -21,67 +23,10 @@ export default function Card({
   initialCount: number;
   shoppingId: string | undefined;
 }) {
-  const [image, setCountImg] = useAtom(hasImages);
-  const [isActive, setIsActive] = useState(initialCount > 0);
-  const [shoppingId, setShoppingId] = useState<string | null | undefined>(
-    initialShoppingId
-  );
-
-  const { data: shoppingData } = useShoppingBasketQuery();
-
-  const currentRecord = shoppingData?.find(
-    (record) => record.product === product.id
-  );
-  const [count, setCount] = useState(currentRecord?.amount || initialCount);
-
-  useEffect(() => {
-    const record = shoppingData?.find((item) => item.product === product.id);
-    if (record) {
-      setCount(record.amount);
-      setShoppingId(record.id);
-      setIsActive(true);
-    } else {
-      setCount(0);
-      setShoppingId(null);
-      setIsActive(false);
-    }
-  }, [shoppingData, product.id]);
-
-  const { updateShoppingBasket, isLoading } = useShoppingBasketOperations();
-
-  async function handleUpdateBasket(newCount: number) {
-    try {
-      const result = await updateShoppingBasket({
-        newCount,
-        productId: product.id,
-        shoppingId,
-      });
-
-      if (newCount === 0) {
-        setIsActive(false);
-      }
-
-      setShoppingId(result?.shoppingId ?? null);
-      setCount(newCount);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const plus = () => {
-    handleUpdateBasket(count + 1);
-  };
-
-  const minus = () => {
-    if (count > 0) {
-      handleUpdateBasket(count - 1);
-    }
-  };
-
-  const Initial = () => {
-    setIsActive(true);
-    handleUpdateBasket(1);
-  };
+  const { id } = useParams<{ id: string }>();
+  const [image] = useAtom(hasImages);
+  const { count, isActive, isLoading, plus, minus, Initial } =
+    useProductQuantity(product, initialCount, initialShoppingId, id);
 
   return (
     <div className="py-1">
@@ -97,7 +42,7 @@ export default function Card({
             id={product.id}
           />
         ) : null}
-        <div className="flex w-full flex-col justify-between ">
+        <div className="flex w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-bold leading-none">{product.title}</p>
             <p className="line-clamp-3 text-sm text-gray-600 break-all pr-2">

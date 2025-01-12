@@ -2,10 +2,11 @@
 import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import Image from "next/image";
 import Counter from "./Counter";
-import { useState } from "react";
-import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
 import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
+import { useProductQuantity } from "@/hooks/useUpdate";
+import { useParams } from "next/navigation";
+
 type ExpandedShoppingRecord = ShoppingBasketRecord & {
   expand: { product: ProductsRecord };
 };
@@ -17,34 +18,15 @@ const ShoppingCard = ({
   product: ExpandedShoppingRecord;
   initialCount: number;
 }) => {
-  const [image, setCountImg] = useAtom(hasImages);
-  const { updateShoppingBasket, isLoading } = useShoppingBasketOperations();
-  const [count, setCount] = useState(initialCount);
+  const { id } = useParams<{ id: string }>();
+  const [image] = useAtom(hasImages);
 
-  async function handleUpdateBasket(newCount: number) {
-    try {
-      await updateShoppingBasket({
-        newCount,
-        productId: product.expand.product.id,
-        shoppingId: product.id,
-      });
-      if (newCount > 0) {
-        setCount(newCount);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const plus = () => {
-    handleUpdateBasket(count + 1);
-  };
-
-  const minus = () => {
-    if (count > 0) {
-      handleUpdateBasket(count - 1);
-    }
-  };
+  const { count, isLoading, plus, minus } = useProductQuantity(
+    product.expand.product,
+    initialCount,
+    product.id,
+    id
+  );
 
   return (
     <div className="flex flex-col">

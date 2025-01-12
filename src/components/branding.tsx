@@ -24,7 +24,7 @@ export default function Branding() {
   const { id } = useParams<{ id: string }>();
   const [title, setTitle] = useState<string>();
 
-  const { data, isLoading } = useShoppingBasketQuery();
+  const { data, isLoading } = useShoppingBasketQuery(id);
 
   const getData = async () => {
     if (!id) {
@@ -105,9 +105,9 @@ export default function Branding() {
           {isLoading ? (
             <p>Загрузка...</p>
           ) : data && data.length > 0 ? (
-            data.map((record) => (
+            data.map((record, index) => (
               <ShoppingCard
-                key={record.id}
+                key={record.id + `${index}`}
                 product={record}
                 initialCount={record.amount}
               />
