@@ -6,7 +6,7 @@ export async function makeOrder(formData: FormData, files: File[]) {
   try {
       const pb = await pocketbase();
 
-
+// TODO: исправить запрос в покетбейз
       const data = {
         orderData: Object.fromEntries(formData.entries()),
         finished: false,

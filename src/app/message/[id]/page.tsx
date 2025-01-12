@@ -6,6 +6,7 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const order = await getOrder(id);
 
+  // TODO: возможны доработки
   function createMessage(order: Object) {
     let message = "";
     const addressParts = [];
