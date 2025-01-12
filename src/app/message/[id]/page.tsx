@@ -6,6 +6,13 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const order = await getOrder(id);
 
+  const getKeysBeforeUnderscore = (obj: OrdersRecord) => {
+    const keys = Object.keys(obj);
+    return keys
+      .filter((key) => key.includes("_"))
+      .map((key) => key.split("_")[0]);
+  };
+
   // TODO: возможны доработки
   function createMessage(order: Object) {
     let message = "";
@@ -19,21 +26,21 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
       ) {
         addressParts.push(value);
       } else if (key.endsWith("_select")) {
-        message += `Выбранный пункт меню: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_datetime")) {
-        message += `Дата и время: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_group")) {
-        message += `Единичный выбор: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_count")) {
-        message += `Количество: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_multichoice")) {
-        message += `Выбранные пункты: ${value.join(", ")}\n`;
+        message += `${key.split("_")[0]}: ${value.join(", ")}\n`;
       } else if (key.endsWith("_text")) {
-        message += `Текст: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_textarea")) {
-        message += `Длинный текст: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       } else if (key.endsWith("_phone")) {
-        message += `Телефон: ${value}\n`;
+        message += `${key.split("_")[0]}: ${value}\n`;
       }
     }
 
