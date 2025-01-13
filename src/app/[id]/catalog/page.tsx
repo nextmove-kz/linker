@@ -1,73 +1,32 @@
 "use client";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
-import { pocketbase } from "@/api/pocketbase";
-
 import Branding from "@/components/branding";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
-import clientPocketBase from "@/api/client_pb";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "@/components/ui/separator";
-
-import { useAtom } from "jotai";
-import { hasImages } from "@/hooks/jotai/atom";
 import { useParams } from "next/navigation";
+import { useProductsQuery } from "@/hooks/useProductsQuery";
+import { getCategorizedProducts, getCount } from "./utils";
+import { useMemo } from "react";
 
 export default function Home() {
   const { id } = useParams<{ id: string }>();
-  const { data: shoppingData } = useShoppingBasketQuery();
-  const [images, setHasImages] = useAtom(hasImages);
+  const { data: shoppingData } = useShoppingBasketQuery(id);
+  const { data: productData } = useProductsQuery(id);
 
-  const getCount = (productId: string) => {
-    const record = shoppingData?.find((record) => record.product === productId);
+  const { categorizedProducts, categories } = useMemo(() => {
+    if (!productData) {
+      return { categorizedProducts: {}, categories: [] };
+    }
+    const { categorizedProductsData, categoriesData } =
+      getCategorizedProducts(productData);
     return {
-      amount: record?.amount || 0,
-      shoppingId: record?.id,
+      categorizedProducts: categorizedProductsData,
+      categories: categoriesData,
     };
-  };
-
-  const getShoppingCarts = async () => {
-    const result = await clientPocketBase
-      .collection("shoppingBasket")
-      .getFullList<ShoppingBasketRecord>({
-        filter: `business.name = "${id}"`,
-        expand: "product",
-      });
-    return result;
-  };
-  const shoppingQuery = useQuery<ShoppingBasketRecord[]>({
-    queryKey: ["shoppingBasket"],
-    queryFn: getShoppingCarts,
-  });
-
-  const getProducts = async () => {
-    const result = await clientPocketBase
-      .collection("products")
-      .getFullList<ProductsRecord>({ filter: `business.name = "${id}"` });
-
-    const imageCount = result?.filter((item) => item.photo).length;
-    setHasImages(imageCount > 0);
-    return result;
-  };
-  const productQuery = useQuery<ProductsRecord[]>({
-    queryKey: ["products"],
-    queryFn: getProducts,
-  });
-
-  const categorizedProducts =
-    productQuery.data?.reduce((acc, product) => {
-      const category = getCategory(product);
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(product);
-      return acc;
-    }, {} as Record<string, ProductsRecord[]>) || {};
-
-  const categories = Object.keys(categorizedProducts);
+  }, [productData]);
 
   return (
     <div className="w-full flex justify-center">
@@ -78,7 +37,7 @@ export default function Home() {
           <div className="flex max-w-[400px] ">
             <ScrollArea className="whitespace-nowrap rounded-md">
               <div className="flex w-max space-x-4 pb-2">
-                {categories.map((category: any) => {
+                {categories?.map((category: any) => {
                   return (
                     <Link
                       href={`${"#"}${category}`}
@@ -101,7 +60,7 @@ export default function Home() {
             <div key={category} id={category} className="flex flex-col gap-2">
               <h2 className="font-semibold mt-2">{category}</h2>
               {products.map((product) => {
-                const count = getCount(product.id);
+                const count = getCount(shoppingData, product.id);
                 return (
                   <ProductCard
                     key={product.id}
@@ -122,9 +81,3 @@ export default function Home() {
     </div>
   );
 }
-
-const getCategory = (product: ProductsRecord): string => {
-  if (product.category_name !== undefined && product.category_name !== "")
-    return product.category_name;
-  return "Без категории";
-};

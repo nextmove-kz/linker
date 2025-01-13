@@ -1,4 +1,3 @@
-// hooks/useShoppingBasket.ts
 import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
 import clientPocketBase from "@/api/client_pb";
@@ -36,13 +35,16 @@ type UpdateMutationResult = UseMutationResult<
   { previousItems: ShoppingBasketRecord[] | undefined }
 >;
 
-export function useShoppingBasketQuery() {
+export function useShoppingBasketQuery(id: string) {
   return useQuery({
     queryKey: ["shoppingBasket"],
     queryFn: async () => {
       const result = await clientPocketBase
         .collection("shoppingBasket")
-        .getFullList<ExpandedShoppingRecord>({ expand: "product" });
+        .getFullList<ExpandedShoppingRecord>({
+          expand: "product",
+          filter: `product.business.name = "${id}"`,
+        });
       return result;
     },
   });
