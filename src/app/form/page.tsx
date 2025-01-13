@@ -1,5 +1,5 @@
 "use client";
-import { makeOrder } from "@/api/order";
+import clientPocketBase from "@/api/client_pb";
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
@@ -41,9 +41,20 @@ export default function FormPage() {
         formDataJson[key] = [formDataJson[key], value];
       }
     });
-    console.log(files);
-    const result = await makeOrder(formData, files);
-    console.log(result);
+    const data = {
+      orderData: Object.fromEntries(formData.entries()),
+      finished: false,
+      attachments: files,
+    };
+    try {
+      const result = await clientPocketBase
+        .collection("orders")
+        .create({ orderData: formData, finished: false, attachments: files });
+      console.log(result);
+    } catch (error) {
+      console.error("Order error:", error);
+      return { error: "Failed to create order" };
+    }
   };
 
   return (

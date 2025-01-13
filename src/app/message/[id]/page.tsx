@@ -6,17 +6,18 @@ const Message = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   const order = await getOrder(id);
 
-  const getKeysBeforeUnderscore = (obj: OrdersRecord) => {
-    const keys = Object.keys(obj);
-    return keys
-      .filter((key) => key.includes("_"))
-      .map((key) => key.split("_")[0]);
-  };
-
   // TODO: возможны доработки
   function createMessage(order: Object) {
     let message = "";
     const addressParts = [];
+    const selectParts = [];
+    const datetimeParts = [];
+    const groupParts = [];
+    const countParts = [];
+    const multichoiceParts = [];
+    const textParts = [];
+    const textareaParts = [];
+    const phoneParts = [];
 
     for (const [key, value] of Object.entries(order)) {
       if (
