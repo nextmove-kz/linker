@@ -1,59 +1,29 @@
-"use client";
-import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
-import clientPocketBase from "@/api/client_pb";
-
-const Counter = ({
-  initialCount,
-  shoppingId,
-  product,
-  onCountChange,
+export default function Counter({
+  count,
+  plus,
+  minus,
+  disabled = false,
 }: {
-  initialCount: number;
-  shoppingId: string;
-  product: ProductsRecord;
-  onCountChange: (newCount: number) => void;
-}) => {
-  const [counter, setCounter] = useState(initialCount);
-
-  useEffect(() => {
-    setCounter(initialCount);
-  }, [initialCount]);
-
-  async function updateShoppingBasket(newCount: number) {
-    if (shoppingId) {
-      await clientPocketBase.collection("shoppingBasket").update(shoppingId, {
-        product: product.id,
-        amount: newCount,
-      });
-    } else {
-      const item: ShoppingBasketRecord = {
-        product: product.id,
-        id: "",
-        amount: newCount,
-      };
-      await clientPocketBase.collection("shoppingBasket").create(item);
-    }
-    onCountChange(newCount);
-  }
-
-  const CountChange = async (num: number) => {
-    const newCount = counter + num;
-    setCounter(newCount);
-    await updateShoppingBasket(newCount);
-  };
-
+  count: number;
+  plus: () => void;
+  minus: () => void;
+  disabled?: boolean;
+}) {
   return (
-    <Button
-      className="w-24 justify-between border-primary text-primary"
-      variant="outline"
-    >
-      <div onClick={() => CountChange(-1)}>-</div>
-      <span>{counter}</span>
-      <div onClick={() => CountChange(1)}>+</div>
-    </Button>
+    <div className="flex items-center gap-2 select-none">
+      <Button
+        className="w-24 gap-0 justify-between border-primary text-primary p-0"
+        variant="outline"
+      >
+        <div className="w-1/3" onClick={minus}>
+          -
+        </div>
+        <span className="w-1/3">{count}</span>
+        <div className="w-1/3" onClick={plus}>
+          +
+        </div>
+      </Button>
+    </div>
   );
-};
-
-export default Counter;
+}

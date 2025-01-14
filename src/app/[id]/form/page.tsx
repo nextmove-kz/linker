@@ -65,7 +65,7 @@ export default function FormPage() {
       className="flex flex-col gap-4 w-[400px] p-2 mx-auto"
       onSubmit={onSubmit}
     >
-      <Branding title="Linkin Burger" />
+      <Branding />
       <AddressField />
       <PhoneField />
       <QuantityField min={0} />
