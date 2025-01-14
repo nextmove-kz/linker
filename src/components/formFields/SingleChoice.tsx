@@ -12,7 +12,7 @@ const SingleChoice = ({
   return (
     <FormField name={name}>
       <RadioGroup name={name + "_group"}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <div className="flex items-center space-x-2" key={item}>
             <RadioGroupItem value={item} id={item + name} />
             <Label htmlFor={item + name}>{item}</Label>

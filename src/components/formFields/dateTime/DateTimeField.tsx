@@ -21,7 +21,7 @@ export function DateTimeField({
 
   return (
     <FormField name={name}>
-      <DateTimePicker name={name} />
+      <DateTimePicker name={name + "_datetime"} />
     </FormField>
   );
 }

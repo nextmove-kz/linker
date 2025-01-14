@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import FormField from "./FormField";
 import { Checkbox } from "../ui/checkbox";
@@ -12,12 +13,13 @@ const MultiChoice = ({
 }) => {
   return (
     <FormField name={name}>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div className="flex gap-2" key={item}>
           <Checkbox
             name={name + "_multichoice"}
             id={item + name}
             value={item}
+            defaultChecked={index === 0}
           ></Checkbox>
           <Label htmlFor={item + name}>{item}</Label>
         </div>
