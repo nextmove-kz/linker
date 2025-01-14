@@ -13,8 +13,10 @@ import SingleChoice from "@/components/formFields/SingleChoice";
 import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function FormPage() {
+  const router = useRouter();
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -51,6 +53,7 @@ export default function FormPage() {
         .collection("orders")
         .create({ orderData: formData, finished: false, attachments: files });
       console.log(result);
+      router.push(`/message/${result.id}`);
     } catch (error) {
       console.error("Order error:", error);
       return { error: "Failed to create order" };
