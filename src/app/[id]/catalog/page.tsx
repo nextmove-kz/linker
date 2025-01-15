@@ -10,12 +10,12 @@ import { useParams } from "next/navigation";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { getCategorizedProducts, getCount } from "./utils";
 import { useMemo } from "react";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   const { id } = useParams<{ id: string }>();
   const { data: shoppingData } = useShoppingBasketQuery(id);
   const { data: productData } = useProductsQuery(id);
-
   const { categorizedProducts, categories } = useMemo(() => {
     if (!productData) {
       return { categorizedProducts: {}, categories: [] };
@@ -30,30 +30,28 @@ export default function Home() {
 
   return (
     <div className="w-full flex justify-center">
-      <div className="w-[400px] flex flex-col pb-10">
+      <div className="max-w-[400px] flex flex-col pb-10 relative">
         <div className="h-28"></div>
-        <div className="bg-white w-[400px] fixed border-b-black border-b h-28">
-          <Branding></Branding>
-          <div className="flex max-w-[400px] ">
-            <ScrollArea className="whitespace-nowrap rounded-md">
-              <div className="flex w-max space-x-4 pb-2">
-                {categories?.map((category: any) => {
-                  return (
-                    <Link
-                      href={`${"#"}${category}`}
-                      key={category}
-                      className="select-none"
-                    >
-                      <Button className="font-bold uppercase" variant={"ghost"}>
-                        {category}
-                      </Button>
-                    </Link>
-                  );
-                })}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
+        <div className="bg-white fixed border-b-black border-b h-28">
+          <Branding sectionId={0}></Branding>
+          <ScrollArea className="whitespace-nowrap rounded-md xs:max-w-[400px] w-screen">
+            <div className="flex space-x-4 pb-2">
+              {categories?.map((category: any) => {
+                return (
+                  <Link
+                    href={`${"#"}${category}`}
+                    key={category}
+                    className="select-none"
+                  >
+                    <Button className="font-bold uppercase" variant={"ghost"}>
+                      {category}
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
         <div className="gap-4 w-full flex flex-col pb-10 justify-start px-2 mx-auto">
           {Object.entries(categorizedProducts).map(([category, products]) => (
@@ -76,6 +74,13 @@ export default function Home() {
         <Separator />
         <div className="text-center">
           <p className="text-muted-foreground py-2">Конец каталога</p>
+        </div>
+        <div className="fixed bottom-6 left-1/2 flex gap-2 xs:w-[400px] w-screen transform -translate-x-1/2 justify-end px-4">
+          <Link href={`/${id}/form`} className="">
+            <Button className="rounded-full h-14 w-14 bg-purple-500 hover:bg-purple-600">
+              <ArrowRight size={32} />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
