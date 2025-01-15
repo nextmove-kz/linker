@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { on } from "events";
+import { useParams, useRouter } from "next/navigation";
 
 const paymentMethods = [
   { id: "kaspi-pt", name: "Каспи платеж", icon: Bill },
@@ -21,7 +22,8 @@ const paymentMethods = [
 
 const PaymentPage = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-
+  const params = useParams();
+  const router = useRouter();
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -38,6 +40,7 @@ const PaymentPage = () => {
     }
 
     console.log(data);
+    router.push(`/${params.id}/${params.order}/status`);
   };
 
   return (
