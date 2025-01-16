@@ -12,6 +12,8 @@ export enum Collections {
 	Otps = "_otps",
 	Superusers = "_superusers",
 	Business = "business",
+	Files = "files",
+	Orders = "orders",
 	Products = "products",
 	ShoppingBasket = "shoppingBasket",
 	Subscribers = "subscribers",
@@ -97,6 +99,22 @@ export type BusinessRecord = {
 	updated?: IsoDateString
 }
 
+export type FilesRecord = {
+	created?: IsoDateString
+	file?: string[]
+	id: string
+	updated?: IsoDateString
+}
+
+export type OrdersRecord<TorderData = unknown> = {
+	attachments?: string[]
+	created?: IsoDateString
+	finished?: boolean
+	id: string
+	orderData?: null | TorderData
+	updated?: IsoDateString
+}
+
 export type ProductsRecord = {
 	business?: RecordIdString
 	category_name?: string
@@ -111,6 +129,7 @@ export type ProductsRecord = {
 
 export type ShoppingBasketRecord = {
 	amount: number
+	business?: RecordIdString
 	created?: IsoDateString
 	id: string
 	product?: RecordIdString
@@ -145,6 +164,8 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & BaseSystemFields<Texpand>
+export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
+export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
 export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
 export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
@@ -159,6 +180,8 @@ export type CollectionRecords = {
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
 	business: BusinessRecord
+	files: FilesRecord
+	orders: OrdersRecord
 	products: ProductsRecord
 	shoppingBasket: ShoppingBasketRecord
 	subscribers: SubscribersRecord
@@ -172,6 +195,8 @@ export type CollectionResponses = {
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
 	business: BusinessResponse
+	files: FilesResponse
+	orders: OrdersResponse
 	products: ProductsResponse
 	shoppingBasket: ShoppingBasketResponse
 	subscribers: SubscribersResponse
@@ -188,6 +213,8 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'business'): RecordService<BusinessResponse>
+	collection(idOrName: 'files'): RecordService<FilesResponse>
+	collection(idOrName: 'orders'): RecordService<OrdersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
 	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
 	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
