@@ -128,21 +128,11 @@ export type ProductsRecord = {
 }
 
 export type ShoppingBasketRecord = {
-	apartment?: string
+	amount: number
 	business?: RecordIdString
-	count: number
 	created?: IsoDateString
-	datetime?: IsoDateString
-	files?: string
-	housenumber?: string
 	id: string
-	multichoice?: string
-	phone?: string
 	product?: RecordIdString
-	select?: string
-	street?: string
-	text?: string
-	textarea?: string
 	updated?: IsoDateString
 }
 
