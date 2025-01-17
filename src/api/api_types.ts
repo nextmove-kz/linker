@@ -130,6 +130,7 @@ export type ProductsRecord = {
 
 export type ShoppingBasketRecord = {
 	amount: number
+	business?: RecordIdString
 	created?: IsoDateString
 	device_id: string
 	id: string
