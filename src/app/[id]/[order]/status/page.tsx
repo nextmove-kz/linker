@@ -12,6 +12,7 @@ import {
   ExpandedOrderRecord,
   ExpandedShoppingRecord,
 } from "@/api/custom_types";
+import { notFound } from "next/navigation";
 
 const StatusPage = async ({
   params,
@@ -28,6 +29,10 @@ const StatusPage = async ({
     });
 
   console.log(data);
+
+  if (!data) {
+    notFound();
+  }
 
   const statusSteps = [
     { icon: Package, label: "Заказ принят" },

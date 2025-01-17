@@ -20,19 +20,6 @@ migrate((app) => {
       },
       {
         "cascadeDelete": false,
-        "collectionId": "pbc_3527180448",
-        "hidden": false,
-        "id": "relation1915095946",
-        "maxSelect": 1,
-        "minSelect": 0,
-        "name": "details",
-        "presentable": false,
-        "required": false,
-        "system": false,
-        "type": "relation"
-      },
-      {
-        "cascadeDelete": false,
         "collectionId": "pbc_1218262561",
         "hidden": false,
         "id": "relation148074040",
@@ -46,26 +33,29 @@ migrate((app) => {
       },
       {
         "cascadeDelete": false,
-        "collectionId": "pbc_3350570875",
+        "collectionId": "pbc_3816125536",
         "hidden": false,
-        "id": "relation1542800728",
+        "id": "relation1915095946",
         "maxSelect": 1,
         "minSelect": 0,
-        "name": "field",
+        "name": "details",
         "presentable": false,
         "required": false,
         "system": false,
         "type": "relation"
       },
       {
+        "cascadeDelete": false,
+        "collectionId": "pbc_3350570875",
         "hidden": false,
-        "id": "json1831371789",
-        "maxSize": 0,
-        "name": "payment",
+        "id": "relation3776899405",
+        "maxSelect": 999,
+        "minSelect": 0,
+        "name": "items",
         "presentable": false,
         "required": false,
         "system": false,
-        "type": "json"
+        "type": "relation"
       },
       {
         "hidden": false,
@@ -97,10 +87,10 @@ migrate((app) => {
         "type": "autodate"
       }
     ],
-    "id": "pbc_1047473523",
+    "id": "pbc_3527180448",
     "indexes": [],
     "listRule": null,
-    "name": "order",
+    "name": "orders",
     "system": false,
     "type": "base",
     "updateRule": null,
@@ -109,7 +99,7 @@ migrate((app) => {
 
   return app.save(collection);
 }, (app) => {
-  const collection = app.findCollectionByNameOrId("pbc_1047473523");
+  const collection = app.findCollectionByNameOrId("pbc_3527180448");
 
   return app.delete(collection);
 })

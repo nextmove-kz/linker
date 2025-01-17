@@ -1,9 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((app) => {
-  const collection = app.findCollectionByNameOrId("pbc_3446931122");
-
-  return app.delete(collection);
-}, (app) => {
   const collection = new Collection({
     "createRule": null,
     "deleteRule": null,
@@ -21,20 +17,6 @@ migrate((app) => {
         "required": true,
         "system": true,
         "type": "text"
-      },
-      {
-        "hidden": false,
-        "id": "file2359244304",
-        "maxSelect": 99,
-        "maxSize": 0,
-        "mimeTypes": [],
-        "name": "file",
-        "presentable": false,
-        "protected": false,
-        "required": false,
-        "system": false,
-        "thumbs": [],
-        "type": "file"
       },
       {
         "hidden": false,
@@ -57,10 +39,10 @@ migrate((app) => {
         "type": "autodate"
       }
     ],
-    "id": "pbc_3446931122",
+    "id": "pbc_3816125536",
     "indexes": [],
     "listRule": null,
-    "name": "files",
+    "name": "details",
     "system": false,
     "type": "base",
     "updateRule": null,
@@ -68,4 +50,8 @@ migrate((app) => {
   });
 
   return app.save(collection);
+}, (app) => {
+  const collection = app.findCollectionByNameOrId("pbc_3816125536");
+
+  return app.delete(collection);
 })

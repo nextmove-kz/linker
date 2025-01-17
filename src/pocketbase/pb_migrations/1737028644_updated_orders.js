@@ -4,7 +4,7 @@ migrate((app) => {
 
   // update collection data
   unmarshal({
-    "name": "details"
+    "viewRule": ""
   }, collection)
 
   return app.save(collection)
@@ -13,7 +13,7 @@ migrate((app) => {
 
   // update collection data
   unmarshal({
-    "name": "orders"
+    "viewRule": null
   }, collection)
 
   return app.save(collection)
