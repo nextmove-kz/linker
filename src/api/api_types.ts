@@ -109,6 +109,7 @@ export type FilesRecord = {
 export type OrdersRecord<TorderData = unknown> = {
 	attachments?: string[]
 	created?: IsoDateString
+	device_id: string
 	finished?: boolean
 	id: string
 	orderData?: null | TorderData
@@ -131,8 +132,9 @@ export type ShoppingBasketRecord = {
 	amount: number
 	business?: RecordIdString
 	created?: IsoDateString
+	device_id: string
 	id: string
-	product?: RecordIdString
+	product: RecordIdString
 	updated?: IsoDateString
 }
 

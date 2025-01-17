@@ -4,6 +4,7 @@ import {
   useShoppingBasketOperations,
 } from "./useShoppingBasket";
 import { ProductsRecord } from "@/api/api_types";
+import { useParams } from "next/navigation";
 
 export function useProductQuantity(
   product: ProductsRecord,
