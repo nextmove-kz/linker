@@ -1,3 +1,5 @@
+// TODO: доделать страницу(посмотреть комментарии - "TODO:")
+
 import { Package, CheckCircle, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pocketbase } from "@/api/pocketbase";
@@ -14,7 +16,7 @@ import {
 } from "@/api/custom_types";
 import { notFound } from "next/navigation";
 import ImageDialog from "@/components/payment/ImageDialog";
-import Image from "next/image";
+import Link from "next/link";
 
 const StatusPage = async ({
   params,
@@ -107,10 +109,25 @@ const StatusPage = async ({
     return resultString;
   };
 
+  const totalSum = data?.expand.items.reduce(
+    (sum, item) =>
+      sum + (item.amount || 0) * (item.expand?.product?.price || 0),
+    0
+  );
+
   const message = compileMessage(data.expand.details.orderData as OrdersRecord);
+
+  const businessPhone = "+77081465849";
+  const text = "Здравствуйте! Я хотел бы получить больше информации.";
+
+  const whatsappUrl = `https://wa.me/${businessPhone.replace(
+    /\D/g,
+    ""
+  )}?text=${encodeURIComponent(text)}`;
+
   return (
     <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900">
+      <h1 className="text-2xl font-bold text-gray-900 truncate">
         Статус заказа ({data.expand.business?.name})
       </h1>
 
@@ -144,7 +161,9 @@ const StatusPage = async ({
             <span className="mt-2 text-xs text-gray-500">Заказ завершен</span>
           </div>
         </div>
-        <Button className="w-full">Связаться с бизнесом</Button>
+        <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+          <Button className="w-full">Связаться с бизнесом</Button>
+        </Link>
       </div>
 
       <div className="rounded-lg bg-white p-6 shadow-md">
@@ -159,15 +178,16 @@ const StatusPage = async ({
                 <span>
                   {item.amount}x {product.title}
                 </span>
-                <span>{product.price}₸</span>
+                <span>₸{product.price}</span>
               </div>
             );
           })}
         </div>
         <div className="mt-4 border-t pt-4">
           <div className="flex justify-between font-semibold">
+            {/* TODO: вывести сумму заказов */}
             <span>Всего</span>
-            <span>$100.00</span>
+            <span>₸{totalSum}</span>
           </div>
         </div>
       </div>
@@ -179,12 +199,14 @@ const StatusPage = async ({
             </AccordionTrigger>
             <AccordionContent>
               <pre>{message}</pre>
-              <ImageDialog
-                name="Открыть"
-                title="Изображение"
-                img={data.expand.details?.attachments || []}
-                id={data.expand.details.id}
-              />
+              {data.expand.details?.attachments && (
+                <ImageDialog
+                  name="Открыть изображения"
+                  title="Изображение"
+                  img={data.expand.details?.attachments || []}
+                  id={data.expand.details.id}
+                />
+              )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -17,6 +17,7 @@ import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "./ui/separator";
 import clientPocketBase from "@/api/client_pb";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 export default function Branding() {
   const router = useRouter();
@@ -124,6 +125,7 @@ export default function Branding() {
                   {totalSum} <span className="text-foreground">₸</span>
                 </p>
               </div>
+              <Button className="mt-2">Перейти к оплате</Button>
             </div>
           )}
         </DialogContent>
