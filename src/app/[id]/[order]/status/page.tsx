@@ -13,6 +13,8 @@ import {
   ExpandedShoppingRecord,
 } from "@/api/custom_types";
 import { notFound } from "next/navigation";
+import ImageDialog from "@/components/payment/ImageDialog";
+import Image from "next/image";
 
 const StatusPage = async ({
   params,
@@ -80,9 +82,9 @@ const StatusPage = async ({
       // console.log("resultString", resultString);
 
       let dataString;
-      console.log("type", type);
+      // console.log("type", type);
       if (complexTypes.includes(type)) {
-        console.log("is_complex");
+        // console.log("is_complex");
         if (
           type === "apartment" ||
           type === "housenumber" ||
@@ -177,6 +179,12 @@ const StatusPage = async ({
             </AccordionTrigger>
             <AccordionContent>
               <pre>{message}</pre>
+              <ImageDialog
+                name="Открыть"
+                title="Изображение"
+                img={data.expand.details?.attachments || []}
+                id={data.expand.details.id}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
