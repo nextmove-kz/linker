@@ -13,6 +13,7 @@ import {
 import { useEffect, useState } from "react";
 import { on } from "events";
 import { useParams, useRouter } from "next/navigation";
+import clientPocketBase from "@/api/client_pb";
 
 const paymentMethods = [
   { id: "kaspi-pt", name: "Каспи платеж", icon: Bill },
@@ -37,15 +38,24 @@ const PaymentPage = () => {
       data = {
         amount: formData.get("Сдача с какой суммы?") || "",
       };
+    } else if (selectedMethod === "kaspi-transfer") {
+      data = {
+        аыаыавоываофвы
+      }
     }
 
     console.log(data);
+
+    const result = clientPocketBase.collection("orders").create({ payment: })
     router.push(`/${params.id}/${params.order}/status`);
   };
 
   return (
     <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
       <Branding />
+      <h1 className="text-2xl font-bold text-gray-900 truncate">
+        Оплата заказа
+      </h1>
       <div className="grid grid-cols-2 gap-2">
         {paymentMethods.map((method) => (
           <PaymentCard

@@ -1,4 +1,5 @@
 "use client";
+import clientPocketBase from "@/api/client_pb";
 import Branding from "@/components/branding";
 import AddressField from "@/components/formFields/AddressField";
 import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
@@ -12,11 +13,26 @@ import SingleChoice from "@/components/formFields/SingleChoice";
 import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
+import { useParams, useRouter } from "next/navigation";
 
 export default function FormPage() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const id = useParams().id;
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
+    const fileInputs = e.currentTarget.querySelectorAll('input[type="file"]');
+    const files: File[] = [];
+
+    fileInputs.forEach((input) => {
+      const fileList = (input as HTMLInputElement).files;
+      if (fileList) {
+        for (let i = 0; i < fileList.length; i++) {
+          files.push(fileList[i]);
+        }
+      }
+    });
 
     const formDataJson: Record<string, any> = {};
     formData.forEach((value, key) => {
@@ -28,8 +44,27 @@ export default function FormPage() {
         formDataJson[key] = [formDataJson[key], value];
       }
     });
-
-    console.log(formDataJson);
+    const data = {
+      orderData: Object.fromEntries(formData.entries()),
+      finished: false,
+      attachments: files,
+    };
+    try {
+      const businessResponse = await clientPocketBase
+        .collection("business")
+        .getList(0, 1, { filter: "name = id" });
+      const business = businessResponse.items[0];
+      const result = await clientPocketBase.collection("details").create({
+        orderData: formData,
+        attachments: files,
+        business: business,
+      });
+      console.log(result);
+      router.push(`/${id}/payment`);
+    } catch (error) {
+      console.error("Order error:", error);
+      return { error: "Failed to create order" };
+    }
   };
 
   return (

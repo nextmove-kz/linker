@@ -22,13 +22,14 @@ const ImageDialog = ({
 }) => {
   return (
     <Dialog>
-      <DialogTrigger className="mt-2 text-purple-600">{name}</DialogTrigger>
+      <DialogTrigger className="mt-2 text-purple-700">{name}</DialogTrigger>
       <DialogContent className="max-w-[390px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="grid grid-cols-2  gap-2">
             {img &&
               img.map((image, index) => (
+                // TODO: исправить src в будущем
                 <Image
                   src={`http://localhost:8090/api/files/pbc_3816125536/${id}/${image}`}
                   alt={`Image ${index + 1}`}

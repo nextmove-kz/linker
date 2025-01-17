@@ -1,5 +1,3 @@
-// TODO: доделать страницу(посмотреть комментарии - "TODO:")
-
 import { Package, CheckCircle, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pocketbase } from "@/api/pocketbase";
@@ -17,6 +15,7 @@ import {
 import { notFound } from "next/navigation";
 import ImageDialog from "@/components/payment/ImageDialog";
 import Link from "next/link";
+import { handleRequest } from "./utils";
 
 const StatusPage = async ({
   params,
@@ -26,13 +25,13 @@ const StatusPage = async ({
   const { id, order } = await params;
 
   const pb = await pocketbase();
-  const data = await pb
-    .collection("orders")
-    .getOne<ExpandedOrderRecord>(order, {
+  const data = await handleRequest(() =>
+    pb.collection("orders").getOne<ExpandedOrderRecord>(order, {
       expand: "items.product,details,business",
-    });
+    })
+  );
 
-  console.log(data);
+  // console.log(data);
 
   if (!data) {
     notFound();
@@ -185,7 +184,6 @@ const StatusPage = async ({
         </div>
         <div className="mt-4 border-t pt-4">
           <div className="flex justify-between font-semibold">
-            {/* TODO: вывести сумму заказов */}
             <span>Всего</span>
             <span>₸{totalSum}</span>
           </div>

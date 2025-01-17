@@ -125,7 +125,6 @@ export default function Branding() {
                   {totalSum} <span className="text-foreground">₸</span>
                 </p>
               </div>
-              <Button className="mt-2">Перейти к оплате</Button>
             </div>
           )}
         </DialogContent>
