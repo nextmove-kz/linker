@@ -21,7 +21,7 @@ export function InputField({
     <FormField name={name}>
       <Input
         type="text"
-        name={name}
+        name={name + "_text"}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setValue(e.target.value)

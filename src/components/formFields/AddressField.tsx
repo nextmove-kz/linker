@@ -10,7 +10,7 @@ export default function AddressField({ name = "Адрес" }: AddressFieldProps)
     <FormField name={name}>
       <Input name={name + "_street"} placeholder="Улица" />
       <div className="flex gap-2">
-        <Input name={name + "_house_number"} placeholder="Дом" />
+        <Input name={name + "_housenumber"} placeholder="Дом" />
         <Input name={name + "_apartment"} placeholder="Квартира" />
       </div>
     </FormField>
