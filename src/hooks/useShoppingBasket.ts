@@ -87,8 +87,7 @@ export function useShoppingBasketMutations() {
 
   const createMutation: CreateMutationResult = useMutation({
     mutationFn: async (newItem: Omit<ShoppingBasketRecord, "id">) => {
-      const createdItem = { ...newItem, device_id: deviceId };
-      console.log("createMutation", createdItem);
+      const createdItem = { ...newItem, device_id: deviceId || "" };
       return await clientPocketBase
         .collection("shoppingBasket")
         .create(createdItem);
@@ -99,12 +98,15 @@ export function useShoppingBasketMutations() {
         "shoppingBasket",
       ]);
 
+      const tempItem: ShoppingBasketRecord = {
+        ...newItem,
+        id: "temp-id",
+        device_id: deviceId || "",
+      };
+
       queryClient.setQueryData<ShoppingBasketRecord[]>(
         ["shoppingBasket"],
-        (old) =>
-          old
-            ? [...old, { ...newItem, id: "temp-id", device_id: deviceId }]
-            : [{ ...newItem, id: "temp-id", device_id: deviceId }]
+        (old) => (old ? [...old, tempItem] : [tempItem])
       );
 
       return { previousItems };
@@ -171,6 +173,7 @@ export function useShoppingBasketOperations() {
     useShoppingBasketMutations();
   const deviceId = useDeviceId();
   const queryClient = useQueryClient();
+
   const getItemCount = (productId: string) => {
     const data = queryClient.getQueryData<ExpandedShoppingRecord[]>([
       "shoppingBasket",
