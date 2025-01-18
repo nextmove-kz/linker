@@ -1,3 +1,4 @@
+"use client";
 import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
 import clientPocketBase from "@/api/client_pb";
@@ -7,6 +8,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useDeviceId } from "./useDeviceId";
 
 type ShoppingBasketResponse = {
   id: string;
@@ -36,6 +38,8 @@ type UpdateMutationResult = UseMutationResult<
 >;
 
 export function useShoppingBasketQuery(id: string) {
+  const deviceId = useDeviceId();
+
   return useQuery({
     queryKey: ["shoppingBasket"],
     queryFn: async () => {
@@ -43,7 +47,7 @@ export function useShoppingBasketQuery(id: string) {
         .collection("shoppingBasket")
         .getFullList<ExpandedShoppingRecord>({
           expand: "product",
-          filter: `product.business.name = "${id}"`,
+          filter: `product.business.name = "${id}" && device_id = "${deviceId}"`,
         });
       return result;
     },
@@ -52,6 +56,7 @@ export function useShoppingBasketQuery(id: string) {
 
 export function useShoppingBasketMutations() {
   const queryClient = useQueryClient();
+  const deviceId = useDeviceId();
 
   const deleteMutation: DeleteMutationResult = useMutation({
     mutationFn: async (id: string) => {
@@ -82,9 +87,10 @@ export function useShoppingBasketMutations() {
 
   const createMutation: CreateMutationResult = useMutation({
     mutationFn: async (newItem: Omit<ShoppingBasketRecord, "id">) => {
+      const createdItem = { ...newItem, device_id: deviceId || "" };
       return await clientPocketBase
         .collection("shoppingBasket")
-        .create(newItem);
+        .create(createdItem);
     },
     onMutate: async (newItem) => {
       await queryClient.cancelQueries({ queryKey: ["shoppingBasket"] });
@@ -92,12 +98,15 @@ export function useShoppingBasketMutations() {
         "shoppingBasket",
       ]);
 
+      const tempItem: ShoppingBasketRecord = {
+        ...newItem,
+        id: "temp-id",
+        device_id: deviceId || "",
+      };
+
       queryClient.setQueryData<ShoppingBasketRecord[]>(
         ["shoppingBasket"],
-        (old) =>
-          old
-            ? [...old, { ...newItem, id: "temp-id" }]
-            : [{ ...newItem, id: "temp-id" }]
+        (old) => (old ? [...old, tempItem] : [tempItem])
       );
 
       return { previousItems };
@@ -162,8 +171,9 @@ export function useShoppingBasketMutations() {
 export function useShoppingBasketOperations() {
   const { deleteMutation, createMutation, updateMutation } =
     useShoppingBasketMutations();
-
+  const deviceId = useDeviceId();
   const queryClient = useQueryClient();
+
   const getItemCount = (productId: string) => {
     const data = queryClient.getQueryData<ExpandedShoppingRecord[]>([
       "shoppingBasket",
@@ -198,6 +208,7 @@ export function useShoppingBasketOperations() {
         const result = await createMutation.mutateAsync({
           product: productId,
           amount: newCount,
+          device_id: deviceId || "",
         });
         return { shoppingId: result.id };
       }

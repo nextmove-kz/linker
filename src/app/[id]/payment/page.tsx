@@ -94,7 +94,7 @@ const PaymentPage = () => {
 
   return (
     <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
-      <Branding />
+      <Branding sectionId={1} />
       <h1 className="text-2xl font-bold text-gray-900 truncate">
         Оплата заказа
       </h1>

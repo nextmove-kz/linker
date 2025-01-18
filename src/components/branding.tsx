@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { BusinessRecord, ShoppingBasketRecord } from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
-import { useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
@@ -18,12 +17,12 @@ import { Separator } from "./ui/separator";
 import clientPocketBase from "@/api/client_pb";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
+import { sectionsHref } from "@/const/sections";
 
-export default function Branding() {
+export default function Branding({ sectionId }: { sectionId: number }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
-  const [title, setTitle] = useState<string>();
 
   const { data, isLoading } = useShoppingBasketQuery(id);
 
@@ -44,28 +43,20 @@ export default function Branding() {
 
       if (businesses.items.length > 0) {
         const business = businesses.items[0];
-        setTitle(business.displayName || "Без названия");
+        return business.displayName || "Без названия";
       } else {
-        setTitle("Бизнес не найден");
         router.replace("/not-found");
       }
-
-      return { records, businesses };
     } catch (error) {
       console.error("Ошибка загрузки данных:", error);
-      setTitle("Ошибка загрузки данных");
       throw error;
     }
   };
 
-  const { isError, error } = useQuery({
+  const { data: title, isError } = useQuery({
     queryKey: ["shoppingBasket", "business", id],
     queryFn: getData,
   });
-
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
 
   const totalItems =
     data?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
@@ -75,6 +66,8 @@ export default function Branding() {
     0
   );
 
+  console.log(`${id}${sectionsHref[sectionId - 1]}`);
+
   return (
     <Dialog
       onOpenChange={async (open: boolean) => {
@@ -82,11 +75,15 @@ export default function Branding() {
         router.refresh();
       }}
     >
-      <div className="flex mx-auto items-center justify-center gap-2 text-3xl font-semibold p-4">
-        <Link href="/" className="w-12">
-          <ArrowLeft />
-        </Link>
-        <span className="max-w-full text-center flex-1">{title}</span>
+      <div className="mx-2 flex items-center max-w-full justify-center gap-2 text-3xl font-semibold py-4">
+        {sectionId !== 0 ? (
+          <Link href={`/${id}${sectionsHref[sectionId - 1]}`} className="w-12">
+            <ArrowLeft />
+          </Link>
+        ) : (
+          <div className="w-12"></div>
+        )}
+        <span className="max-w-full text-center grow">{title}</span>
         <div className="flex relative py-2">
           <DialogTrigger>
             <ShoppingCart
@@ -99,7 +96,7 @@ export default function Branding() {
             )}
           </DialogTrigger>
         </div>
-        <DialogContent className="w-[400px] rounded-sm">
+        <DialogContent className=" rounded-sm">
           <DialogHeader>
             <DialogTitle>Корзина</DialogTitle>
           </DialogHeader>

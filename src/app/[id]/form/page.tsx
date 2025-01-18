@@ -69,10 +69,10 @@ export default function FormPage() {
 
   return (
     <form
-      className="flex flex-col gap-4 w-[400px] p-2 mx-auto"
+      className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto"
       onSubmit={onSubmit}
     >
-      <Branding />
+      <Branding sectionId={1} />
       <AddressField />
       <PhoneField />
       <QuantityField min={0} />
