@@ -25,29 +25,51 @@ const PaymentPage = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const params = useParams();
   const router = useRouter();
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     let data;
     if (selectedMethod === "kaspi-pt") {
-      data = {
+      data = JSON.stringify({
         phoneNumber: formData.get("Ваш номер для платежа_phone") || "",
-      };
+      });
     } else if (selectedMethod === "cash") {
-      data = {
+      data = JSON.stringify({
         amount: formData.get("Сдача с какой суммы?") || "",
-      };
+      });
     } else if (selectedMethod === "kaspi-transfer") {
-      data = {
-        аыаыавоываофвы
-      }
+      data = JSON.stringify({
+        transfer: "kaspi-transfer",
+      });
     }
 
     console.log(data);
+    const businessResponse = await clientPocketBase
+      .collection("business")
+      .getList(0, 1, { filter: `name = "${params.id}"` });
+    const business = businessResponse.items[0];
+    const businessID = businessResponse.items[0].id;
+    const detailsResponse = await clientPocketBase
+      .collection("details")
+      .getList(0, 1, { filter: `business = "${business.id}"` });
+    const detailsID = detailsResponse.items[0].id;
+    const itemsResponse = await clientPocketBase
+      .collection("shoppingBasket")
+      .getList(0, 1, { filter: `business = "${business.id}"` });
+    const itemsID = itemsResponse.items[0].id;
+    console.log("CHECK: ", itemsID, detailsID, business.id, data);
+    const result = await clientPocketBase.collection("orders").create({
+      business: businessID,
+      details: detailsID,
+      items: itemsID,
+      device_id: "1234123412341234123412341234",
+      status: false,
+      payment: data,
+    });
 
-    const result = clientPocketBase.collection("orders").create({ payment: })
-    router.push(`/${params.id}/${params.order}/status`);
+    console.log(result);
+    router.push(`/${params.id}/${result.id}/status`);
   };
 
   return (

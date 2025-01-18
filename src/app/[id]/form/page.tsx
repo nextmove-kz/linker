@@ -52,8 +52,8 @@ export default function FormPage() {
     try {
       const businessResponse = await clientPocketBase
         .collection("business")
-        .getList(0, 1, { filter: "name = id" });
-      const business = businessResponse.items[0];
+        .getList(0, 1, { filter: `name = "${id}"` });
+      const business = businessResponse.items[0].id;
       const result = await clientPocketBase.collection("details").create({
         orderData: formData,
         attachments: files,
