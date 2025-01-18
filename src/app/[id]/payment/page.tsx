@@ -25,51 +25,71 @@ const PaymentPage = () => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const params = useParams();
   const router = useRouter();
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    let data;
-    if (selectedMethod === "kaspi-pt") {
-      data = JSON.stringify({
-        phoneNumber: formData.get("Ваш номер для платежа_phone") || "",
+    try {
+      const formDataObject = Object.fromEntries(formData.entries());
+      const data = JSON.stringify(
+        getPaymentData(selectedMethod || "", formDataObject)
+      );
+
+      const business = await fetchFirstItem(
+        "business",
+        `name = "${params.id}"`
+      );
+      const details = await fetchFirstItem(
+        "details",
+        `business = "${business.id}"`
+      );
+      const items = await fetchFirstItem(
+        "shoppingBasket",
+        `business = "${business.id}"`
+      );
+
+      if (!business || !details || !items) {
+        console.error("Ошибка: не удалось загрузить необходимые данные.");
+        return;
+      }
+
+      // console.log("CHECK: ", items.id, details.id, business.id, data);
+
+      const result = await clientPocketBase.collection("orders").create({
+        business: business.id,
+        details: details.id,
+        items: items.id,
+        device_id: "1234123412341234123412341234",
+        status: false,
+        payment: data,
       });
-    } else if (selectedMethod === "cash") {
-      data = JSON.stringify({
-        amount: formData.get("Сдача с какой суммы?") || "",
-      });
-    } else if (selectedMethod === "kaspi-transfer") {
-      data = JSON.stringify({
-        transfer: "kaspi-transfer",
-      });
+
+      console.log(result);
+      router.push(`/${params.id}/${result.id}/status`);
+    } catch (error) {
+      console.error("Failed to create order:", error);
     }
+  };
 
-    console.log(data);
-    const businessResponse = await clientPocketBase
-      .collection("business")
-      .getList(0, 1, { filter: `name = "${params.id}"` });
-    const business = businessResponse.items[0];
-    const businessID = businessResponse.items[0].id;
-    const detailsResponse = await clientPocketBase
-      .collection("details")
-      .getList(0, 1, { filter: `business = "${business.id}"` });
-    const detailsID = detailsResponse.items[0].id;
-    const itemsResponse = await clientPocketBase
-      .collection("shoppingBasket")
-      .getList(0, 1, { filter: `business = "${business.id}"` });
-    const itemsID = itemsResponse.items[0].id;
-    console.log("CHECK: ", itemsID, detailsID, business.id, data);
-    const result = await clientPocketBase.collection("orders").create({
-      business: businessID,
-      details: detailsID,
-      items: itemsID,
-      device_id: "1234123412341234123412341234",
-      status: false,
-      payment: data,
-    });
+  const fetchFirstItem = async (collection: string, filter: string) => {
+    const response = await clientPocketBase
+      .collection(collection)
+      .getList(0, 1, { filter });
+    return response.items[0] || null;
+  };
 
-    console.log(result);
-    router.push(`/${params.id}/${result.id}/status`);
+  const getPaymentData = (method: string, formData: Record<string, any>) => {
+    switch (method) {
+      case "kaspi-pt":
+        return { phoneNumber: formData["Ваш номер для платежа_phone"] || "" };
+      case "cash":
+        return { amount: formData["Сдача с какой суммы?"] || "" };
+      case "kaspi-transfer":
+        return { transfer: "kaspi-transfer" };
+      default:
+        return {};
+    }
   };
 
   return (
