@@ -16,6 +16,7 @@ import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "./ui/separator";
 import clientPocketBase from "@/api/client_pb";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 import { sectionsHref } from "@/const/sections";
 
 export default function Branding({ sectionId }: { sectionId: number }) {

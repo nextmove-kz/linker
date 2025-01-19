@@ -12,6 +12,7 @@ export enum Collections {
 	Otps = "_otps",
 	Superusers = "_superusers",
 	Business = "business",
+	Details = "details",
 	Files = "files",
 	Orders = "orders",
 	Products = "products",
@@ -99,20 +100,31 @@ export type BusinessRecord = {
 	updated?: IsoDateString
 }
 
+export type DetailsRecord<TorderData = unknown> = {
+	attachments?: string[]
+	business?: RecordIdString
+	created?: IsoDateString
+	id: string
+	orderData?: null | TorderData
+	updated?: IsoDateString
+}
+
+export type OrdersRecord<Tpayment = unknown> = {
+	business?: RecordIdString
+	created?: IsoDateString
+	details?: RecordIdString
+	device_id: string
+	id: string
+	items?: RecordIdString[]
+	payment?: null | Tpayment
+	status?: boolean
+	updated?: IsoDateString
+}
+
 export type FilesRecord = {
 	created?: IsoDateString
 	file?: string[]
 	id: string
-	updated?: IsoDateString
-}
-
-export type OrdersRecord<TorderData = unknown> = {
-	attachments?: string[]
-	created?: IsoDateString
-	device_id: string
-	finished?: boolean
-	id: string
-	orderData?: null | TorderData
 	updated?: IsoDateString
 }
 
@@ -166,6 +178,7 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & BaseSystemFields<Texpand>
+export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<DetailsRecord<TorderData>> & BaseSystemFields<Texpand>
 export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
 export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
@@ -182,6 +195,7 @@ export type CollectionRecords = {
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
 	business: BusinessRecord
+	details: DetailsRecord
 	files: FilesRecord
 	orders: OrdersRecord
 	products: ProductsRecord
@@ -197,6 +211,7 @@ export type CollectionResponses = {
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
 	business: BusinessResponse
+	details: DetailsResponse
 	files: FilesResponse
 	orders: OrdersResponse
 	products: ProductsResponse
@@ -215,6 +230,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'business'): RecordService<BusinessResponse>
+	collection(idOrName: 'details'): RecordService<DetailsResponse>
 	collection(idOrName: 'files'): RecordService<FilesResponse>
 	collection(idOrName: 'orders'): RecordService<OrdersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
