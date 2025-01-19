@@ -1,5 +1,4 @@
 import { Package, CheckCircle, MoveRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { pocketbase } from "@/api/pocketbase";
 import { OrdersRecord } from "@/api/api_types";
 import {
@@ -8,13 +7,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  ExpandedOrderRecord,
-  ExpandedShoppingRecord,
-} from "@/api/custom_types";
+import { ExpandedOrderRecord } from "@/api/custom_types";
 import { notFound } from "next/navigation";
 import ImageDialog from "@/components/payment/ImageDialog";
-import Link from "next/link";
 import { handleRequest } from "./utils";
 import { compileMessage } from "@/lib/utils";
 import ProductList from "@/components/status/ProductList";
