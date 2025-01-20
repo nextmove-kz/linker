@@ -10,8 +10,7 @@ import {
   ReceiptText as Bill,
   ArrowLeftRight as Transfer,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { on } from "events";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import clientPocketBase from "@/api/client_pb";
 
