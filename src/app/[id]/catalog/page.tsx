@@ -65,6 +65,7 @@ export default function Home() {
                     product={product}
                     initialCount={count.amount}
                     shoppingId={count.shoppingId}
+                    settings={product.expand?.settings}
                   />
                 );
               })}

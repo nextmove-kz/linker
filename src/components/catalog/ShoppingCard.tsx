@@ -1,14 +1,26 @@
 "use client";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
+import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
+  ShoppingBasketRecord,
+} from "@/api/api_types";
 import Image from "next/image";
 import Counter from "./Counter";
 import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { useParams } from "next/navigation";
+import { Divide } from "lucide-react";
 
 type ExpandedShoppingRecord = ShoppingBasketRecord & {
-  expand: { product: ProductsRecord };
+  expand: {
+    product: ProductsRecord;
+    selected_variants: ExpandedVariant[];
+  };
+};
+type ExpandedVariant = SettingVariantRecord & {
+  expand: { setting: SettingsRecord };
 };
 
 const ShoppingCard = ({
@@ -41,6 +53,33 @@ const ShoppingCard = ({
           )}
           <div>
             <div className="font-medium">{product.expand.product.title}</div>
+            <div className="flex flex-col text-xs text-ellipsis">
+              {product.expand.selected_variants.map((variant) => {
+                if (variant.expand.setting.type === "single") {
+                  return (
+                    <div key={variant.id} className="flex gap-1">
+                      <p>{variant.expand.setting.name}:</p>
+                      <p>{variant.name}</p>
+                      {(variant.price_change || 0) >= 0 ? (
+                        <p className="text-primary">+{variant.price_change}</p>
+                      ) : (
+                        <p className="text-primary">-{variant.price_change}</p>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <div key={variant.id} className="flex gap-1">
+                    <p>{variant.name}</p>
+                    {(variant.price_change || 0) >= 0 ? (
+                      <p className="text-primary">+{variant.price_change}</p>
+                    ) : (
+                      <p className="text-primary">-{variant.price_change}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
             <div className="text-primary">
               {(product.expand.product.price || 0) * count} ₸
             </div>

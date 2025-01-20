@@ -4,7 +4,6 @@ import {
   useShoppingBasketOperations,
 } from "./useShoppingBasket";
 import { ProductsRecord } from "@/api/api_types";
-
 export function useProductQuantity(
   product: ProductsRecord,
   initialCount: number,
@@ -36,12 +35,19 @@ export function useProductQuantity(
     }
   }, [shoppingData, product.id]);
 
-  async function handleUpdateBasket(newCount: number) {
+  async function handleUpdateBasket({
+    newCount,
+    variants,
+  }: {
+    newCount: number;
+    variants?: string[];
+  }) {
     try {
       const result = await updateShoppingBasket({
         newCount,
         productId: product.id,
         shoppingId,
+        variantsId: variants,
       });
 
       if (newCount === 0) {
@@ -56,18 +62,23 @@ export function useProductQuantity(
   }
 
   const plus = () => {
-    handleUpdateBasket(count + 1);
+    handleUpdateBasket({ newCount: count + 1 });
   };
 
   const minus = () => {
     if (count > 0) {
-      handleUpdateBasket(count - 1);
+      handleUpdateBasket({ newCount: count - 1 });
     }
   };
 
   const Initial = () => {
     setIsActive(true);
-    handleUpdateBasket(1);
+    handleUpdateBasket({ newCount: 1 });
+  };
+
+  const createWithSettings = (variants: string[]) => {
+    setIsActive(true);
+    handleUpdateBasket({ newCount: 1, variants });
   };
 
   return {
@@ -77,5 +88,6 @@ export function useProductQuantity(
     plus,
     minus,
     Initial,
+    createWithSettings,
   };
 }

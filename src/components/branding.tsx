@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { BusinessRecord, ShoppingBasketRecord } from "@/api/api_types";
+import { BusinessRecord } from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
 import { notFound, useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -30,10 +30,6 @@ export default function Branding({ sectionId }: { sectionId: number }) {
       notFound();
     }
     try {
-      const records = await clientPocketBase
-        .collection("shoppingBasket")
-        .getFullList<ShoppingBasketRecord>({ expand: "product" });
-
       const businesses = await clientPocketBase
         .collection("business")
         .getList<BusinessRecord>(1, 1, {
@@ -52,7 +48,7 @@ export default function Branding({ sectionId }: { sectionId: number }) {
     }
   };
 
-  const { data: title, isError } = useQuery({
+  const { data: title } = useQuery({
     queryKey: ["shoppingBasket", "business", id],
     queryFn: getData,
   });
