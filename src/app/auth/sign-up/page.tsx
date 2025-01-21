@@ -1,5 +1,6 @@
 "use client";
 
+//TODO: доделать страницу регистрации(использовать server action)
 import { Button } from "@/components/ui/button";
 import {
   Card,
