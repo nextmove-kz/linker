@@ -4,6 +4,7 @@ import FormField from "./FormField";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { ExpandedSettings } from "@/api/custom_types";
+import { it } from "date-fns/locale";
 
 const SettingsMultiChoice = ({
   settings,
@@ -22,6 +23,11 @@ const SettingsMultiChoice = ({
             value={item.id}
           />
           <Label htmlFor={item.id}>{item.name}</Label>
+          {(item.price_change || 0) >= 0 ? (
+            <Label className="text-primary">+{item.price_change}</Label>
+          ) : (
+            <Label className="text-primary">-{item.price_change}</Label>
+          )}
         </div>
       ))}
     </FormField>

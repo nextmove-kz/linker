@@ -12,6 +12,8 @@ import { hasImages } from "..//../hooks/jotai/atom";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { useParams } from "next/navigation";
 import { Divide } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "../ui/separator";
 
 type ExpandedShoppingRecord = ShoppingBasketRecord & {
   expand: {
@@ -40,6 +42,18 @@ const ShoppingCard = ({
     id
   );
 
+  const totalPrice = () => {
+    const initial = (product?.expand?.product?.price || 0) * count;
+
+    const variantPrice =
+      product?.expand?.selected_variants?.reduce(
+        (sum, item) => sum + (item?.price_change || 0),
+        0
+      ) || 0;
+
+    return initial + variantPrice;
+  };
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between">
@@ -53,12 +67,31 @@ const ShoppingCard = ({
           )}
           <div>
             <div className="font-medium">{product.expand.product.title}</div>
-            <div className="flex flex-col text-xs text-ellipsis">
-              {product.expand.selected_variants.map((variant) => {
+            <ScrollArea className="max-h-[40px] w-full rounded-md p-1 pr-5 flex flex-col text-xs text-ellipsis">
+              {product.expand.selected_variants?.map((variant) => {
                 if (variant.expand.setting.type === "single") {
                   return (
-                    <div key={variant.id} className="flex gap-1">
-                      <p>{variant.expand.setting.name}:</p>
+                    <div className="flex flex-col gap-1" key={variant.id}>
+                      <div className="flex gap-1">
+                        <p>{variant.expand.setting.name}:</p>
+                        <p>{variant.name}</p>
+                        {(variant.price_change || 0) >= 0 ? (
+                          <p className="text-primary">
+                            +{variant.price_change}
+                          </p>
+                        ) : (
+                          <p className="text-primary">
+                            -{variant.price_change}
+                          </p>
+                        )}
+                      </div>
+                      <Separator />
+                    </div>
+                  );
+                }
+                return (
+                  <div className="flex flex-col gap-1" key={variant.id}>
+                    <div className="flex gap-1">
                       <p>{variant.name}</p>
                       {(variant.price_change || 0) >= 0 ? (
                         <p className="text-primary">+{variant.price_change}</p>
@@ -66,23 +99,13 @@ const ShoppingCard = ({
                         <p className="text-primary">-{variant.price_change}</p>
                       )}
                     </div>
-                  );
-                }
-                return (
-                  <div key={variant.id} className="flex gap-1">
-                    <p>{variant.name}</p>
-                    {(variant.price_change || 0) >= 0 ? (
-                      <p className="text-primary">+{variant.price_change}</p>
-                    ) : (
-                      <p className="text-primary">-{variant.price_change}</p>
-                    )}
+                    <Separator />
                   </div>
                 );
               })}
-            </div>
-            <div className="text-primary">
-              {(product.expand.product.price || 0) * count} ₸
-            </div>
+            </ScrollArea>
+
+            <div className="text-primary">{totalPrice()}₸</div>
           </div>
         </div>
 

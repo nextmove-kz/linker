@@ -55,13 +55,18 @@ export default function Branding({ sectionId }: { sectionId: number }) {
 
   const totalItems =
     data?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
-  const totalSum = data?.reduce(
-    (sum, item) =>
-      sum + (item.amount || 0) * (item.expand?.product?.price || 0),
-    0
-  );
 
-  console.log(`${id}${sectionsHref[sectionId - 1]}`);
+  const totalSum =
+    data?.reduce((total, item) => {
+      const initial = (item.expand?.product?.price || 0) * (item.amount || 0);
+      const variantsPrice =
+        (item.expand?.selected_variants?.reduce(
+          (sum, variant) => sum + (variant.price_change || 0),
+          0
+        ) || 0) * (item.amount || 0);
+
+      return total + initial + variantsPrice;
+    }, 0) || 0;
 
   return (
     <Dialog
