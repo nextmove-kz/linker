@@ -9,7 +9,7 @@ import { ImageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { ExpandedSettings } from "@/api/custom_types";
-import FormDialog from "./FormDialog";
+import SettingsDialog from "./SettingsDialog";
 
 export default function Card({
   product,
@@ -71,7 +71,7 @@ export default function Card({
             {count > 0 && isActive ? (
               <Counter count={count} plus={plus} minus={minus} />
             ) : settings ? (
-              <FormDialog
+              <SettingsDialog
                 product={product}
                 settings={settings}
                 isLoading={isLoading}

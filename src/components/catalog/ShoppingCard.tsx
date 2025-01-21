@@ -56,42 +56,27 @@ const ShoppingCard = ({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-3">
           {image && (
-            <ProductImage
-              photo={product.expand.product.photo}
-              alt={product.expand.product.title}
-              id={product.expand.product.id}
-            />
+            <div className="flex-shrink-0">
+              <ProductImage
+                photo={product.expand.product.photo}
+                alt={product.expand.product.title}
+                id={product.expand.product.id}
+              />
+            </div>
           )}
-          <div>
-            <div className="font-medium">{product.expand.product.title}</div>
-            <ScrollArea className="max-h-[40px] w-full rounded-md p-1 pr-5 flex flex-col text-xs text-ellipsis">
+          <div className="flex flex-col min-h-full">
+            <div className="font-medium mb-1">
+              {product.expand.product.title}
+            </div>
+            <div className="rounded-md text-xs text-ellipsis space-y-0.5">
               {product.expand.selected_variants?.map((variant) => {
                 if (variant.expand.setting.type === "single") {
                   return (
-                    <div className="flex flex-col gap-1" key={variant.id}>
-                      <div className="flex gap-1">
-                        <p>{variant.expand.setting.name}:</p>
-                        <p>{variant.name}</p>
-                        {(variant.price_change || 0) >= 0 ? (
-                          <p className="text-primary">
-                            +{variant.price_change}
-                          </p>
-                        ) : (
-                          <p className="text-primary">
-                            -{variant.price_change}
-                          </p>
-                        )}
-                      </div>
-                      <Separator />
-                    </div>
-                  );
-                }
-                return (
-                  <div className="flex flex-col gap-1" key={variant.id}>
-                    <div className="flex gap-1">
+                    <div className="flex items-center gap-1" key={variant.id}>
+                      <p>{variant.expand.setting.name}:</p>
                       <p>{variant.name}</p>
                       {(variant.price_change || 0) >= 0 ? (
                         <p className="text-primary">+{variant.price_change}</p>
@@ -99,17 +84,25 @@ const ShoppingCard = ({
                         <p className="text-primary">-{variant.price_change}</p>
                       )}
                     </div>
-                    <Separator />
+                  );
+                }
+                return (
+                  <div className="flex items-center gap-1" key={variant.id}>
+                    <p>{variant.name}</p>
+                    {(variant.price_change || 0) >= 0 ? (
+                      <p className="text-primary">+{variant.price_change}</p>
+                    ) : (
+                      <p className="text-primary">-{variant.price_change}</p>
+                    )}
                   </div>
                 );
               })}
-            </ScrollArea>
-
-            <div className="text-primary">{totalPrice()}₸</div>
+            </div>
+            <div className="text-primary mt-1">{totalPrice()}₸</div>
           </div>
         </div>
 
-        <div>
+        <div className="flex-shrink-0">
           <Counter
             count={count}
             plus={plus}

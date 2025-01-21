@@ -24,7 +24,7 @@ interface FormDialogProps {
   onSubmit: (formData: FormData) => Promise<void>;
 }
 
-const FormDialog = ({
+const SettingsDialog = ({
   product,
   settings,
   isLoading,
@@ -103,4 +103,4 @@ const FormDialog = ({
   );
 };
 
-export default FormDialog;
+export default SettingsDialog;

@@ -1,10 +1,9 @@
-"use client";
 import React from "react";
-import FormField from "./FormField";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { ExpandedSettings } from "@/api/custom_types";
-import { it } from "date-fns/locale";
+
+import FormField from "../formFields/FormField";
 
 const SettingsMultiChoice = ({
   settings,

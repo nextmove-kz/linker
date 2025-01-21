@@ -17,6 +17,7 @@ import { Separator } from "./ui/separator";
 import clientPocketBase from "@/api/client_pb";
 import { useRouter } from "next/navigation";
 import { sectionsHref } from "@/const/sections";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function Branding({ sectionId }: { sectionId: number }) {
   const router = useRouter();
@@ -100,19 +101,23 @@ export default function Branding({ sectionId }: { sectionId: number }) {
           <DialogHeader>
             <DialogTitle>Корзина</DialogTitle>
           </DialogHeader>
-          {isLoading ? (
-            <p>Загрузка...</p>
-          ) : data && data.length > 0 ? (
-            data.map((record, index) => (
-              <ShoppingCard
-                key={record.id + `${index}`}
-                product={record}
-                initialCount={record.amount}
-              />
-            ))
-          ) : (
-            <p>Корзина пуста</p>
-          )}
+          <ScrollArea className="max-h-[60vh]">
+            <div className="gap-4 flex flex-col">
+              {isLoading ? (
+                <p>Загрузка...</p>
+              ) : data && data.length > 0 ? (
+                data.map((record, index) => (
+                  <ShoppingCard
+                    key={record.id + `${index}`}
+                    product={record}
+                    initialCount={record.amount}
+                  />
+                ))
+              ) : (
+                <p>Корзина пуста</p>
+              )}
+            </div>
+          </ScrollArea>
           {totalSum != undefined && totalSum > 0 && (
             <div className="flex flex-col gap-1">
               <Separator />

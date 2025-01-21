@@ -1,6 +1,6 @@
+import FormField from "../formFields/FormField";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import FormField from "./FormField";
 import { ExpandedSettings } from "@/api/custom_types";
 
 const SettingsSingleChoice = ({
