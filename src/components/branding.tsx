@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { BusinessRecord, ShoppingBasketRecord } from "@/api/api_types";
+import { BusinessRecord } from "@/api/api_types";
 import ShoppingCard from "./catalog/ShoppingCard";
 import { notFound, useParams } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ import clientPocketBase from "@/api/client_pb";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { sectionsHref } from "@/const/sections";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function Branding({ sectionId }: { sectionId: number }) {
   const router = useRouter();
@@ -31,10 +32,6 @@ export default function Branding({ sectionId }: { sectionId: number }) {
       notFound();
     }
     try {
-      const records = await clientPocketBase
-        .collection("shoppingBasket")
-        .getFullList<ShoppingBasketRecord>({ expand: "product" });
-
       const businesses = await clientPocketBase
         .collection("business")
         .getList<BusinessRecord>(1, 1, {
@@ -53,20 +50,25 @@ export default function Branding({ sectionId }: { sectionId: number }) {
     }
   };
 
-  const { data: title, isError } = useQuery({
+  const { data: title } = useQuery({
     queryKey: ["shoppingBasket", "business", id],
     queryFn: getData,
   });
 
   const totalItems =
     data?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
-  const totalSum = data?.reduce(
-    (sum, item) =>
-      sum + (item.amount || 0) * (item.expand?.product?.price || 0),
-    0
-  );
 
-  console.log(`${id}${sectionsHref[sectionId - 1]}`);
+  const totalSum =
+    data?.reduce((total, item) => {
+      const initial = (item.expand?.product?.price || 0) * (item.amount || 0);
+      const variantsPrice =
+        (item.expand?.selected_variants?.reduce(
+          (sum, variant) => sum + (variant.price_change || 0),
+          0
+        ) || 0) * (item.amount || 0);
+
+      return total + initial + variantsPrice;
+    }, 0) || 0;
 
   return (
     <Dialog
@@ -100,19 +102,23 @@ export default function Branding({ sectionId }: { sectionId: number }) {
           <DialogHeader>
             <DialogTitle>Корзина</DialogTitle>
           </DialogHeader>
-          {isLoading ? (
-            <p>Загрузка...</p>
-          ) : data && data.length > 0 ? (
-            data.map((record, index) => (
-              <ShoppingCard
-                key={record.id + `${index}`}
-                product={record}
-                initialCount={record.amount}
-              />
-            ))
-          ) : (
-            <p>Корзина пуста</p>
-          )}
+          <ScrollArea className="max-h-[60vh]">
+            <div className="gap-4 flex flex-col">
+              {isLoading ? (
+                <p>Загрузка...</p>
+              ) : data && data.length > 0 ? (
+                data.map((record, index) => (
+                  <ShoppingCard
+                    key={record.id + `${index}`}
+                    product={record}
+                    initialCount={record.amount}
+                  />
+                ))
+              ) : (
+                <p>Корзина пуста</p>
+              )}
+            </div>
+          </ScrollArea>
           {totalSum != undefined && totalSum > 0 && (
             <div className="flex flex-col gap-1">
               <Separator />

@@ -16,6 +16,8 @@ export enum Collections {
 	Files = "files",
 	Orders = "orders",
 	Products = "products",
+	SettingVariant = "setting_variant",
+	Settings = "settings",
 	ShoppingBasket = "shoppingBasket",
 	Subscribers = "subscribers",
 	Users = "users",
@@ -136,8 +138,31 @@ export type ProductsRecord = {
 	id: string
 	photo?: string
 	price?: number
+	settings?: RecordIdString[]
 	title: string
 	updated?: IsoDateString
+}
+
+export type SettingVariantRecord = {
+	created?: IsoDateString
+	id: string
+	name?: string
+	price_change?: number
+	setting?: RecordIdString
+	updated?: IsoDateString
+}
+
+export enum SettingsTypeOptions {
+	"single" = "single",
+	"multiple" = "multiple",
+}
+export type SettingsRecord = {
+	created?: IsoDateString
+	id: string
+	name?: string
+	type?: SettingsTypeOptions
+	updated?: IsoDateString
+	variants?: RecordIdString[]
 }
 
 export type ShoppingBasketRecord = {
@@ -146,6 +171,7 @@ export type ShoppingBasketRecord = {
 	created?: IsoDateString
 	device_id: string
 	id: string
+	selected_variants?: RecordIdString[]
 	product: RecordIdString
 	updated?: IsoDateString
 }
@@ -182,6 +208,8 @@ export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<
 export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
 export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
+export type SettingVariantResponse<Texpand = unknown> = Required<SettingVariantRecord> & BaseSystemFields<Texpand>
+export type SettingsResponse<Texpand = unknown> = Required<SettingsRecord> & BaseSystemFields<Texpand>
 export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
 export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
@@ -199,6 +227,8 @@ export type CollectionRecords = {
 	files: FilesRecord
 	orders: OrdersRecord
 	products: ProductsRecord
+	setting_variant: SettingVariantRecord
+	settings: SettingsRecord
 	shoppingBasket: ShoppingBasketRecord
 	subscribers: SubscribersRecord
 	users: UsersRecord
@@ -215,6 +245,8 @@ export type CollectionResponses = {
 	files: FilesResponse
 	orders: OrdersResponse
 	products: ProductsResponse
+	setting_variant: SettingVariantResponse
+	settings: SettingsResponse
 	shoppingBasket: ShoppingBasketResponse
 	subscribers: SubscribersResponse
 	users: UsersResponse
@@ -234,6 +266,8 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'files'): RecordService<FilesResponse>
 	collection(idOrName: 'orders'): RecordService<OrdersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
+	collection(idOrName: 'setting_variant'): RecordService<SettingVariantResponse>
+	collection(idOrName: 'settings'): RecordService<SettingsResponse>
 	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
 	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>

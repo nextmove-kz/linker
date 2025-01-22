@@ -55,7 +55,11 @@ export default function Home() {
         </div>
         <div className="gap-4 w-full flex flex-col pb-10 justify-start px-2 mx-auto">
           {Object.entries(categorizedProducts).map(([category, products]) => (
-            <div key={category} id={category} className="flex flex-col gap-2">
+            <div
+              key={category}
+              id={category}
+              className="flex flex-col gap-2 scroll-mt-28"
+            >
               <h2 className="font-semibold mt-2">{category}</h2>
               {products.map((product) => {
                 const count = getCount(shoppingData, product.id);
@@ -65,6 +69,7 @@ export default function Home() {
                     product={product}
                     initialCount={count.amount}
                     shoppingId={count.shoppingId}
+                    settings={product.expand?.settings}
                   />
                 );
               })}

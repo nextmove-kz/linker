@@ -1,47 +1,61 @@
 "use client";
-import { ProductsRecord } from "@/api/api_types";
+import { ProductsRecord, SettingVariantRecord } from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
 import Counter from "./Counter";
-import {
-  useShoppingBasketOperations,
-  useShoppingBasketQuery,
-} from "@/hooks/useShoppingBasket";
 import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
 import { ImageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useProductQuantity } from "@/hooks/useUpdate";
+import { ExpandedSettings } from "@/api/custom_types";
+import SettingsDialog from "./SettingsDialog";
 
 export default function Card({
   product,
   initialCount,
   shoppingId: initialShoppingId,
+  settings,
 }: {
   product: ProductsRecord;
   initialCount: number;
   shoppingId: string | undefined;
+  settings?: ExpandedSettings[];
 }) {
   const { id } = useParams<{ id: string }>();
   const [image] = useAtom(hasImages);
-  const { count, isActive, isLoading, plus, minus, Initial } =
-    useProductQuantity(product, initialCount, initialShoppingId, id);
+  const {
+    count,
+    isActive,
+    isLoading,
+    plus,
+    minus,
+    Initial,
+    createWithSettings,
+  } = useProductQuantity(product, initialCount, initialShoppingId, id);
+
+  const handleFormSubmit = async (formData: FormData) => {
+    const formEntries = Object.fromEntries(formData.entries());
+    const variants = Object.values(formEntries).map((value) =>
+      value.toString()
+    );
+    await createWithSettings(variants);
+  };
 
   return (
     <div className="py-1">
       <div
         className={`${
           !image ? "border shadow-sm p-3" : "flex gap-2"
-        }  rounded-lg`}
+        } rounded-lg`}
       >
-        {image ? (
+        {image && (
           <ProductImage
             photo={product.photo}
             alt={product.title}
             id={product.id}
           />
-        ) : null}
+        )}
         <div className="flex w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-bold leading-none">{product.title}</p>
@@ -56,6 +70,14 @@ export default function Card({
           >
             {count > 0 && isActive ? (
               <Counter count={count} plus={plus} minus={minus} />
+            ) : settings ? (
+              <SettingsDialog
+                product={product}
+                settings={settings}
+                isLoading={isLoading}
+                showImage={image}
+                onSubmit={handleFormSubmit}
+              />
             ) : (
               <Button
                 onClick={Initial}
@@ -72,7 +94,7 @@ export default function Card({
   );
 }
 
-function ProductImage({
+export function ProductImage({
   photo,
   alt,
   id,

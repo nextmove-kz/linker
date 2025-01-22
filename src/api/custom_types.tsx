@@ -1,4 +1,7 @@
 import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
   BusinessRecord,
   DetailsRecord,
   OrdersRecord,
@@ -7,7 +10,17 @@ import {
 } from "@/api/api_types";
 
 export type ExpandedShoppingRecord = ShoppingBasketRecord & {
-  expand: { product: ProductsRecord };
+  expand: {
+    product: ProductsRecord;
+    selected_variants: ExpandedVariant[];
+  };
+};
+type ExpandedVariant = SettingVariantRecord & {
+  expand: { setting: SettingsRecord };
+};
+
+export type ExpandedSettings = SettingsRecord & {
+  expand: { variants: SettingVariantRecord[] };
 };
 
 export type ExpandedOrderRecord = OrdersRecord & {
