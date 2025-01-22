@@ -1,4 +1,3 @@
-// app/actions/subscribe.ts
 "use server";
 
 import { pocketbase } from "./pocketbase";

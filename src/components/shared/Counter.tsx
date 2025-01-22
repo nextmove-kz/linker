@@ -12,7 +12,7 @@ type CounterProps = {
 
 export default function Counter({
   defaultValue = 1,
-  min = 1,
+  min = 0,
   max = 99,
   onChange,
   name,
