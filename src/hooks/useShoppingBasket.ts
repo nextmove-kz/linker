@@ -46,7 +46,7 @@ export function useShoppingBasketQuery(id: string) {
       const result = await clientPocketBase
         .collection("shoppingBasket")
         .getFullList<ExpandedShoppingRecord>({
-          expand: "product",
+          expand: "product,selected_variants.setting",
           filter: `product.business.name = "${id}" && device_id = "${deviceId}"`,
         });
       return result;
@@ -186,8 +186,9 @@ export function useShoppingBasketOperations() {
     newCount: number;
     productId: string;
     shoppingId?: string | null;
+    variantsId?: string[];
   }) => {
-    const { newCount, productId, shoppingId } = params;
+    const { newCount, productId, shoppingId, variantsId } = params;
 
     try {
       if (newCount === 0) {
@@ -201,6 +202,7 @@ export function useShoppingBasketOperations() {
           newData: {
             product: productId,
             amount: newCount,
+            selected_variants: variantsId,
           },
         });
         return { shoppingId: result.id };
@@ -208,6 +210,7 @@ export function useShoppingBasketOperations() {
         const result = await createMutation.mutateAsync({
           product: productId,
           amount: newCount,
+          selected_variants: variantsId,
           device_id: deviceId || "",
         });
         return { shoppingId: result.id };
