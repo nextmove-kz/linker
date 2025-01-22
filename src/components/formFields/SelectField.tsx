@@ -12,7 +12,7 @@ import {
 import { BaseFieldProps } from "./FormFieldRenderer";
 
 interface SelectFieldProps extends BaseFieldProps {
-  options: string[];
+  options?: string[];
 }
 
 const SelectField = ({ name = "Выберите", options = [] }: SelectFieldProps) => {
