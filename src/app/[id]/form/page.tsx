@@ -91,7 +91,7 @@ export default function FormPage() {
         name="Единичный выбор"
         items={["Пункт 1", "Пункт 2", "Пункт 3"]}
       />
-      <ImageUploader />
+      <ImageUploader variant="multiple" />
       <Button type="submit" className="mt-6">
         Перейти к оплате
       </Button>
