@@ -14,10 +14,11 @@ import SingleChoice from "@/components/formFields/SingleChoice";
 import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function FormPage() {
   const router = useRouter();
+  const id = useParams().id;
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -50,11 +51,17 @@ export default function FormPage() {
       attachments: files,
     };
     try {
-      const result = await clientPocketBase
-        .collection("orders")
-        .create({ orderData: formData, finished: false, attachments: files });
+      const businessResponse = await clientPocketBase
+        .collection("business")
+        .getList(0, 1, { filter: `name = "${id}"` });
+      const business = businessResponse.items[0].id;
+      const result = await clientPocketBase.collection("details").create({
+        orderData: formData,
+        attachments: files,
+        business: business,
+      });
       console.log(result);
-      router.push(`/message/${result.id}`);
+      router.push(`/${id}/payment`);
     } catch (error) {
       console.error("Order error:", error);
       return { error: "Failed to create order" };
