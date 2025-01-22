@@ -12,9 +12,17 @@ export enum Collections {
 	Otps = "_otps",
 	Superusers = "_superusers",
 	Business = "business",
-	Details = "details",
+	BusinessFieldSettings = "business_field_settings",
+	BusinessFields = "business_fields",
+	FieldOptions = "field_options",
+	FieldSettings = "field_settings",
+	FieldTypes = "field_types",
 	Files = "files",
 	Orders = "orders",
+	Products = "products",
+	SettingOptions = "setting_options",
+	Details = "details",
+	Files = "files",
 	Products = "products",
 	SettingVariant = "setting_variant",
 	Settings = "settings",
@@ -102,6 +110,62 @@ export type BusinessRecord = {
 	updated?: IsoDateString
 }
 
+export type BusinessFieldSettingsRecord = {
+	businsess_field: RecordIdString
+	created?: IsoDateString
+	id: string
+	setting: RecordIdString
+	updated?: IsoDateString
+	value?: string
+}
+
+export type BusinessFieldsRecord = {
+	business?: RecordIdString
+	created?: IsoDateString
+	field_options?: RecordIdString[]
+	field_settings?: RecordIdString[]
+	field_type: RecordIdString
+	id: string
+	name: string
+	position: number
+	required?: boolean
+	updated?: IsoDateString
+}
+
+export type FieldOptionsRecord = {
+	business_field: RecordIdString
+	created?: IsoDateString
+	id: string
+	updated?: IsoDateString
+	value: string
+}
+
+export enum FieldSettingsSettingTypeOptions {
+	"text" = "text",
+	"number" = "number",
+	"boolean" = "boolean",
+	"select" = "select",
+}
+export type FieldSettingsRecord = {
+	created?: IsoDateString
+	default_value?: string
+	display_name: string
+	field_type: RecordIdString
+	id: string
+	name: string
+	setting_options?: RecordIdString[]
+	setting_type: FieldSettingsSettingTypeOptions
+	updated?: IsoDateString
+}
+
+export type FieldTypesRecord = {
+	created?: IsoDateString
+	display_name: string
+	id: string
+	name: string
+}
+
+export type FilesRecord = {
 export type DetailsRecord<TorderData = unknown> = {
 	attachments?: string[]
 	business?: RecordIdString
@@ -143,6 +207,13 @@ export type ProductsRecord = {
 	updated?: IsoDateString
 }
 
+export type SettingOptionsRecord = {
+	created?: IsoDateString
+	id: string
+	label: string
+	setting: RecordIdString
+	updated?: IsoDateString
+	value: string
 export type SettingVariantRecord = {
 	created?: IsoDateString
 	id: string
@@ -167,7 +238,6 @@ export type SettingsRecord = {
 
 export type ShoppingBasketRecord = {
 	amount: number
-	business?: RecordIdString
 	created?: IsoDateString
 	device_id: string
 	id: string
@@ -204,6 +274,15 @@ export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemF
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & BaseSystemFields<Texpand>
+export type BusinessFieldSettingsResponse<Texpand = unknown> = Required<BusinessFieldSettingsRecord> & BaseSystemFields<Texpand>
+export type BusinessFieldsResponse<Texpand = unknown> = Required<BusinessFieldsRecord> & BaseSystemFields<Texpand>
+export type FieldOptionsResponse<Texpand = unknown> = Required<FieldOptionsRecord> & BaseSystemFields<Texpand>
+export type FieldSettingsResponse<Texpand = unknown> = Required<FieldSettingsRecord> & BaseSystemFields<Texpand>
+export type FieldTypesResponse<Texpand = unknown> = Required<FieldTypesRecord> & BaseSystemFields<Texpand>
+export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
+export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
+export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
+export type SettingOptionsResponse<Texpand = unknown> = Required<SettingOptionsRecord> & BaseSystemFields<Texpand>
 export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<DetailsRecord<TorderData>> & BaseSystemFields<Texpand>
 export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
 export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
@@ -223,6 +302,15 @@ export type CollectionRecords = {
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
 	business: BusinessRecord
+	business_field_settings: BusinessFieldSettingsRecord
+	business_fields: BusinessFieldsRecord
+	field_options: FieldOptionsRecord
+	field_settings: FieldSettingsRecord
+	field_types: FieldTypesRecord
+	files: FilesRecord
+	orders: OrdersRecord
+	products: ProductsRecord
+	setting_options: SettingOptionsRecord
 	details: DetailsRecord
 	files: FilesRecord
 	orders: OrdersRecord
@@ -241,6 +329,15 @@ export type CollectionResponses = {
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
 	business: BusinessResponse
+	business_field_settings: BusinessFieldSettingsResponse
+	business_fields: BusinessFieldsResponse
+	field_options: FieldOptionsResponse
+	field_settings: FieldSettingsResponse
+	field_types: FieldTypesResponse
+	files: FilesResponse
+	orders: OrdersResponse
+	products: ProductsResponse
+	setting_options: SettingOptionsResponse
 	details: DetailsResponse
 	files: FilesResponse
 	orders: OrdersResponse
@@ -262,6 +359,15 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: '_otps'): RecordService<OtpsResponse>
 	collection(idOrName: '_superusers'): RecordService<SuperusersResponse>
 	collection(idOrName: 'business'): RecordService<BusinessResponse>
+	collection(idOrName: 'business_field_settings'): RecordService<BusinessFieldSettingsResponse>
+	collection(idOrName: 'business_fields'): RecordService<BusinessFieldsResponse>
+	collection(idOrName: 'field_options'): RecordService<FieldOptionsResponse>
+	collection(idOrName: 'field_settings'): RecordService<FieldSettingsResponse>
+	collection(idOrName: 'field_types'): RecordService<FieldTypesResponse>
+	collection(idOrName: 'files'): RecordService<FilesResponse>
+	collection(idOrName: 'orders'): RecordService<OrdersResponse>
+	collection(idOrName: 'products'): RecordService<ProductsResponse>
+	collection(idOrName: 'setting_options'): RecordService<SettingOptionsResponse>
 	collection(idOrName: 'details'): RecordService<DetailsResponse>
 	collection(idOrName: 'files'): RecordService<FilesResponse>
 	collection(idOrName: 'orders'): RecordService<OrdersResponse>

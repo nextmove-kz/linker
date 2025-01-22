@@ -1,4 +1,9 @@
 import {
+  BusinessRecord,
+  ProductsRecord,
+  ShoppingBasketRecord,
+  FieldTypesRecord,
+  BusinessFieldsRecord,
   ProductsRecord,
   SettingVariantRecord,
   SettingsRecord,
@@ -28,5 +33,11 @@ export type ExpandedOrderRecord = OrdersRecord & {
     items: ExpandedShoppingRecord[];
     business: BusinessRecord;
     details: DetailsRecord;
+  };
+};
+
+export type ExpandedBusinessFields = BusinessFieldsRecord & {
+  expand: {
+    field_type: FieldTypesRecord;
   };
 };

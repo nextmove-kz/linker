@@ -3,23 +3,25 @@ import React from "react";
 import FormField from "./FormField";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
+import { BaseFieldProps } from "./FormFieldRenderer";
+
+interface MultiChoiceProps extends BaseFieldProps {
+  options?: string[];
+}
 
 const MultiChoice = ({
   name = "Выберите",
-  items,
-}: {
-  name: string;
-  items: string[];
-}) => {
+  required,
+  options = [],
+}: MultiChoiceProps) => {
   return (
     <FormField name={name}>
-      {items.map((item, index) => (
+      {options.map((item, index) => (
         <div className="flex gap-2" key={item}>
           <Checkbox
             name={name + "_multichoice"}
             id={item + name}
             value={item}
-            defaultChecked={index === 0}
           ></Checkbox>
           <Label htmlFor={item + name}>{item}</Label>
         </div>

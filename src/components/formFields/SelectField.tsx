@@ -9,14 +9,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { BaseFieldProps } from "./FormFieldRenderer";
 
-const DropdownField = ({
-  name = "Выберите",
-  items,
-}: {
-  name?: string;
-  items: string[];
-}) => {
+interface SelectFieldProps extends BaseFieldProps {
+  options?: string[];
+}
+
+const SelectField = ({ name = "Выберите", options = [] }: SelectFieldProps) => {
   return (
     <FormField name={name}>
       <Select name={name + "_select"}>
@@ -25,7 +24,7 @@ const DropdownField = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {items.map((item) => (
+            {options.map((item) => (
               <SelectItem key={item} value={item}>
                 {item}
               </SelectItem>
@@ -37,4 +36,4 @@ const DropdownField = ({
   );
 };
 
-export default DropdownField;
+export default SelectField;
