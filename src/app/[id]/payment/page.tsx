@@ -1,7 +1,7 @@
 "use client";
 
 import Branding from "@/components/branding";
-import { InputField } from "@/components/formFields/FormInput";
+import InputField from "@/components/formFields/FormInput";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import PaymentCard from "@/components/payment/PaymentCard";
 import { Button } from "@/components/ui/button";

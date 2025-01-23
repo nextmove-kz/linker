@@ -14,13 +14,15 @@ export enum Collections {
 	Business = "business",
 	BusinessFieldSettings = "business_field_settings",
 	BusinessFields = "business_fields",
+	Details = "details",
 	FieldOptions = "field_options",
 	FieldSettings = "field_settings",
 	FieldTypes = "field_types",
-	Files = "files",
 	Orders = "orders",
 	Products = "products",
 	SettingOptions = "setting_options",
+	SettingVariant = "setting_variant",
+	Settings = "settings",
 	ShoppingBasket = "shoppingBasket",
 	Subscribers = "subscribers",
 	Users = "users",
@@ -127,6 +129,15 @@ export type BusinessFieldsRecord = {
 	updated?: IsoDateString
 }
 
+export type DetailsRecord<TorderData = unknown> = {
+	attachments?: string[]
+	business?: RecordIdString
+	created?: IsoDateString
+	id: string
+	orderData?: null | TorderData
+	updated?: IsoDateString
+}
+
 export type FieldOptionsRecord = {
 	business_field: RecordIdString
 	created?: IsoDateString
@@ -160,20 +171,15 @@ export type FieldTypesRecord = {
 	name: string
 }
 
-export type FilesRecord = {
+export type OrdersRecord<Tpayment = unknown> = {
+	business?: RecordIdString
 	created?: IsoDateString
-	file?: string[]
-	id: string
-	updated?: IsoDateString
-}
-
-export type OrdersRecord<TorderData = unknown> = {
-	attachments?: string[]
-	created?: IsoDateString
+	details?: RecordIdString
 	device_id: string
-	finished?: boolean
 	id: string
-	orderData?: null | TorderData
+	items?: RecordIdString[]
+	payment?: null | Tpayment
+	status?: boolean
 	updated?: IsoDateString
 }
 
@@ -185,6 +191,7 @@ export type ProductsRecord = {
 	id: string
 	photo?: string
 	price?: number
+	settings?: RecordIdString[]
 	title: string
 	updated?: IsoDateString
 }
@@ -198,12 +205,35 @@ export type SettingOptionsRecord = {
 	value: string
 }
 
+export type SettingVariantRecord = {
+	created?: IsoDateString
+	id: string
+	name?: string
+	price_change?: number
+	setting?: RecordIdString
+	updated?: IsoDateString
+}
+
+export enum SettingsTypeOptions {
+	"single" = "single",
+	"multiple" = "multiple",
+}
+export type SettingsRecord = {
+	created?: IsoDateString
+	id: string
+	name?: string
+	type: SettingsTypeOptions
+	updated?: IsoDateString
+	variants?: RecordIdString[]
+}
+
 export type ShoppingBasketRecord = {
 	amount: number
 	created?: IsoDateString
 	device_id: string
 	id: string
 	product: RecordIdString
+	selected_variants?: RecordIdString[]
 	updated?: IsoDateString
 }
 
@@ -237,13 +267,15 @@ export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> &
 export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & BaseSystemFields<Texpand>
 export type BusinessFieldSettingsResponse<Texpand = unknown> = Required<BusinessFieldSettingsRecord> & BaseSystemFields<Texpand>
 export type BusinessFieldsResponse<Texpand = unknown> = Required<BusinessFieldsRecord> & BaseSystemFields<Texpand>
+export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<DetailsRecord<TorderData>> & BaseSystemFields<Texpand>
 export type FieldOptionsResponse<Texpand = unknown> = Required<FieldOptionsRecord> & BaseSystemFields<Texpand>
 export type FieldSettingsResponse<Texpand = unknown> = Required<FieldSettingsRecord> & BaseSystemFields<Texpand>
 export type FieldTypesResponse<Texpand = unknown> = Required<FieldTypesRecord> & BaseSystemFields<Texpand>
-export type FilesResponse<Texpand = unknown> = Required<FilesRecord> & BaseSystemFields<Texpand>
-export type OrdersResponse<TorderData = unknown, Texpand = unknown> = Required<OrdersRecord<TorderData>> & BaseSystemFields<Texpand>
+export type OrdersResponse<Tpayment = unknown, Texpand = unknown> = Required<OrdersRecord<Tpayment>> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
 export type SettingOptionsResponse<Texpand = unknown> = Required<SettingOptionsRecord> & BaseSystemFields<Texpand>
+export type SettingVariantResponse<Texpand = unknown> = Required<SettingVariantRecord> & BaseSystemFields<Texpand>
+export type SettingsResponse<Texpand = unknown> = Required<SettingsRecord> & BaseSystemFields<Texpand>
 export type ShoppingBasketResponse<Texpand = unknown> = Required<ShoppingBasketRecord> & BaseSystemFields<Texpand>
 export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
@@ -259,13 +291,15 @@ export type CollectionRecords = {
 	business: BusinessRecord
 	business_field_settings: BusinessFieldSettingsRecord
 	business_fields: BusinessFieldsRecord
+	details: DetailsRecord
 	field_options: FieldOptionsRecord
 	field_settings: FieldSettingsRecord
 	field_types: FieldTypesRecord
-	files: FilesRecord
 	orders: OrdersRecord
 	products: ProductsRecord
 	setting_options: SettingOptionsRecord
+	setting_variant: SettingVariantRecord
+	settings: SettingsRecord
 	shoppingBasket: ShoppingBasketRecord
 	subscribers: SubscribersRecord
 	users: UsersRecord
@@ -280,13 +314,15 @@ export type CollectionResponses = {
 	business: BusinessResponse
 	business_field_settings: BusinessFieldSettingsResponse
 	business_fields: BusinessFieldsResponse
+	details: DetailsResponse
 	field_options: FieldOptionsResponse
 	field_settings: FieldSettingsResponse
 	field_types: FieldTypesResponse
-	files: FilesResponse
 	orders: OrdersResponse
 	products: ProductsResponse
 	setting_options: SettingOptionsResponse
+	setting_variant: SettingVariantResponse
+	settings: SettingsResponse
 	shoppingBasket: ShoppingBasketResponse
 	subscribers: SubscribersResponse
 	users: UsersResponse
@@ -304,13 +340,15 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'business'): RecordService<BusinessResponse>
 	collection(idOrName: 'business_field_settings'): RecordService<BusinessFieldSettingsResponse>
 	collection(idOrName: 'business_fields'): RecordService<BusinessFieldsResponse>
+	collection(idOrName: 'details'): RecordService<DetailsResponse>
 	collection(idOrName: 'field_options'): RecordService<FieldOptionsResponse>
 	collection(idOrName: 'field_settings'): RecordService<FieldSettingsResponse>
 	collection(idOrName: 'field_types'): RecordService<FieldTypesResponse>
-	collection(idOrName: 'files'): RecordService<FilesResponse>
 	collection(idOrName: 'orders'): RecordService<OrdersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
 	collection(idOrName: 'setting_options'): RecordService<SettingOptionsResponse>
+	collection(idOrName: 'setting_variant'): RecordService<SettingVariantResponse>
+	collection(idOrName: 'settings'): RecordService<SettingsResponse>
 	collection(idOrName: 'shoppingBasket'): RecordService<ShoppingBasketResponse>
 	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
 	collection(idOrName: 'users'): RecordService<UsersResponse>
