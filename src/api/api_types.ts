@@ -104,6 +104,7 @@ export type BusinessRecord = {
 	displayName?: string
 	id: string
 	name: string
+	phone_number: string
 	updated?: IsoDateString
 }
 
@@ -131,8 +132,9 @@ export type BusinessFieldsRecord = {
 
 export type DetailsRecord<TorderData = unknown> = {
 	attachments?: string[]
-	business?: RecordIdString
+	business: RecordIdString
 	created?: IsoDateString
+	device_id: string
 	id: string
 	orderData?: null | TorderData
 	updated?: IsoDateString
@@ -177,7 +179,7 @@ export type OrdersRecord<Tpayment = unknown> = {
 	details?: RecordIdString
 	device_id: string
 	id: string
-	items?: RecordIdString[]
+	items: RecordIdString[]
 	payment?: null | Tpayment
 	status?: boolean
 	updated?: IsoDateString
