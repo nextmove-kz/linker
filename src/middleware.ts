@@ -1,31 +1,16 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-const DEVICE_ID_COOKIE = "device_id";
-// 10 лет в секундах
-const COOKIE_MAX_AGE = 315360000;
+import { NextRequest, NextResponse } from "next/server";
+import { handleDeviceId } from "./middleare/deviceId";
+import { handleBusinessRedirect } from "./middleare/businessRedirect";
 
 export async function middleware(request: NextRequest) {
-  const deviceId = request.cookies.get(DEVICE_ID_COOKIE);
+  let response = NextResponse.next();
 
-  if (!deviceId) {
-    const response = NextResponse.next();
-    const newDeviceId = crypto.randomUUID();
+  response = await handleDeviceId(request, response);
 
-    response.cookies.set({
-      name: DEVICE_ID_COOKIE,
-      value: newDeviceId,
-      maxAge: COOKIE_MAX_AGE,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      httpOnly: false,
-    });
+  const redirectResponse = await handleBusinessRedirect(request);
+  if (redirectResponse) return redirectResponse;
 
-    return response;
-  }
-
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

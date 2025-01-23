@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   useShoppingBasketQuery,
   useShoppingBasketOperations,
@@ -11,6 +12,7 @@ export function useProductQuantity(
   initialShoppingId: string | undefined,
   businessId: string
 ) {
+  const router = useRouter();
   const [isActive, setIsActive] = useState(initialCount > 0);
   const [shoppingId, setShoppingId] = useState<string | null | undefined>(
     initialShoppingId
@@ -53,6 +55,14 @@ export function useProductQuantity(
 
       if (newCount === 0) {
         setIsActive(false);
+
+        const updatedCart =
+          shoppingData?.filter((item) => item.id !== shoppingId) || [];
+
+        if (updatedCart.length === 0) {
+          router.push(`/${businessId}/catalog`);
+          return;
+        }
       }
 
       setShoppingId(result?.shoppingId ?? null);
