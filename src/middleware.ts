@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { handleDeviceId } from "./middleare/deviceId";
-import { handleBusinessRedirect } from "./middleare/businessRedirect";
+import { handleDeviceId } from "./middleware/deviceId";
+import { handleBusinessRedirect } from "./middleware/businessRedirect";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next();

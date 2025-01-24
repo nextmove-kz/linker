@@ -58,19 +58,20 @@ const SettingsDialog = ({
           <DrawerHeader>
             {showImage && (
               <ProductImage
+                settings
                 photo={product.photo}
                 alt={product.title}
                 id={product.id}
               />
             )}
-            <h1 className="flex justify-start text-sm font-semibold">
+            <h1 className="text-sm font-semibold text-start w-full">
               Описание
             </h1>
-            <p className="flex justify-start text-slate-600 text-sm">
+            <p className="text-slate-600 text-sm text-start">
               {product.description}
             </p>
           </DrawerHeader>
-          <Separator className="mx-4" />
+          <Separator className="w-10/12 mx-auto" />
           <div className="p-5 gap-3 flex flex-col">
             {settings.map((set) =>
               set.type === "single" ? (
