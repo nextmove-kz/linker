@@ -13,9 +13,9 @@ const ProgressBar = ({
 }) => {
   const currentStatusStep = () => {
     switch (data.status) {
-      case false:
+      case "pending":
         return 0;
-      case true:
+      case "finished":
         return 2;
       default:
         return 0;

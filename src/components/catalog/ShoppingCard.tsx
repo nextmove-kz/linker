@@ -3,7 +3,7 @@ import {
   ProductsRecord,
   SettingVariantRecord,
   SettingsRecord,
-  ShoppingBasketRecord,
+  ShoppingCartRecord,
 } from "@/api/api_types";
 import Image from "next/image";
 import Counter from "./Counter";
@@ -15,7 +15,7 @@ import { Divide } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "../ui/separator";
 
-type ExpandedShoppingRecord = ShoppingBasketRecord & {
+type ExpandedShoppingRecord = ShoppingCartRecord & {
   expand: {
     product: ProductsRecord;
     selected_variants: ExpandedVariant[];
