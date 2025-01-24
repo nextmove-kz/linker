@@ -14,6 +14,7 @@ const OrderAccept = async ({ params }: { params: Promise<{ id: string }> }) => {
   } catch (error) {
     console.log(error);
   }
+
   return (
     <div className="flex flex-col min-h-screen items-center justify-center gap-4 max-w-[400px] p-2 mx-auto">
       <div className="max-w-md w-full px-6 py-8 bg-white shadow-lg rounded-lg text-center">
