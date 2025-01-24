@@ -15,6 +15,10 @@ import { Button } from "@/components/ui/button";
 import InputField from "@/components/formFields/FormInput";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
+import { createItemsFromCart } from "./utils";
+import { ExpandedShoppingRecord } from "@/api/custom_types";
+import { compileMessage } from "@/lib/utils";
+import { OrdersRecord } from "@/api/api_types";
 
 type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
 
@@ -117,10 +121,10 @@ export default function PaymentPage() {
         });
 
       const { items: basket, totalItems } = await clientPocketBase
-        .collection("shoppingBasket")
-        .getList(0, 1, {
+        .collection("shopping_cart")
+        .getList<ExpandedShoppingRecord>(0, 100, {
           filter: `product.business = "${business.id}" && device_id = "${deviceId}"`,
-          expand: "product",
+          expand: "product,selected_variants",
         });
 
       if (!business || !details || totalItems === 0) {
@@ -130,19 +134,23 @@ export default function PaymentPage() {
       const method = paymentMethods.find((m) => m.id === selectedMethod);
       if (!method) return;
 
+      const orderItems = await createItemsFromCart(basket);
+      const detailsMessage = compileMessage(
+        details[0].orderData as OrdersRecord
+      );
+
       const order = await clientPocketBase.collection("orders").create({
         business: business.id,
-        details: details[0].id,
-        items: basket.map((item) => item.id),
+        details: detailsMessage,
+        items: orderItems.map((item) => item.id),
         device_id: deviceId,
         status: false,
         payment: JSON.stringify(method.getPaymentData(formData)),
       });
 
-      // TODO: Удаляем все товары из корзины
-      // basket.forEach((item) =>
-      //   clientPocketBase.collection("shoppingBasket").delete(item.id)
-      // );
+      basket.forEach((item) =>
+        clientPocketBase.collection("shopping_cart").delete(item.id)
+      );
 
       router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
