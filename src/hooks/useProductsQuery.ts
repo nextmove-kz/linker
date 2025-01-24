@@ -12,7 +12,7 @@ export function useProductsQuery(id: string) {
       const result = await clientPocketBase
         .collection("products")
         .getFullList<ProductsRecord>({
-          filter: `business.name = "${id}"`,
+          filter: `business.name = "${id}" && archive = false`,
           expand: "settings.variants",
         });
 
