@@ -29,8 +29,6 @@ const StatusPage = async ({
     })
   );
 
-  // console.log(data);
-
   if (!data) {
     notFound();
   }
@@ -53,10 +51,10 @@ const StatusPage = async ({
     { icon: CheckCircle, label: "Заказ завершен" },
   ];
   return (
-    <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
+    <div className="flex flex-col gap-4 max-w-[400px] p-2 py-8 mx-auto">
       {/* TITLE BLOCK*/}
       <h1 className="text-2xl font-bold text-gray-900 truncate">
-        Статус заказа ({data.expand.business?.name})
+        Статус заказа ({data.expand.business?.displayName})
       </h1>
 
       {/* ORDER STATUS BLOCK*/}
@@ -74,7 +72,7 @@ const StatusPage = async ({
             </AccordionTrigger>
             <AccordionContent>
               <pre>{message}</pre>
-              {data.expand.details?.attachments && (
+              {(data.expand.details?.attachments?.length || 0) > 0 && (
                 <ImageDialog
                   name="Открыть изображения"
                   title="Изображение"

@@ -1,45 +1,102 @@
+import { useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
 import clientPocketBase from "@/api/client_pb";
-import { useRouter } from "next/navigation";
+import { useDeviceId } from "@/hooks/useDeviceId";
+
+interface BusinessRecord {
+  id: string;
+  name: string;
+}
+
+interface SubmitError {
+  error: string;
+}
+
+export function useBusinessByName(name: string) {
+  return useQuery<BusinessRecord>({
+    queryKey: ["business", name],
+    queryFn: async () => {
+      const records = await clientPocketBase
+        .collection("business")
+        .getFirstListItem<BusinessRecord>(`name = "${name}"`);
+      return records;
+    },
+  });
+}
 
 export const useUniversalSubmit = () => {
   const router = useRouter();
-  return async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const { id } = useParams<{ id: string }>();
+  const deviceId = useDeviceId();
+  const businessQuery = useBusinessByName(id);
 
-    const fileInputs = e.currentTarget.querySelectorAll('input[type="file"]');
+  const getFilesFromForm = (form: HTMLFormElement): File[] => {
     const files: File[] = [];
+    const fileInputs = form.querySelectorAll('input[type="file"]');
 
     fileInputs.forEach((input) => {
       const fileList = (input as HTMLInputElement).files;
       if (fileList) {
-        for (let i = 0; i < fileList.length; i++) {
-          files.push(fileList[i]);
-        }
+        files.push(...Array.from(fileList));
       }
     });
 
-    const formDataJson: Record<string, any> = {};
+    return files;
+  };
+
+  const getFormDataAsJson = (formData: FormData): Record<string, any> => {
+    const json: Record<string, any> = {};
+
     formData.forEach((value, key) => {
-      if (!formDataJson[key]) {
-        formDataJson[key] = value;
-      } else if (Array.isArray(formDataJson[key])) {
-        formDataJson[key].push(value);
+      if (!json[key]) {
+        json[key] = value;
+      } else if (Array.isArray(json[key])) {
+        json[key].push(value);
       } else {
-        formDataJson[key] = [formDataJson[key], value];
+        json[key] = [json[key], value];
       }
     });
-    const data = {
-      orderData: Object.fromEntries(formData.entries()),
-      finished: false,
-      attachments: files,
-    };
+
+    return json;
+  };
+
+  return async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<SubmitError | void> => {
+    e.preventDefault();
+
+    if (!businessQuery.data) {
+      return { error: "Business data not available" };
+    }
+
     try {
-      const result = await clientPocketBase
-        .collection("orders")
-        .create({ orderData: formData, finished: false, attachments: files });
-      console.log(result);
-      router.push(`/message/${result.id}`);
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const files = getFilesFromForm(form);
+      const formDataJson = getFormDataAsJson(formData);
+
+      const { items } = await clientPocketBase
+        .collection("details")
+        .getList(0, 0, {
+          filter: `device_id = "${deviceId}" && business = "${businessQuery.data.id}"`,
+        });
+
+      const detailsData = {
+        orderData: formDataJson,
+        attachments: files,
+        device_id: deviceId,
+        business: businessQuery.data.id,
+      };
+
+      if (items.length > 0) {
+        await clientPocketBase
+          .collection("details")
+          .update(items[0].id, detailsData);
+      } else {
+        await clientPocketBase.collection("details").create(detailsData);
+      }
+
+      router.push(`/${id}/payment`);
     } catch (error) {
       console.error("Order error:", error);
       return { error: "Failed to create order" };

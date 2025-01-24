@@ -59,7 +59,7 @@ export default function Card({
         <div className="flex w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-bold leading-none">{product.title}</p>
-            <p className="line-clamp-3 text-sm text-gray-600 break-all pr-2">
+            <p className="line-clamp-3 text-sm text-gray-600 break-words pr-2">
               {product.description || "Без описания"}
             </p>
           </div>
@@ -69,7 +69,12 @@ export default function Card({
             }`}
           >
             {count > 0 && isActive ? (
-              <Counter count={count} plus={plus} minus={minus} />
+              <div className="flex gap-3 items-center ">
+                <Counter count={count} plus={plus} minus={minus} />{" "}
+                <span className="text-gray-500">
+                  {product.price && product.price * count} ₸
+                </span>
+              </div>
             ) : settings ? (
               <SettingsDialog
                 product={product}
