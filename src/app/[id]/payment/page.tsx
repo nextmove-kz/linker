@@ -144,7 +144,7 @@ export default function PaymentPage() {
         details: detailsMessage,
         items: orderItems.map((item) => item.id),
         device_id: deviceId,
-        status: false,
+        status: "pending",
         payment: JSON.stringify(method.getPaymentData(formData)),
       });
 
