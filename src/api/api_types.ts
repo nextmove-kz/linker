@@ -185,6 +185,12 @@ export type OrderItemsRecord = {
 	updated?: IsoDateString
 }
 
+export enum OrdersStatusOptions {
+	"pending" = "pending",
+	"declined" = "declined",
+	"accepted" = "accepted",
+	"finished" = "finished",
+}
 export type OrdersRecord<Tpayment = unknown> = {
 	attachments?: string[]
 	business?: RecordIdString
@@ -194,7 +200,7 @@ export type OrdersRecord<Tpayment = unknown> = {
 	id: string
 	items: RecordIdString[]
 	payment?: null | Tpayment
-	status?: boolean
+	status?: OrdersStatusOptions
 	updated?: IsoDateString
 }
 

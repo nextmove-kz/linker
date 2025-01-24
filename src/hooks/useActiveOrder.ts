@@ -18,7 +18,7 @@ export function useActiveOrder() {
       const { items } = await clientPocketBase
         .collection("orders")
         .getList<ExpandedOrdersRecord>(1, 1, {
-          filter: `device_id = "${deviceId}" && status = false && business.name = "${businessId}"`,
+          filter: `device_id = "${deviceId}" && (status = "pending" || status = "accepted") && business.name = "${businessId}"`,
           sort: "-created",
           expand: "business",
         });
