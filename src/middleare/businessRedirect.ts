@@ -23,7 +23,7 @@ export async function handleBusinessRedirect(request: NextRequest) {
     !path.startsWith("_next/") &&
     !path.startsWith("favicon.ico")
   ) {
-    const appPages = ["info", "about", "contact"];
+    const appPages = ["info", "about", "contact", ""];
     if (!appPages.includes(path)) {
       try {
         const businessExists = await checkBusinessExists(path);
