@@ -98,7 +98,6 @@ export const useUniversalSubmit = () => {
 
       router.push(`/${id}/payment`);
     } catch (error) {
-      console.error("Order error:", error);
       return { error: "Failed to create order" };
     }
   };

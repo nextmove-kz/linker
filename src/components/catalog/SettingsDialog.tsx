@@ -37,12 +37,8 @@ const SettingsDialog = ({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    try {
-      await onSubmit(formData);
-      setIsOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
+    await onSubmit(formData);
+    setIsOpen(false);
   };
 
   return (

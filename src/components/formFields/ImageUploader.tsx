@@ -45,7 +45,6 @@ const ImageUploader = ({
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ) as ImageFile[];
       setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
-      console.log(files);
     }
   };
 

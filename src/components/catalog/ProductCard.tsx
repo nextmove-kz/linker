@@ -35,20 +35,21 @@ export default function Card({
     Initial,
     createWithSettings,
   } = useProductQuantity(product, initialCount, initialShoppingId, id);
-  const [pricePreview, setPricePreview] = useState(product.price * count);
+  const [pricePreview, setPricePreview] = useState("");
   const { data: shoppingCartData } = useShoppingBasketQuery(id);
 
   useEffect(() => {
     const inCartData = shoppingCartData?.find(
       (item) => item.expand?.product.id === product.id
     );
+    if (!inCartData) return;
     const priceModifier =
       inCartData?.expand?.selected_variants?.reduce(
         (sum, item) => sum + (item.price_change || 0),
         0
       ) || 0;
 
-    setPricePreview((product.price + priceModifier) * count);
+    setPricePreview((product.price + priceModifier) * count + " ₸");
   }, [shoppingCartData]);
 
   const handleFormSubmit = async (formData: FormData) => {
@@ -88,7 +89,7 @@ export default function Card({
             {count > 0 && isActive ? (
               <div className="flex gap-3 items-center ">
                 <Counter count={count} plus={plus} minus={minus} />{" "}
-                <span className="text-gray-500">{pricePreview} ₸</span>
+                <span className="text-gray-500">{pricePreview}</span>
               </div>
             ) : settings ? (
               <SettingsDialog
