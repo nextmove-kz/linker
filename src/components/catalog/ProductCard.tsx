@@ -147,10 +147,6 @@ export function ProductImage({
         width={128}
         height={128}
         className="rounded w-full h-full aspect-square object-cover select-none"
-        onError={(e) => {
-          console.error("Image loading error:", e);
-          console.log("Attempted URL:", photoUrl);
-        }}
       />
     </div>
   );
