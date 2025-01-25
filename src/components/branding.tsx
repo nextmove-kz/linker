@@ -45,7 +45,6 @@ export default function Branding({ sectionId }: { sectionId: number }) {
         router.replace("/not-found");
       }
     } catch (error) {
-      console.error("Ошибка загрузки данных:", error);
       throw error;
     }
   };

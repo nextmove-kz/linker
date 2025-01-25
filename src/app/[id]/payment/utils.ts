@@ -19,7 +19,6 @@ export const createItemsFromCart = async (
         device_id: item.device_id,
         price: calculatePrice(item.expand.product.price, variants),
       };
-      console.log(orderItem);
       const created = await clientPocketBase
         .collection("order_items")
         .create(orderItem);

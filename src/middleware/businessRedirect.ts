@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server";
 import { pocketbase } from "@/api/pocketbase";
 
 async function checkBusinessExists(businessName: string) {
-  console.log("lakjsdkljKLJSAdlajsdljaklsdjlkasjkdl");
   try {
     const pb = await pocketbase();
     const records = await pb.collection("business").getList(1, 1, {

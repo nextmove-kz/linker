@@ -36,7 +36,7 @@ const paymentMethods = [
     name: "Наличные",
     icon: CircleDollarSignIcon,
     getPaymentData: (formData: FormData) => ({
-      amount: formData.get("Сдача с какой суммы?") || "",
+      amount: formData.get("Сдача с какой суммы?_text") || "",
     }),
   },
   {
@@ -154,7 +154,7 @@ export default function PaymentPage() {
 
       router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
-      console.error("Failed to create order:", error);
+      router.push(`/${params.id}`);
     }
   };
 
