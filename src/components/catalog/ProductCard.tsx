@@ -146,7 +146,6 @@ export function ProductImage({
         alt={alt}
         width={128}
         height={128}
-        unoptimized
         className="rounded w-full h-full aspect-square object-cover select-none"
         onError={(e) => {
           console.error("Image loading error:", e);
