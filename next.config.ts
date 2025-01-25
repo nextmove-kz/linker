@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "pocketbase-linker.fly.dev",
+        pathname: "/api/files/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pocketbase-linker.fly.dev",
         port: "443",
         pathname: "/api/files/**",
       },
