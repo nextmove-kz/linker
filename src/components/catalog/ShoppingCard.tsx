@@ -131,7 +131,7 @@ function ProductImage({ photo, alt, id }: ImageProps) {
       </div>
     );
   }
-  const photoUrl = `http://127.0.0.1:8090/api/files/products/${id}/${photo}`;
+  const photoUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/products/${id}/${photo}`;
 
   return (
     <Image
