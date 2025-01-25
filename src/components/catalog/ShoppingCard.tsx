@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import { Divide } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "../ui/separator";
+import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
 
 type ExpandedShoppingRecord = ShoppingCartRecord & {
   expand: {
@@ -35,12 +36,14 @@ const ShoppingCard = ({
   const { id } = useParams<{ id: string }>();
   const [image] = useAtom(hasImages);
 
-  const { count, isLoading, plus, minus } = useProductQuantity(
+  const { isLoadingItem } = useShoppingBasketOperations();
+  const { count, plus, minus } = useProductQuantity(
     product.expand.product,
     initialCount,
     product.id,
     id
   );
+  const isLoading = isLoadingItem(product.id);
 
   const totalPrice = () => {
     const initial = (product?.expand?.product?.price || 0) * count;
