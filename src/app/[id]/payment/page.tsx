@@ -8,6 +8,7 @@ import {
   CircleDollarSignIcon,
   ReceiptText,
   ArrowLeftRight,
+  Check,
 } from "lucide-react";
 import Branding from "@/components/branding";
 import PaymentCard from "@/components/payment/PaymentCard";
@@ -16,10 +17,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import InputField from "@/components/formFields/FormInput";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
-import { createItemsFromCart } from "./utils";
+import { createItemsFromCart, usePaymentFormData } from "./utils";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
 import { compileMessage } from "@/lib/utils";
 import { OrdersRecord } from "@/api/api_types";
+import CashInput from "@/components/payment/CashInput";
 
 type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
 
@@ -51,11 +53,15 @@ const paymentMethods = [
 function PaymentInputs({
   selectedMethod,
   paymentConfirmed,
+  phoneNumber,
   setPaymentConfirmed,
+  totalSum,
 }: {
   selectedMethod: PaymentMethodId | null;
   paymentConfirmed: boolean;
+  phoneNumber: string;
   setPaymentConfirmed: (checked: boolean) => void;
+  totalSum: number;
 }) {
   if (!selectedMethod) return null;
 
@@ -63,7 +69,14 @@ function PaymentInputs({
     case "kaspi-pt":
       return <PhoneField name="Ваш номер для платежа" />;
     case "cash":
-      return <InputField name="Сдача с какой суммы?" placeholder="100" />;
+      return (
+        <CashInput
+          name="Сдача с какой суммы?"
+          placeholder="10000"
+          required
+          totalSum={totalSum}
+        />
+      );
     case "kaspi-transfer":
       return (
         <div className="flex flex-col gap-4">
@@ -72,7 +85,7 @@ function PaymentInputs({
             <span className="select-none">
               Номер для перевода:{" "}
               <span className="text-primary font-bold select-text">
-                +7 (890) 123-45-67
+                {phoneNumber}
               </span>
             </span>
           </div>
@@ -101,13 +114,11 @@ export default function PaymentPage() {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodId | null>(
     null
   );
-  // TODO: Получение номера бизнеса из базы данных
   // TODO: Формирование видов оплаты из базы данных
-  // TODO: Получение суммы оплаты из базы данных
-  // TODO: Проверка на подтверждение оплаты
   // TODO: Акцент на том что это финальный этап заказа
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-  const params = useParams();
+  const params = useParams<{ id: string }>();
+  const { phoneNumber, totalSum, anyLoading } = usePaymentFormData(params.id);
   const router = useRouter();
   const deviceId = useDeviceId();
 
@@ -164,13 +175,22 @@ export default function PaymentPage() {
     }
   };
 
+  if (anyLoading) {
+    return null;
+  }
+
   return (
     <ActiveOrderCheck>
       <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
         <Branding sectionId={2} />
-        <h1 className="text-2xl font-bold text-gray-900 truncate">
-          Оплата заказа
-        </h1>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-gray-500">Сумма к оплате</span>
+            <span className="text-xl text-gray-900 font-bold">
+              {totalSum!.toLocaleString()} ₸
+            </span>
+          </div>
+        </div>
         <div className="grid grid-cols-2 gap-2">
           {paymentMethods.map((method) => (
             <PaymentCard
@@ -189,6 +209,8 @@ export default function PaymentPage() {
               selectedMethod={selectedMethod}
               paymentConfirmed={paymentConfirmed}
               setPaymentConfirmed={setPaymentConfirmed}
+              phoneNumber={phoneNumber!}
+              totalSum={totalSum!}
             />
             <Button
               type="submit"
@@ -197,7 +219,7 @@ export default function PaymentPage() {
                 selectedMethod === "kaspi-transfer" && !paymentConfirmed
               }
             >
-              Завершить заказ
+              Завершить заказ <Check className="w-4 h-4" />
             </Button>
           </form>
         )}

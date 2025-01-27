@@ -2,11 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import clientPocketBase from "@/api/client_pb";
 import { useDeviceId } from "@/hooks/useDeviceId";
-
-interface BusinessRecord {
-  id: string;
-  name: string;
-}
+import { BusinessRecord } from "@/api/api_types";
 
 interface SubmitError {
   error: string;
