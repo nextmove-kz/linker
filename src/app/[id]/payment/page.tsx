@@ -12,9 +12,14 @@ import {
 import Branding from "@/components/branding";
 import PaymentCard from "@/components/payment/PaymentCard";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import InputField from "@/components/formFields/FormInput";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
+import { createItemsFromCart } from "./utils";
+import { ExpandedShoppingRecord } from "@/api/custom_types";
+import { compileMessage } from "@/lib/utils";
+import { OrdersRecord } from "@/api/api_types";
 
 type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
 
@@ -32,7 +37,7 @@ const paymentMethods = [
     name: "Наличные",
     icon: CircleDollarSignIcon,
     getPaymentData: (formData: FormData) => ({
-      amount: formData.get("Сдача с какой суммы?") || "",
+      amount: formData.get("Сдача с какой суммы?_text") || "",
     }),
   },
   {
@@ -43,52 +48,51 @@ const paymentMethods = [
   },
 ];
 
-function PaymentForms({
+function PaymentInputs({
   selectedMethod,
-  onSubmit,
+  paymentConfirmed,
+  setPaymentConfirmed,
 }: {
   selectedMethod: PaymentMethodId | null;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  paymentConfirmed: boolean;
+  setPaymentConfirmed: (checked: boolean) => void;
 }) {
   if (!selectedMethod) return null;
 
   switch (selectedMethod) {
     case "kaspi-pt":
-      return (
-        <form
-          onSubmit={onSubmit}
-          className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto"
-        >
-          <PhoneField name="Ваш номер для платежа" />
-          <Button type="submit" className="mt-2">
-            Продолжить
-          </Button>
-        </form>
-      );
+      return <PhoneField name="Ваш номер для платежа" />;
     case "cash":
-      return (
-        <form
-          onSubmit={onSubmit}
-          className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto"
-        >
-          <InputField name="Сдача с какой суммы?" placeholder="100" />
-          <Button type="submit" className="mt-2">
-            Продолжить
-          </Button>
-        </form>
-      );
+      return <InputField name="Сдача с какой суммы?" placeholder="100" />;
     case "kaspi-transfer":
       return (
-        <form
-          onSubmit={onSubmit}
-          className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto text-sm"
-        >
-          <span>Каспи перевод</span>
-          <span>Номер для перевода: +7 (890) 123-45-67</span>
-          <Button type="submit" className="mt-2">
-            Продолжить
-          </Button>
-        </form>
+        <div className="flex flex-col gap-4">
+          <div className="text-md flex flex-col gap-2">
+            <span className="text-gray-500">Каспи перевод</span>
+            <span className="select-none">
+              Номер для перевода:{" "}
+              <span className="text-primary font-bold select-text">
+                +7 (890) 123-45-67
+              </span>
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="payment-confirmed"
+              checked={paymentConfirmed}
+              onCheckedChange={(checked) =>
+                setPaymentConfirmed(checked as boolean)
+              }
+              required
+            />
+            <label
+              htmlFor="payment-confirmed"
+              className="text-sm font-medium leading-none select-none"
+            >
+              Я провел оплату
+            </label>
+          </div>
+        </div>
       );
   }
 }
@@ -97,6 +101,12 @@ export default function PaymentPage() {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethodId | null>(
     null
   );
+  // TODO: Получение номера бизнеса из базы данных
+  // TODO: Формирование видов оплаты из базы данных
+  // TODO: Получение суммы оплаты из базы данных
+  // TODO: Проверка на подтверждение оплаты
+  // TODO: Акцент на том что это финальный этап заказа
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const params = useParams();
   const router = useRouter();
   const deviceId = useDeviceId();
@@ -117,10 +127,10 @@ export default function PaymentPage() {
         });
 
       const { items: basket, totalItems } = await clientPocketBase
-        .collection("shoppingBasket")
-        .getList(0, 1, {
+        .collection("shopping_cart")
+        .getList<ExpandedShoppingRecord>(0, 100, {
           filter: `product.business = "${business.id}" && device_id = "${deviceId}"`,
-          expand: "product",
+          expand: "product,selected_variants",
         });
 
       if (!business || !details || totalItems === 0) {
@@ -130,23 +140,27 @@ export default function PaymentPage() {
       const method = paymentMethods.find((m) => m.id === selectedMethod);
       if (!method) return;
 
+      const orderItems = await createItemsFromCart(basket);
+      const detailsMessage = compileMessage(
+        details[0].orderData as OrdersRecord
+      );
+
       const order = await clientPocketBase.collection("orders").create({
         business: business.id,
-        details: details[0].id,
-        items: basket.map((item) => item.id),
+        details: detailsMessage,
+        items: orderItems.map((item) => item.id),
         device_id: deviceId,
-        status: false,
+        status: "pending",
         payment: JSON.stringify(method.getPaymentData(formData)),
       });
 
-      // TODO: Удаляем все товары из корзины
-      // basket.forEach((item) =>
-      //   clientPocketBase.collection("shoppingBasket").delete(item.id)
-      // );
+      basket.forEach((item) =>
+        clientPocketBase.collection("shopping_cart").delete(item.id)
+      );
 
       router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
-      console.error("Failed to create order:", error);
+      router.push(`/${params.id}`);
     }
   };
 
@@ -169,12 +183,24 @@ export default function PaymentPage() {
             />
           ))}
         </div>
-        <div className="pt-2">
-          <PaymentForms
-            selectedMethod={selectedMethod}
-            onSubmit={handleSubmit}
-          />
-        </div>
+        {selectedMethod && (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <PaymentInputs
+              selectedMethod={selectedMethod}
+              paymentConfirmed={paymentConfirmed}
+              setPaymentConfirmed={setPaymentConfirmed}
+            />
+            <Button
+              type="submit"
+              className="mt-2"
+              disabled={
+                selectedMethod === "kaspi-transfer" && !paymentConfirmed
+              }
+            >
+              Завершить заказ
+            </Button>
+          </form>
+        )}
       </div>
     </ActiveOrderCheck>
   );

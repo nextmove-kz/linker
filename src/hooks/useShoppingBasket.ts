@@ -1,5 +1,5 @@
 "use client";
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
+import { ProductsRecord, ShoppingCartRecord } from "@/api/api_types";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
 import clientPocketBase from "@/api/client_pb";
 import {
@@ -20,31 +20,35 @@ type DeleteMutationResult = UseMutationResult<
   void,
   Error,
   string,
-  { previousItems: ProductsRecord[] | undefined }
+  { previousItems: ExpandedShoppingRecord[] | undefined; mutationId: number }
 >;
 
 type CreateMutationResult = UseMutationResult<
   ShoppingBasketResponse,
   Error,
-  Omit<ShoppingBasketRecord, "id">,
-  { previousItems: ShoppingBasketRecord[] | undefined }
+  Omit<ShoppingCartRecord, "id">,
+  { previousItems: ExpandedShoppingRecord[] | undefined; mutationId: number }
 >;
 
 type UpdateMutationResult = UseMutationResult<
   ShoppingBasketResponse,
   Error,
-  { id: string; newData: Partial<ShoppingBasketRecord> },
-  { previousItems: ShoppingBasketRecord[] | undefined }
+  { id: string; newData: Partial<ShoppingCartRecord> },
+  { previousItems: ExpandedShoppingRecord[] | undefined; mutationId: number }
 >;
+type PendingMutations = number[];
+
+const pendingRequests = new Map<string, Promise<any>>();
 
 export function useShoppingBasketQuery(id: string) {
   const deviceId = useDeviceId();
 
   return useQuery({
-    queryKey: ["shoppingBasket"],
+    queryKey: ["shopping_cart"],
+    staleTime: 30000, // Consider data fresh for 30 seconds
     queryFn: async () => {
       const result = await clientPocketBase
-        .collection("shoppingBasket")
+        .collection("shopping_cart")
         .getFullList<ExpandedShoppingRecord>({
           expand: "product,selected_variants.setting",
           filter: `product.business.name = "${id}" && device_id = "${deviceId}"`,
@@ -60,65 +64,142 @@ export function useShoppingBasketMutations() {
 
   const deleteMutation: DeleteMutationResult = useMutation({
     mutationFn: async (id: string) => {
-      await clientPocketBase.collection("shoppingBasket").delete(id);
+      const key = `delete-${id}`;
+      if (pendingRequests.has(key)) {
+        return pendingRequests.get(key);
+      }
+
+      const promise = clientPocketBase.collection("shopping_cart").delete(id);
+      pendingRequests.set(key, promise);
+
+      try {
+        await promise;
+      } finally {
+        pendingRequests.delete(key);
+      }
     },
     onMutate: async (deletedId) => {
-      await queryClient.cancelQueries({ queryKey: ["shoppingBasket"] });
-      const previousItems = queryClient.getQueryData<ProductsRecord[]>([
-        "shoppingBasket",
-      ]);
+      const mutationId = Date.now();
+      await queryClient.cancelQueries({ queryKey: ["shopping_cart"] });
 
-      queryClient.setQueryData<ProductsRecord[]>(["shoppingBasket"], (old) =>
-        old ? old.filter((item) => item.id !== deletedId) : []
+      const pendingMutations =
+        queryClient.getQueryData<PendingMutations>(["pendingMutations"]) || [];
+      queryClient.setQueryData(
+        ["pendingMutations"],
+        [...pendingMutations, mutationId]
       );
 
-      return { previousItems };
+      const previousItems = queryClient.getQueryData<ExpandedShoppingRecord[]>([
+        "shopping_cart",
+      ]);
+
+      queryClient.setQueryData<ExpandedShoppingRecord[]>(
+        ["shopping_cart"],
+        (old) => (old ? old.filter((item) => item.id !== deletedId) : [])
+      );
+
+      return { previousItems, mutationId };
     },
     onError: (err, variables, context) => {
       if (context?.previousItems) {
-        queryClient.setQueryData(["shoppingBasket"], context.previousItems);
+        queryClient.setQueryData(["shopping_cart"], context.previousItems);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shoppingBasket"] });
-      queryClient.refetchQueries({ queryKey: ["shoppingBasket"] });
+    onSuccess: (_, __, context) => {
+      if (context?.mutationId) {
+        const pendingMutations =
+          queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+        queryClient.setQueryData(
+          ["pendingMutations"],
+          pendingMutations.filter((id) => id !== context.mutationId)
+        );
+      }
+    },
+    onSettled: (_, __, context) => {
+      const pendingMutations =
+        queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+      if (pendingMutations.length === 0) {
+        queryClient.invalidateQueries({ queryKey: ["shopping_cart"] });
+      }
     },
   });
 
   const createMutation: CreateMutationResult = useMutation({
-    mutationFn: async (newItem: Omit<ShoppingBasketRecord, "id">) => {
+    mutationFn: async (newItem: Omit<ShoppingCartRecord, "id">) => {
+      const key = `create-${newItem.product}-${newItem.amount}`;
+      if (pendingRequests.has(key)) {
+        return pendingRequests.get(key);
+      }
+
       const createdItem = { ...newItem, device_id: deviceId || "" };
-      return await clientPocketBase
-        .collection("shoppingBasket")
+      const promise = clientPocketBase
+        .collection("shopping_cart")
         .create(createdItem);
+      pendingRequests.set(key, promise);
+
+      try {
+        return await promise;
+      } finally {
+        pendingRequests.delete(key);
+      }
     },
     onMutate: async (newItem) => {
-      await queryClient.cancelQueries({ queryKey: ["shoppingBasket"] });
-      const previousItems = queryClient.getQueryData<ShoppingBasketRecord[]>([
-        "shoppingBasket",
-      ]);
+      const mutationId = Date.now();
+      await queryClient.cancelQueries({ queryKey: ["shopping_cart"] });
 
-      const tempItem: ShoppingBasketRecord = {
-        ...newItem,
-        id: "temp-id",
+      const pendingMutations =
+        queryClient.getQueryData<PendingMutations>(["pendingMutations"]) || [];
+      queryClient.setQueryData(
+        ["pendingMutations"],
+        [...pendingMutations, mutationId]
+      );
+
+      const previousItems = queryClient.getQueryData<ExpandedShoppingRecord[]>([
+        "shopping_cart",
+      ]);
+      const products = queryClient.getQueryData<ProductsRecord[]>(["products"]);
+      const product = products?.find((p) => p.id === newItem.product);
+
+      const tempItem: ExpandedShoppingRecord = {
+        id: `temp-${mutationId}`,
         device_id: deviceId || "",
+        amount: newItem.amount,
+        product: newItem.product,
+        selected_variants: newItem.selected_variants || [],
+        expand: {
+          product: product!,
+          selected_variants: [],
+        },
       };
 
-      queryClient.setQueryData<ShoppingBasketRecord[]>(
-        ["shoppingBasket"],
+      queryClient.setQueryData<ExpandedShoppingRecord[]>(
+        ["shopping_cart"],
         (old) => (old ? [...old, tempItem] : [tempItem])
       );
 
-      return { previousItems };
+      return { previousItems, mutationId };
     },
     onError: (err, variables, context) => {
       if (context?.previousItems) {
-        queryClient.setQueryData(["shoppingBasket"], context.previousItems);
+        queryClient.setQueryData(["shopping_cart"], context.previousItems);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shoppingBasket"] });
-      queryClient.refetchQueries({ queryKey: ["shoppingBasket"] });
+    onSuccess: (_, __, context) => {
+      if (context?.mutationId) {
+        const pendingMutations =
+          queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+        queryClient.setQueryData(
+          ["pendingMutations"],
+          pendingMutations.filter((id) => id !== context.mutationId)
+        );
+      }
+    },
+    onSettled: (_, __, context) => {
+      const pendingMutations =
+        queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+      if (pendingMutations.length === 0) {
+        queryClient.invalidateQueries({ queryKey: ["shopping_cart"] });
+      }
     },
   });
 
@@ -128,36 +209,70 @@ export function useShoppingBasketMutations() {
       newData,
     }: {
       id: string;
-      newData: Partial<ShoppingBasketRecord>;
+      newData: Partial<ShoppingCartRecord>;
     }) => {
-      return await clientPocketBase
-        .collection("shoppingBasket")
+      const key = `update-${id}-${JSON.stringify(newData)}`;
+      if (pendingRequests.has(key)) {
+        return pendingRequests.get(key);
+      }
+
+      const promise = clientPocketBase
+        .collection("shopping_cart")
         .update(id, newData);
+      pendingRequests.set(key, promise);
+
+      try {
+        return await promise;
+      } finally {
+        pendingRequests.delete(key);
+      }
     },
     onMutate: async ({ id, newData }) => {
-      await queryClient.cancelQueries({ queryKey: ["shoppingBasket"] });
-      const previousItems = queryClient.getQueryData<ShoppingBasketRecord[]>([
-        "shoppingBasket",
+      const mutationId = Date.now();
+      await queryClient.cancelQueries({ queryKey: ["shopping_cart"] });
+
+      const pendingMutations =
+        queryClient.getQueryData<PendingMutations>(["pendingMutations"]) || [];
+      queryClient.setQueryData(
+        ["pendingMutations"],
+        [...pendingMutations, mutationId]
+      );
+
+      const previousItems = queryClient.getQueryData<ExpandedShoppingRecord[]>([
+        "shopping_cart",
       ]);
 
-      queryClient.setQueryData<ShoppingBasketRecord[]>(
-        ["shoppingBasket"],
+      queryClient.setQueryData<ExpandedShoppingRecord[]>(
+        ["shopping_cart"],
         (old) =>
           old?.map((item) =>
             item.id === id ? { ...item, ...newData } : item
           ) || []
       );
 
-      return { previousItems };
+      return { previousItems, mutationId };
     },
     onError: (err, variables, context) => {
       if (context?.previousItems) {
-        queryClient.setQueryData(["shoppingBasket"], context.previousItems);
+        queryClient.setQueryData(["shopping_cart"], context.previousItems);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shoppingBasket"] });
-      queryClient.refetchQueries({ queryKey: ["shoppingBasket"] });
+    onSuccess: (_, __, context) => {
+      if (context?.mutationId) {
+        const pendingMutations =
+          queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+        queryClient.setQueryData(
+          ["pendingMutations"],
+          pendingMutations.filter((id) => id !== context.mutationId)
+        );
+      }
+    },
+    onSettled: (_, __, context) => {
+      const pendingMutations =
+        queryClient.getQueryData<number[]>(["pendingMutations"]) || [];
+      if (pendingMutations.length === 0) {
+        queryClient.invalidateQueries({ queryKey: ["shopping_cart"] });
+      }
     },
   });
 
@@ -176,7 +291,7 @@ export function useShoppingBasketOperations() {
 
   const getItemCount = (productId: string) => {
     const data = queryClient.getQueryData<ExpandedShoppingRecord[]>([
-      "shoppingBasket",
+      "shopping_cart",
     ]);
     const record = data?.find((item) => item.product === productId);
     return record ? record.amount : 0;
@@ -228,6 +343,15 @@ export function useShoppingBasketOperations() {
       deleteMutation.isPending ||
       createMutation.isPending ||
       updateMutation.isPending,
+    // Fixed the comparison
+    isLoadingItem: (productId: string) => {
+      const deletingId = deleteMutation.variables;
+      return (
+        deletingId === productId ||
+        createMutation.variables?.product === productId ||
+        updateMutation.variables?.newData.product === productId
+      );
+    },
     isError:
       deleteMutation.isError ||
       createMutation.isError ||

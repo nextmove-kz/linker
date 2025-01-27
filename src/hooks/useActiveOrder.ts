@@ -2,6 +2,7 @@ import { useDeviceId } from "@/hooks/useDeviceId";
 import { useQuery } from "@tanstack/react-query";
 import clientPocketBase from "@/api/client_pb";
 import { BusinessRecord, OrdersRecord } from "@/api/api_types";
+import { useParams } from "next/navigation";
 
 type ExpandedOrdersRecord = OrdersRecord & {
   expand: { business: BusinessRecord };
@@ -9,6 +10,7 @@ type ExpandedOrdersRecord = OrdersRecord & {
 
 export function useActiveOrder() {
   const deviceId = useDeviceId();
+  const { id: businessId } = useParams<{ id: string }>();
 
   return useQuery({
     queryKey: ["activeOrder", deviceId],
@@ -16,7 +18,7 @@ export function useActiveOrder() {
       const { items } = await clientPocketBase
         .collection("orders")
         .getList<ExpandedOrdersRecord>(1, 1, {
-          filter: `device_id = "${deviceId}" && status = false`,
+          filter: `device_id = "${deviceId}" && (status = "pending" || status = "accepted") && business.name = "${businessId}"`,
           sort: "-created",
           expand: "business",
         });

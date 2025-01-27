@@ -3,7 +3,7 @@ import {
   ProductsRecord,
   SettingVariantRecord,
   SettingsRecord,
-  ShoppingBasketRecord,
+  ShoppingCartRecord,
 } from "@/api/api_types";
 import Image from "next/image";
 import Counter from "./Counter";
@@ -14,8 +14,9 @@ import { useParams } from "next/navigation";
 import { Divide } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "../ui/separator";
+import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
 
-type ExpandedShoppingRecord = ShoppingBasketRecord & {
+type ExpandedShoppingRecord = ShoppingCartRecord & {
   expand: {
     product: ProductsRecord;
     selected_variants: ExpandedVariant[];
@@ -35,12 +36,14 @@ const ShoppingCard = ({
   const { id } = useParams<{ id: string }>();
   const [image] = useAtom(hasImages);
 
-  const { count, isLoading, plus, minus } = useProductQuantity(
+  const { isLoadingItem } = useShoppingBasketOperations();
+  const { count, plus, minus } = useProductQuantity(
     product.expand.product,
     initialCount,
     product.id,
     id
   );
+  const isLoading = isLoadingItem(product.id);
 
   const totalPrice = () => {
     const initial = (product?.expand?.product?.price || 0) * count;
@@ -131,7 +134,7 @@ function ProductImage({ photo, alt, id }: ImageProps) {
       </div>
     );
   }
-  const photoUrl = `http://127.0.0.1:8090/api/files/products/${id}/${photo}`;
+  const photoUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/products/${id}/${photo}`;
 
   return (
     <Image

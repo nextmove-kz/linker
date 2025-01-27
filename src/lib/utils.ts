@@ -1,8 +1,29 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { OrderItemsRecord } from "@/api/api_types";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
+}
+
+export function formatPaymentMethod(paymentMethod: Record<string, string>) {
+  const key = Object.keys(paymentMethod)[0];
+  switch (key) {
+    case "kaspi-pt":
+      return "Каспи платеж";
+    case "cash":
+      return "Наличные";
+    case "transfer":
+      return "Каспи перевод";
+    default:
+      return "";
+  }
+}
+
+export function formatOrderList(orderItems: OrderItemsRecord[]): string {
+  return orderItems
+    .map((item) => `${item.amount}x ${item.product_name}`)
+    .join(", ");
 }
 
 export function compileMessage(orderData: Object) {
@@ -22,17 +43,9 @@ export function compileMessage(orderData: Object) {
     const type = key.split("_")[1];
     const value: any = orderData[key as keyof typeof orderData];
 
-    // console.log("resultString", resultString);
-
     let dataString;
-    // console.log("type", type);
     if (complexTypes.includes(type)) {
-      // console.log("is_complex");
-      if (
-        type === "apartment" ||
-        type === "housenumber" ||
-        type === "street"
-      ) {
+      if (type === "apartment" || type === "housenumber" || type === "street") {
         dataString = proceessAddress(orderData, keys, name);
       }
       if (type === "multichoice") {
@@ -48,15 +61,14 @@ export function compileMessage(orderData: Object) {
     resultString += dataString;
   }
   return resultString;
-};
+}
 
 const proceessAddress = (orderData: Object, keys: string[], name: string) => {
   const streetKey = `${name}_street`;
   const housenumberKey = `${name}_housenumber`;
   const apartmentKey = `${name}_apartment`;
   const streetValue = orderData[streetKey as keyof typeof orderData];
-  const housenumberValue =
-    orderData[housenumberKey as keyof typeof orderData];
+  const housenumberValue = orderData[housenumberKey as keyof typeof orderData];
   const apartmentValue = orderData[apartmentKey as keyof typeof orderData];
 
   const addressString = `${name}: ул. ${streetValue} дом ${housenumberValue} кв. ${apartmentValue}\n`;

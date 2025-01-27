@@ -1,7 +1,7 @@
 import {
   ProductsRecord,
   SettingsRecord,
-  ShoppingBasketRecord,
+  ShoppingCartRecord,
 } from "@/api/api_types";
 import { ExpandedSettings } from "@/api/custom_types";
 export type CategorizedProducts = Record<string, ExpandedProductsRecord[]>;
@@ -34,7 +34,7 @@ const getCategory = (product: ProductsRecord): string => {
 };
 
 export const getCount = (
-  shoppingData: ShoppingBasketRecord[] | undefined,
+  shoppingData: ShoppingCartRecord[] | undefined,
   productId: string
 ) => {
   const record = shoppingData?.find((record) => record.product === productId);

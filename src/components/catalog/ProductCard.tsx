@@ -10,6 +10,8 @@ import { useParams } from "next/navigation";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { ExpandedSettings } from "@/api/custom_types";
 import SettingsDialog from "./SettingsDialog";
+import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
+import { use, useEffect, useState } from "react";
 
 export default function Card({
   product,
@@ -33,6 +35,22 @@ export default function Card({
     Initial,
     createWithSettings,
   } = useProductQuantity(product, initialCount, initialShoppingId, id);
+  const [pricePreview, setPricePreview] = useState("");
+  const { data: shoppingCartData } = useShoppingBasketQuery(id);
+
+  useEffect(() => {
+    const inCartData = shoppingCartData?.find(
+      (item) => item.expand?.product.id === product.id
+    );
+    if (!inCartData) return;
+    const priceModifier =
+      inCartData?.expand?.selected_variants?.reduce(
+        (sum, item) => sum + (item.price_change || 0),
+        0
+      ) || 0;
+
+    setPricePreview((product.price + priceModifier) * count + " ₸");
+  }, [shoppingCartData]);
 
   const handleFormSubmit = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
@@ -71,9 +89,7 @@ export default function Card({
             {count > 0 && isActive ? (
               <div className="flex gap-3 items-center ">
                 <Counter count={count} plus={plus} minus={minus} />{" "}
-                <span className="text-gray-500">
-                  {product.price && product.price * count} ₸
-                </span>
+                <span className="text-gray-500">{pricePreview}</span>
               </div>
             ) : settings ? (
               <SettingsDialog
@@ -103,13 +119,16 @@ export function ProductImage({
   photo,
   alt,
   id,
+  settings = false,
 }: {
   photo?: string;
   alt: string;
   id: string;
+  settings?: boolean;
 }) {
-  const photoContainer =
-    "select-none object-cover border rounded min-w-32 h-32 flex items-center justify-center bg-gray-50";
+  const photoContainer = `select-none object-cover border rounded min-w-32 ${
+    !settings && "h-32"
+  } flex items-center justify-center bg-gray-50 ${settings && "aspect-square"}`;
 
   if (!photo) {
     return (
@@ -119,7 +138,7 @@ export function ProductImage({
     );
   }
 
-  const photoUrl = `http://127.0.0.1:8090/api/files/products/${id}/${photo}`;
+  const photoUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/products/${id}/${photo}`;
 
   return (
     <div className={photoContainer}>

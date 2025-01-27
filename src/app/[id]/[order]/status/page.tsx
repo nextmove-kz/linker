@@ -25,7 +25,7 @@ const StatusPage = async ({
   const pb = await pocketbase();
   const data = await handleRequest(() =>
     pb.collection("orders").getOne<ExpandedOrderRecord>(order, {
-      expand: "items.product,details,business",
+      expand: "items,business",
     })
   );
 
@@ -38,12 +38,11 @@ const StatusPage = async ({
   }
 
   const totalSum = data?.expand.items.reduce(
-    (sum, item) =>
-      sum + (item.amount || 0) * (item.expand?.product?.price || 0),
+    (sum, item) => sum + item.amount * (item.price || 0),
     0
   );
 
-  const message = compileMessage(data.expand.details.orderData as OrdersRecord);
+  const message = data.details;
 
   const statusSteps = [
     { icon: Package, label: "Заказ принят" },
@@ -72,14 +71,14 @@ const StatusPage = async ({
             </AccordionTrigger>
             <AccordionContent>
               <pre>{message}</pre>
-              {(data.expand.details?.attachments?.length || 0) > 0 && (
+              {/* {(data.expand.details?.attachments?.length || 0) > 0 && (
                 <ImageDialog
                   name="Открыть изображения"
                   title="Изображение"
                   img={data.expand.details?.attachments || []}
                   id={data.expand.details.id}
                 />
-              )}
+              )} */}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
