@@ -42,6 +42,7 @@ export default function PhoneInput({ name }: { name?: string }) {
     <Input
       value={phone}
       name={name + "_phone"}
+      required
       minLength={18}
       placeholder="+7 (___) ___-__-__"
       onChange={handleChange}

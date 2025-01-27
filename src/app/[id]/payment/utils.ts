@@ -5,6 +5,26 @@ import {
 } from "@/api/api_types";
 import clientPocketBase from "@/api/client_pb";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
+import { useBusinessByName } from "../form/utils";
+import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
+
+export const usePaymentFormData = (businessId: string) => {
+  // получаем номер телефона бизнеса из базы данных
+  const { data: businessData, isLoading: isBusinessLoading } =
+    useBusinessByName(businessId);
+  const phoneNumber = businessData?.phone_number;
+
+  // получаем общую сумму заказа из базы данных
+  const { data: shoppingData, isLoading: isShoppingLoading } =
+    useShoppingBasketQuery(businessId);
+  const totalSum = shoppingData?.reduce(
+    (sum, item) => sum + (item.expand?.product?.price || 0) * item.amount,
+    0
+  );
+
+  const anyLoading = isBusinessLoading || isShoppingLoading;
+  return { phoneNumber, totalSum, anyLoading };
+};
 
 export const createItemsFromCart = async (
   basket: ExpandedShoppingRecord[]
