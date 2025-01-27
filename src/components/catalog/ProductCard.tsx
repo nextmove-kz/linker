@@ -35,22 +35,33 @@ export default function Card({
     Initial,
     createWithSettings,
   } = useProductQuantity(product, initialCount, initialShoppingId, id);
-  const [pricePreview, setPricePreview] = useState("");
-  const { data: shoppingCartData } = useShoppingBasketQuery(id);
+  const [pricePreview, setPricePreview] = useState<string | null>(null);
+  const { data: shoppingCartData, isLoading: isCartLoading } =
+    useShoppingBasketQuery(id);
 
   useEffect(() => {
-    const inCartData = shoppingCartData?.find(
+    if (!shoppingCartData || isCartLoading || !count) {
+      setPricePreview(null);
+      return;
+    }
+
+    const inCartData = shoppingCartData.find(
       (item) => item.expand?.product.id === product.id
     );
-    if (!inCartData) return;
+
+    if (!inCartData) {
+      return;
+    }
+
     const priceModifier =
-      inCartData?.expand?.selected_variants?.reduce(
+      inCartData.expand?.selected_variants?.reduce(
         (sum, item) => sum + (item.price_change || 0),
         0
-      ) || 0;
+      ) ?? 0;
 
-    setPricePreview((product.price + priceModifier) * count + " ₸");
-  }, [shoppingCartData]);
+    const totalPrice = (product.price + priceModifier) * count;
+    setPricePreview(`${totalPrice} ₸`);
+  }, [shoppingCartData, isCartLoading, count, product.id, product.price]);
 
   const handleFormSubmit = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
@@ -87,9 +98,11 @@ export default function Card({
             }`}
           >
             {count > 0 && isActive ? (
-              <div className="flex gap-3 items-center ">
-                <Counter count={count} plus={plus} minus={minus} />{" "}
-                <span className="text-gray-500">{pricePreview}</span>
+              <div className="flex gap-3 items-center">
+                <Counter count={count} plus={plus} minus={minus} />
+                {pricePreview && (
+                  <span className="text-gray-500">{pricePreview}</span>
+                )}
               </div>
             ) : settings ? (
               <SettingsDialog
