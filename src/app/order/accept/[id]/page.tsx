@@ -7,10 +7,31 @@ const OrderAccept = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
   try {
     const pb = await pocketbase();
-    const orderResponse = await pb
+    const orderUpdateResponse = await pb
       .collection("orders")
       .update(id, { status: "accepted" });
-    console.log(orderResponse);
+
+    console.log(orderUpdateResponse);
+    const orderData = pb.collection("orders").getOne(id);
+    // TODO: whatsapp-bot send notification
+
+    const clientNotification = await fetch(
+      "localhost:3000/api/client-success",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: "+79990000000",
+          business: "1",
+          id: id,
+          orderItems: orderData,
+          orderDetails: "1",
+          paymentMethod: "1",
+        }),
+      }
+    );
   } catch (error) {
     console.log(error);
   }

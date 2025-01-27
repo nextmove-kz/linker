@@ -15,6 +15,24 @@ const OrderDecline = async ({
       .collection("orders")
       .update(id, { status: "declined" });
     console.log(orderResponse);
+    const orderData = pb.collection("orders").getOne(id);
+    // TODO: whatsapp-bot send notification
+
+    // const clientNotification = await fetch(
+    //   "localhost:3000/api/client-success",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       phone: "+79990000000",
+    //       id: id,
+    //       business: "1",
+    //       orderItems: "1",
+    //     }),
+    //   }
+    // );
   } catch (error) {
     console.log(error);
   }
