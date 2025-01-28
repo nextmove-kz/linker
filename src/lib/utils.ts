@@ -10,9 +10,9 @@ export function formatPaymentMethod(paymentMethod: Record<string, string>) {
   const key = Object.keys(paymentMethod)[0];
   switch (key) {
     case "kaspi-pt":
-      return "Каспи платеж";
+      return "Каспи платеж. " + `Номер для платежа: ${paymentMethod[key]}`;
     case "cash":
-      return "Наличные";
+      return "Наличные. " + `Сдача с : ${paymentMethod[key]}₸`;
     case "transfer":
       return "Каспи перевод";
     default:

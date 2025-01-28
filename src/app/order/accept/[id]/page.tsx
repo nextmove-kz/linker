@@ -26,22 +26,25 @@ const OrderAccept = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       if (!process.env.WHATSAPP_BOT) throw new Error("Whatsapp BOT is not set");
       // TODO: whatsapp-bot send notification
-      const clientNotification = await fetch(process.env.WHATSAPP_BOT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone: orderData.phone,
-          business: orderData.expand.business.displayName as string,
-          id: id as string,
-          orderItems: formatOrderList(orderData.expand.items) as string,
-          orderDetails: orderData.details as string,
-          paymentMethod: formatPaymentMethod(
-            orderData.payment as Record<string, string>
-          ) as string,
-        }),
-      });
+      const clientNotification = await fetch(
+        `${process.env.WHATSAPP_BOT}/api/client-success`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: orderData.phone,
+            business: orderData.expand.business.displayName as string,
+            id: id as string,
+            orderItems: formatOrderList(orderData.expand.items) as string,
+            orderDetails: orderData.details as string,
+            paymentMethod: formatPaymentMethod(
+              orderData.payment as Record<string, string>
+            ) as string,
+          }),
+        }
+      );
       // console.log("notification res: ", clientNotification);
     } catch (error) {
       return (

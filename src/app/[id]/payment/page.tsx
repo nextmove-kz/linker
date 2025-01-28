@@ -18,7 +18,11 @@ import PhoneField from "@/components/formFields/phone/PhoneField";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 import { createItemsFromCart } from "./utils";
 import { ExpandedShoppingRecord } from "@/api/custom_types";
-import { compileMessage } from "@/lib/utils";
+import {
+  compileMessage,
+  formatOrderList,
+  formatPaymentMethod,
+} from "@/lib/utils";
 import { OrdersRecord } from "@/api/api_types";
 
 type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
@@ -157,7 +161,25 @@ export default function PaymentPage() {
       basket.forEach((item) =>
         clientPocketBase.collection("shopping_cart").delete(item.id)
       );
-
+      const notificationResponse = await fetch(
+        `${process.env.WHATSAPP_BOT}/api/business-notification`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: order.phone,
+            id: order.id,
+            orderItems: formatOrderList(orderItems) as string,
+            orderDetails: order.details,
+            paymentMethod: formatPaymentMethod(
+              order.payment as Record<string, string>
+            ),
+          }),
+        }
+      );
+      // console.log(notificationResponse);
       router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
       router.push(`/${params.id}`);

@@ -26,23 +26,26 @@ const OrderDecline = async ({
       const orderResponse = await pb
         .collection("orders")
         .update(id, { status: "declined" });
-      console.log(orderResponse);
+      // console.log(orderResponse);
       // TODO: whatsapp-bot send notification
 
       if (!process.env.WHATSAPP_BOT) throw new Error("Whatsapp BOT is not set");
 
-      const clientNotification = await fetch(process.env.WHATSAPP_BOT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone: orderData.phone,
-          id: id,
-          business: orderData.expand.business.displayName as string,
-          orderItems: formatOrderList(orderData.expand.items) as string,
-        }),
-      });
+      const clientNotification = await fetch(
+        `${process.env.WHATSAPP_BOT}/api/client-decline`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: orderData.phone,
+            id: id,
+            business: orderData.expand.business.displayName as string,
+            orderItems: formatOrderList(orderData.expand.items) as string,
+          }),
+        }
+      );
     } catch (error) {
       return (
         <div className="flex flex-col min-h-screen items-center justify-center gap-4 max-w-[400px] p-2 mx-auto">
