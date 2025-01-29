@@ -15,6 +15,9 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
 import { useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export default function SignupForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,9 +33,28 @@ export default function SignupForm() {
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto">
-      <h1 className="text-3xl font-semibold text-center mb-4">
-        Регистрация для бизнеса
-      </h1>
+      <div className="flex mb-4 gap-2">
+        <svg
+          width="50"
+          height="50"
+          viewBox="0 0 303 303"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="shadow-2xl rounded-xl"
+        >
+          <rect width="303" height="303" rx="72" fill="#6650F2" />
+          <path
+            d="M147 92L206.293 151.293C206.683 151.683 206.683 152.317 206.293 152.707L147 212"
+            stroke="white"
+            stroke-width="42"
+            stroke-linecap="round"
+          />
+          <circle cx="118" cy="152" r="22" fill="white" />
+        </svg>
+        <h1 className="text-3xl font-semibold text-center mt-auto">
+          Регистрация бизнеса
+        </h1>
+      </div>
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle>Зарегестрируйте свой бизнес</CardTitle>
@@ -75,30 +97,47 @@ export default function SignupForm() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Пароль</Label>
-              <Input id="password" name="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Введите пароль"
+                required
+              />
               {/* {errors.password && (
               <p className="text-sm text-red-500">{errors.password}</p>
             )} */}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="passwordConfirm">Пароль</Label>
+              <Label htmlFor="passwordConfirm">Подтвердите пароль</Label>
               <Input
                 id="passwordConfirm"
                 name="passwordConfirm"
                 type="password"
+                placeholder="Введите пароль еще раз"
                 required
               />
               {/* {errors.passwordConfirm && (
               <p className="text-sm text-red-500">{errors.passwordConfirm}</p>
             )} */}
             </div>
-
+            <Separator />
             {/* <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? "Signing Up..." : "Sign Up"}
           </Button> */}
             <Button type="submit" className="w-full">
-              Sign Up
+              Зарегистрироваться
             </Button>
+            <span className="flex justify-center text-gray-500 gap-1">
+              Уже есть аккаунт?
+              <Link
+                href="/auth/sign-in"
+                className="flex underline text-blue-500"
+              >
+                Войти
+                <ArrowUpRight className=" h-4 w-4" />
+              </Link>
+            </span>
           </form>
         </CardContent>
         <CardFooter>
