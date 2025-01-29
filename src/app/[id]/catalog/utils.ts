@@ -1,5 +1,13 @@
-import { ProductsRecord, ShoppingBasketRecord } from "@/api/api_types";
-export type CategorizedProducts = Record<string, ProductsRecord[]>;
+import {
+  ProductsRecord,
+  SettingsRecord,
+  ShoppingCartRecord,
+} from "@/api/api_types";
+import { ExpandedSettings } from "@/api/custom_types";
+export type CategorizedProducts = Record<string, ExpandedProductsRecord[]>;
+type ExpandedProductsRecord = ProductsRecord & {
+  expand?: { settings: ExpandedSettings[] };
+};
 export function getCategorizedProducts(data: ProductsRecord[]) {
   const categorizedProducts =
     data?.reduce((acc, product) => {
@@ -9,7 +17,7 @@ export function getCategorizedProducts(data: ProductsRecord[]) {
       }
       acc[category].push(product);
       return acc;
-    }, {} as Record<string, ProductsRecord[]>) || {};
+    }, {} as CategorizedProducts) || {};
 
   const categories = Object.keys(categorizedProducts);
 
@@ -26,7 +34,7 @@ const getCategory = (product: ProductsRecord): string => {
 };
 
 export const getCount = (
-  shoppingData: ShoppingBasketRecord[] | undefined,
+  shoppingData: ShoppingCartRecord[] | undefined,
   productId: string
 ) => {
   const record = shoppingData?.find((record) => record.product === productId);

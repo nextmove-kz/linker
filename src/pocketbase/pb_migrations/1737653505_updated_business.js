@@ -1,15 +1,15 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((app) => {
-  const collection = app.findCollectionByNameOrId("pbc_3527180448")
+  const collection = app.findCollectionByNameOrId("pbc_1218262561")
 
   // add field
-  collection.fields.addAt(4, new Field({
+  collection.fields.addAt(3, new Field({
     "autogeneratePattern": "",
     "hidden": false,
-    "id": "text2493827028",
-    "max": 36,
-    "min": 36,
-    "name": "device_id",
+    "id": "text1795275867",
+    "max": 0,
+    "min": 0,
+    "name": "phone_number",
     "pattern": "",
     "presentable": false,
     "primaryKey": false,
@@ -20,10 +20,10 @@ migrate((app) => {
 
   return app.save(collection)
 }, (app) => {
-  const collection = app.findCollectionByNameOrId("pbc_3527180448")
+  const collection = app.findCollectionByNameOrId("pbc_1218262561")
 
   // remove field
-  collection.fields.removeById("text2493827028")
+  collection.fields.removeById("text1795275867")
 
   return app.save(collection)
 })

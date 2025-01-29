@@ -11,7 +11,7 @@ type DateTimeFieldProps = {
   maxDate?: Date;
 };
 
-export function DateTimeField({
+export default function DateTimeField({
   name = "Дата и время",
   minDate,
   maxDate,

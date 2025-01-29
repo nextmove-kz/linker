@@ -1,7 +1,4 @@
-import {
-  ExpandedOrderRecord,
-  ExpandedShoppingRecord,
-} from "@/api/custom_types";
+import { ExpandedOrderItems, ExpandedOrderRecord } from "@/api/custom_types";
 
 const ProductList = ({
   data,
@@ -14,16 +11,19 @@ const ProductList = ({
     <div className="rounded-lg bg-white p-6 shadow-md">
       <h2 className="mb-4 text-lg font-semibold">Заказ</h2>
 
-      <div className="mb-2 flex justify-between text-sm">
-        {data.expand.items.map((item: ExpandedShoppingRecord) => {
-          const product = item.expand.product;
-
+      <div className="mb-2 flex flex-col gap-4 text-sm">
+        {data.expand.items.map((item: ExpandedOrderItems) => {
           return (
             <div key={item.id} className="flex justify-between w-full">
-              <span>
-                {item.amount}x {product.title}
-              </span>
-              <span>₸{product.price}</span>
+              <div className="flex flex-col">
+                <span>
+                  {item.amount}x {item.product_name}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {item.selected_variants}
+                </span>
+              </div>
+              <span>₸{item.price * item.amount}</span>
             </div>
           );
         })}

@@ -3,10 +3,10 @@ migrate((app) => {
   const collection = app.findCollectionByNameOrId("pbc_3527180448")
 
   // add field
-  collection.fields.addAt(3, new Field({
+  collection.fields.addAt(7, new Field({
     "hidden": false,
     "id": "file1204091606",
-    "maxSelect": 99,
+    "maxSelect": 5,
     "maxSize": 0,
     "mimeTypes": [],
     "name": "attachments",

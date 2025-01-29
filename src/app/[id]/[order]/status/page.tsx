@@ -25,11 +25,9 @@ const StatusPage = async ({
   const pb = await pocketbase();
   const data = await handleRequest(() =>
     pb.collection("orders").getOne<ExpandedOrderRecord>(order, {
-      expand: "items.product,details,business",
+      expand: "items,business",
     })
   );
-
-  // console.log(data);
 
   if (!data) {
     notFound();
@@ -40,12 +38,11 @@ const StatusPage = async ({
   }
 
   const totalSum = data?.expand.items.reduce(
-    (sum, item) =>
-      sum + (item.amount || 0) * (item.expand?.product?.price || 0),
+    (sum, item) => sum + item.amount * (item.price || 0),
     0
   );
 
-  const message = compileMessage(data.expand.details.orderData as OrdersRecord);
+  const message = data.details;
 
   const statusSteps = [
     { icon: Package, label: "Заказ принят" },
@@ -53,10 +50,10 @@ const StatusPage = async ({
     { icon: CheckCircle, label: "Заказ завершен" },
   ];
   return (
-    <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
+    <div className="flex flex-col gap-4 max-w-[400px] p-2 py-8 mx-auto">
       {/* TITLE BLOCK*/}
       <h1 className="text-2xl font-bold text-gray-900 truncate">
-        Статус заказа ({data.expand.business?.name})
+        Статус заказа ({data.expand.business?.displayName})
       </h1>
 
       {/* ORDER STATUS BLOCK*/}
@@ -74,14 +71,14 @@ const StatusPage = async ({
             </AccordionTrigger>
             <AccordionContent>
               <pre>{message}</pre>
-              {data.expand.details?.attachments && (
+              {/* {(data.expand.details?.attachments?.length || 0) > 0 && (
                 <ImageDialog
                   name="Открыть изображения"
                   title="Изображение"
                   img={data.expand.details?.attachments || []}
                   id={data.expand.details.id}
                 />
-              )}
+              )} */}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
