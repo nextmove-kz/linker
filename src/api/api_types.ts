@@ -26,7 +26,6 @@ export enum Collections {
 	Settings = "settings",
 	ShoppingCart = "shopping_cart",
 	Subscribers = "subscribers",
-	Users = "users",
 }
 
 // Alias types for improved usability
@@ -101,12 +100,21 @@ export type SuperusersRecord = {
 }
 
 export type BusinessRecord = {
+	address?: string
+	color?: string
 	created?: IsoDateString
-	displayName?: string
+	description?: string
+	display_name?: string
+	email: string
+	emailVisibility?: boolean
 	id: string
-	name: string
-	phone_number: string
+	instagram?: string
+	name?: string
+	password: string
+	phone_number?: string
+	tokenKey: string
 	updated?: IsoDateString
+	verified?: boolean
 }
 
 export type BusinessFieldSettingsRecord = {
@@ -119,7 +127,7 @@ export type BusinessFieldSettingsRecord = {
 }
 
 export type BusinessFieldsRecord = {
-	business: RecordIdString
+	business?: RecordIdString
 	created?: IsoDateString
 	field_options?: RecordIdString[]
 	field_settings?: RecordIdString[]
@@ -133,7 +141,7 @@ export type BusinessFieldsRecord = {
 
 export type DetailsRecord<TorderData = unknown> = {
 	attachments?: string[]
-	business: RecordIdString
+	business?: RecordIdString
 	created?: IsoDateString
 	device_id: string
 	id: string
@@ -200,6 +208,7 @@ export type OrdersRecord<Tpayment = unknown> = {
 	id: string
 	items: RecordIdString[]
 	payment?: null | Tpayment
+	phone?: string
 	status?: OrdersStatusOptions
 	updated?: IsoDateString
 }
@@ -267,26 +276,13 @@ export type SubscribersRecord = {
 	updated?: IsoDateString
 }
 
-export type UsersRecord = {
-	avatar?: string
-	created?: IsoDateString
-	email: string
-	emailVisibility?: boolean
-	id: string
-	name?: string
-	password: string
-	tokenKey: string
-	updated?: IsoDateString
-	verified?: boolean
-}
-
 // Response types include system fields and match responses from the PocketBase API
 export type AuthoriginsResponse<Texpand = unknown> = Required<AuthoriginsRecord> & BaseSystemFields<Texpand>
 export type ExternalauthsResponse<Texpand = unknown> = Required<ExternalauthsRecord> & BaseSystemFields<Texpand>
 export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemFields<Texpand>
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
-export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & BaseSystemFields<Texpand>
+export type BusinessResponse<Texpand = unknown> = Required<BusinessRecord> & AuthSystemFields<Texpand>
 export type BusinessFieldSettingsResponse<Texpand = unknown> = Required<BusinessFieldSettingsRecord> & BaseSystemFields<Texpand>
 export type BusinessFieldsResponse<Texpand = unknown> = Required<BusinessFieldsRecord> & BaseSystemFields<Texpand>
 export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<DetailsRecord<TorderData>> & BaseSystemFields<Texpand>
@@ -301,7 +297,6 @@ export type SettingVariantResponse<Texpand = unknown> = Required<SettingVariantR
 export type SettingsResponse<Texpand = unknown> = Required<SettingsRecord> & BaseSystemFields<Texpand>
 export type ShoppingCartResponse<Texpand = unknown> = Required<ShoppingCartRecord> & BaseSystemFields<Texpand>
 export type SubscribersResponse<Texpand = unknown> = Required<SubscribersRecord> & BaseSystemFields<Texpand>
-export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
 
@@ -326,7 +321,6 @@ export type CollectionRecords = {
 	settings: SettingsRecord
 	shopping_cart: ShoppingCartRecord
 	subscribers: SubscribersRecord
-	users: UsersRecord
 }
 
 export type CollectionResponses = {
@@ -350,7 +344,6 @@ export type CollectionResponses = {
 	settings: SettingsResponse
 	shopping_cart: ShoppingCartResponse
 	subscribers: SubscribersResponse
-	users: UsersResponse
 }
 
 // Type for usage with type asserted PocketBase instance
@@ -377,5 +370,4 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'settings'): RecordService<SettingsResponse>
 	collection(idOrName: 'shopping_cart'): RecordService<ShoppingCartResponse>
 	collection(idOrName: 'subscribers'): RecordService<SubscribersResponse>
-	collection(idOrName: 'users'): RecordService<UsersResponse>
 }
