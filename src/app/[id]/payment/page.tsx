@@ -22,6 +22,7 @@ import { ExpandedShoppingRecord } from "@/api/custom_types";
 import { compileMessage } from "@/lib/utils";
 import { OrdersRecord } from "@/api/api_types";
 import CashInput from "@/components/payment/CashInput";
+import { sendBusinessNotification } from "@/api/whatsapp/notifications";
 
 type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
 
@@ -30,23 +31,25 @@ const paymentMethods = [
     id: "kaspi-pt" as const,
     name: "Каспи платеж",
     icon: ReceiptText,
-    getPaymentData: (formData: FormData) => ({
-      phoneNumber: formData.get("Ваш номер для платежа_phone") || "",
-    }),
+    getPaymentData: (formData: FormData) =>
+      `Каспи Платежом. На номер: ${
+        formData.get("Ваш номер для платежа_phone") || ""
+      }`,
   },
   {
     id: "cash" as const,
     name: "Наличные",
     icon: CircleDollarSignIcon,
-    getPaymentData: (formData: FormData) => ({
-      amount: formData.get("Сдача с какой суммы?_text") || "",
-    }),
+    getPaymentData: (formData: FormData) =>
+      `Наличными. Сдача с суммы: ${
+        formData.get("Сдача с какой суммы?_text") || ""
+      }`,
   },
   {
     id: "kaspi-transfer" as const,
     name: "Каспи перевод",
     icon: ArrowLeftRight,
-    getPaymentData: () => ({ transfer: "kaspi-transfer" }),
+    getPaymentData: () => "Оплачено переводом на каспи",
   },
 ];
 
@@ -162,12 +165,14 @@ export default function PaymentPage() {
         items: orderItems.map((item) => item.id),
         device_id: deviceId,
         status: "pending",
-        payment: JSON.stringify(method.getPaymentData(formData)),
+        payment: method.getPaymentData(formData),
       });
 
       basket.forEach((item) =>
         clientPocketBase.collection("shopping_cart").delete(item.id)
       );
+
+      await sendBusinessNotification(order, business, orderItems);
 
       router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
