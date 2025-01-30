@@ -53,7 +53,7 @@ const StatusPage = async ({
     <div className="flex flex-col gap-4 max-w-[400px] p-2 py-8 mx-auto">
       {/* TITLE BLOCK*/}
       <h1 className="text-2xl font-bold text-gray-900 truncate">
-        Статус заказа ({data.expand.business?.displayName})
+        Статус заказа ({data.expand.business?.display_name})
       </h1>
 
       {/* ORDER STATUS BLOCK*/}

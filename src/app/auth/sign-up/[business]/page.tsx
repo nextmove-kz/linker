@@ -27,23 +27,29 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PhoneInput from "@/components/formFields/phone/PhoneInput";
 import ColorPicker from "@/components/onboarding/ColorPicker";
 import ColorPickerModal from "@/components/onboarding/ColorPickerModal";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function SignupForm() {
   const businessID = useParams().business;
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
-    console.log(data);
-    const result = clientPocketBase.collection("business").create(data);
-    console.log(result);
-    console.log(clientPocketBase.authStore.isValid);
-    console.log(clientPocketBase.authStore.token);
-    console.log(clientPocketBase.authStore.record?.id);
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = Object.fromEntries(formData);
+      console.log(data);
+      const result = await clientPocketBase.collection("business").create(data);
+      // console.log(result);
+      // console.log(clientPocketBase.authStore.isValid);
+      // console.log(clientPocketBase.authStore.token);
+      // console.log(clientPocketBase.authStore.record?.id);
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      throw new Error("Authentication failed");
+    }
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto">
@@ -72,7 +78,7 @@ export default function SignupForm() {
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
           <CardTitle>Зарегестрируйте свой бизнес</CardTitle>
-          <CardDescription>Создайте учетную запись для начала</CardDescription>
+          <CardDescription>Настройте бизнес для начала</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -121,6 +127,19 @@ export default function SignupForm() {
                 name="address"
                 required
                 placeholder="Адрес бизнеса"
+              />
+              {/* {errors.businessName && (
+              <p className="text-sm text-red-500">{errors.businessName}</p>
+            )} */}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Описание</Label>
+
+              <Textarea
+                id="description"
+                name="description"
+                required
+                placeholder="Описание для бизнеса"
               />
               {/* {errors.businessName && (
               <p className="text-sm text-red-500">{errors.businessName}</p>
