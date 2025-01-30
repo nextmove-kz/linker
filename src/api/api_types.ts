@@ -191,7 +191,7 @@ export enum OrdersStatusOptions {
 	"accepted" = "accepted",
 	"finished" = "finished",
 }
-export type OrdersRecord<Tpayment = unknown> = {
+export type OrdersRecord = {
 	attachments?: string[]
 	business?: RecordIdString
 	created?: IsoDateString
@@ -199,7 +199,7 @@ export type OrdersRecord<Tpayment = unknown> = {
 	device_id: string
 	id: string
 	items: RecordIdString[]
-	payment?: null | Tpayment
+	payment: string
 	status?: OrdersStatusOptions
 	updated?: IsoDateString
 }
@@ -244,6 +244,7 @@ export type SettingsRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
+	required?: boolean
 	type: SettingsTypeOptions
 	updated?: IsoDateString
 	variants?: RecordIdString[]
@@ -294,7 +295,7 @@ export type FieldOptionsResponse<Texpand = unknown> = Required<FieldOptionsRecor
 export type FieldSettingsResponse<Texpand = unknown> = Required<FieldSettingsRecord> & BaseSystemFields<Texpand>
 export type FieldTypesResponse<Texpand = unknown> = Required<FieldTypesRecord> & BaseSystemFields<Texpand>
 export type OrderItemsResponse<Texpand = unknown> = Required<OrderItemsRecord> & BaseSystemFields<Texpand>
-export type OrdersResponse<Tpayment = unknown, Texpand = unknown> = Required<OrdersRecord<Tpayment>> & BaseSystemFields<Texpand>
+export type OrdersResponse<Texpand = unknown> = Required<OrdersRecord> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
 export type SettingOptionsResponse<Texpand = unknown> = Required<SettingOptionsRecord> & BaseSystemFields<Texpand>
 export type SettingVariantResponse<Texpand = unknown> = Required<SettingVariantRecord> & BaseSystemFields<Texpand>
