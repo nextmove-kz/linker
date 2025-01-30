@@ -55,7 +55,7 @@ export function ActiveOrderCheck({ children }: Props) {
       <div className="flex flex-col items-center justify-center gap-4 p-4 h-dvh">
         <h2 className="text-xl font-semibold">
           У вас уже есть активный заказ в{" "}
-          {activeOrder.expand.business.displayName}!
+          {activeOrder.expand.business.display_name}!
         </h2>
         <Button
           onClick={() => router.push(`/${businessId}/${activeOrder.id}/status`)}

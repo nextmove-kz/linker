@@ -77,10 +77,10 @@ export default function SignupForm() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="displayName">Название бизнеса</Label>
+              <Label htmlFor="display_name">Название бизнеса</Label>
               <Input
-                id="displayName"
-                name="displayName"
+                id="display_name"
+                name="display_name"
                 required
                 placeholder="Asyl Food"
               />
