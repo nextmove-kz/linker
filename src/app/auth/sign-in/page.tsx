@@ -12,14 +12,23 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
 import { signIn } from "@/app/actions";
+import { LogIn } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
-export default function SignupForm() {
+export default function SignInForm() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto">
       <h1 className="text-3xl font-semibold text-center mb-4">Вход в Linker</h1>
       <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle>Войдите</CardTitle>
+          <CardTitle>
+            <div className="flex flex-col items-center justify-center">
+              <LogIn className="h-16 w-16 shadow-md p-3 border-gray-400 rounded-2xl text-gray-500" />
+              <span className="text-xl text-gray-400 text-center"></span>
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form action={signIn} className="space-y-4">
@@ -40,11 +49,21 @@ export default function SignupForm() {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Введите пароль"
                 required
                 className="py-6"
               />
             </div>
-
+            <div className="flex justify-between">
+              <div className="flex gap-1 items-center">
+                <Checkbox id="remember" name="remember"></Checkbox>
+                <p className="text-gray-500">Запомнить меня</p>
+              </div>
+              <Link href="/" className="underline text-blue-500">
+                Забыли пароль?
+              </Link>
+            </div>
+            <Separator />
             <Button type="submit" className="w-full">
               Войти
             </Button>
