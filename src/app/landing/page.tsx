@@ -16,7 +16,7 @@ const page = () => {
   return (
     <div>
       <div className="top-0 w-full fixed desktop:static bg-white z-50">
-        <div className="mx-20 pt-6 pb-3">
+        <div className="desktop:mx-20  tablet:mx-10 mx-5 pt-6 pb-3">
           <Navbar></Navbar>
         </div>
         <Separator></Separator>
@@ -27,9 +27,9 @@ const page = () => {
           <Hero></Hero>
         </div>
         <Advantages></Advantages>
-        {/* <AboutProject></AboutProject> */}
+        <AboutProject></AboutProject>
         <Forwhom></Forwhom>
-        {/* <Roadmap></Roadmap> */}
+        <Roadmap></Roadmap>
         <Price></Price>
         <GetQuestions></GetQuestions>
         <PostQuestions></PostQuestions>

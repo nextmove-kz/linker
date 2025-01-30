@@ -1,10 +1,10 @@
 import React from "react";
 
-const Square = () => {
+const Square = ({ width, height }: { width?: number; height?: number }) => {
   return (
     <svg
-      width="310"
-      height="389"
+      width={width}
+      height={height}
       viewBox="0 0 310 389"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

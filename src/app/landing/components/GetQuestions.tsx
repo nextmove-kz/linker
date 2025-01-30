@@ -12,13 +12,14 @@ const GetQuestions = () => {
         <p className="bg-violet100 text-primary shadow-none px-8 py-3 w-[280px] rounded-full">
           Часто задаваемые вопросы
         </p>
-        <h1 className="uppercase text-title font-bold">
-          Ответы на <span className="text-orange">частозадаваемые</span> вопросы
+        <h1 className="text-center uppercase sm:text-[20px] tablet:text-[28px] desktop:text-title font-bold">
+          Ответы на <span className="text-orange">часто задаваемые </span>
+          вопросы
         </h1>
       </div>
       <Accordion type="single" collapsible className="w-full h-full">
-        <div className="flex w-full flex-col desktop:flex-row desktop:gap-10 items-start">
-          <div className="flex flex-col desktop:w-1/2 w-full">
+        <div className="flex w-full flex-row desktop:gap-10 items-start justify-center">
+          <div className="flex flex-col tablet:w-3/4 w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger>
                 Что такое Linker и как он работает?
@@ -45,9 +46,6 @@ const GetQuestions = () => {
                 you prefer.
               </AccordionContent>
             </AccordionItem>
-          </div>
-
-          <div className="flex flex-col desktop:w-1/2 w-full">
             <AccordionItem value="item-4">
               <AccordionTrigger>
                 Смогу ли я сам разобраться с тем как работает LInker?

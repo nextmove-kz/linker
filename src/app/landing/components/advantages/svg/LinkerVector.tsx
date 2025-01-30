@@ -3,8 +3,8 @@ import React from "react";
 const LinkerVector = () => {
   return (
     <svg
-      width="101"
-      height="119"
+      width="90"
+      height="90"
       viewBox="0 0 101 119"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -28,12 +28,12 @@ const Hero = () => {
             <span className="text-orange"> 15 минут</span>
           </h1>
         </div>
-        <p className="text-md text-gray">
+        <p className="text-md text-gray desktop:flex hidden">
           От 20 сообщений до потока готовых заказов за пару кликов. Принимайте
           заявки через удобную форму, получайте оплату онлайн и управляйте
           заказами в одном месте
         </p>
-        <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase group relative">
+        <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase group relative desktop:flex hidden">
           <span className="flex items-center gap-2">
             Начать сейчас
             <span className="transform transition-transform duration-300 group-hover:translate-x-3">
@@ -43,10 +43,10 @@ const Hero = () => {
         </Button>
       </div>
 
-      <div className="w-1/2  flex justify-center">
+      <div className="w-1/2 flex justify-center">
         <div className="flex desktop:w-[470px] tablet:w-[400px] w-[300px] justify-start relative">
           <div className="flex justify-center items-center w-full relative">
-            <div className="absolute z-50 bottom-6 left-0">
+            <div className="absolute z-40 bottom-6 left-0">
               <Orders></Orders>
             </div>
 
@@ -64,7 +64,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="absolute tablet:top-5 top-14 desktop:top-0 z-50 left-0 w-[60px] h-[60px] tablet:w-[77px] tablet:h-[77px] desktop:w-[100px] desktop:h-[100px]">
+            <div className="absolute tablet:top-5 top-14 desktop:top-0 z-40 left-0 w-[60px] h-[60px] tablet:w-[77px] tablet:h-[77px] desktop:w-[100px] desktop:h-[100px]">
               <Image
                 src={"/insta.png"}
                 alt="gjkf"
@@ -73,16 +73,16 @@ const Hero = () => {
               ></Image>
             </div>
 
-            <div className="flex items-center absolute  bg-white -right-5 top-2/5 -rotate-6 px-2 py-1 tablet:px-3 tablet:py-2  desktop:px-4 desktop:py-3 gap-1 z-50 shadow-lg rounded-2xl">
+            <div className="flex items-center absolute  bg-white -right-5 top-2/5 -rotate-6 px-2 py-1 tablet:px-3 tablet:py-2  desktop:px-4 desktop:py-3 gap-1 z-40 shadow-lg rounded-2xl">
               <CheckCircle></CheckCircle>
               <h1 className="desktop:text-base tablet:text-[12px] text-[9px] font-rubik font-bold">
                 Заказ отправлен клиенту
               </h1>
             </div>
-            <div className="absolute z-50 tablet:-right-16 -right-7 tablet:top-0 top-12">
+            <div className="absolute z-40 tablet:-right-16 -right-7 tablet:top-0 top-12">
               <Like></Like>
             </div>
-            <div className="absolute z-50 tablet:-right-16 -right-9 tablet:bottom-10 bottom-7">
+            <div className="absolute z-40 tablet:-right-16 -right-9 tablet:bottom-10 bottom-7">
               <Star></Star>
             </div>
             <WomanBg></WomanBg>
@@ -91,11 +91,24 @@ const Hero = () => {
               height={515}
               src={"/woman.png"}
               alt="gkfj"
-              className="absolute bottom-[18%] tablet:bottom-[13%] desktop:bottom-[7%] z-40 object-cover"
+              className="absolute bottom-[18%] tablet:bottom-[13%] desktop:bottom-[7%] z-30 object-cover"
             ></Image>
           </div>
         </div>
       </div>
+      <p className="sm:text-[14px] tablet:text-base desktop:text-md text-gray desktop:hidden flex">
+        От 20 сообщений до потока готовых заказов за пару кликов. Принимайте
+        заявки через удобную форму, получайте оплату онлайн и управляйте
+        заказами в одном месте
+      </p>
+      <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase relative desktop:hidden flex">
+        <span className="flex items-center gap-2">
+          Начать сейчас
+          <span className="">
+            <LinkerLogo bg={false} />
+          </span>
+        </span>
+      </Button>
     </div>
   );
 };

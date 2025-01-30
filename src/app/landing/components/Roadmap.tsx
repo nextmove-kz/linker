@@ -19,17 +19,15 @@ const Roadmap = () => {
           5 шагов для работы с Linker
         </p>
         <div className="text-center">
-          <h1 className="uppercase text-darkGray font-rubik text-title font-bold">
-            Создайте профессиональный сайт
-          </h1>
-          <h1 className="uppercase text-darkGray font-rubik text-title font-bold">
-            для приема заказов <span className="text-orange">за 15 минут</span>
+          <h1 className="uppercase text-darkGray font-rubik desktop:text-title tablet:text-[28px] text-[20px] font-bold">
+            Создайте профессиональный сайт для приема заказов{" "}
+            <span className="text-orange">за 15 минут</span>
           </h1>
         </div>
       </div>
-      <div className="flex flex-wrap w-full items-center">
-        <div className="flex items-center gap-6 w-1/3">
-          <Card className="px-6 py-8">
+      <div className="grid desktop:grid-cols-[1fr_65px_1fr_65px_1fr_65px] tablet:grid-cols-[1fr_65px_1fr] grid-cols-1 gap-4 w-full sm:items-center justify-between">
+        <div className="flex items-center gap-6 w-full">
+          <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
               <h1 className="uppercase text-primary text-title font-bold">
                 01
@@ -39,16 +37,16 @@ const Roadmap = () => {
                 <Clock1></Clock1>
               </div>
             </div>
-            <p className="text-gray text-base">
+            <p className="text-gray text-16px">
               Укажите название бизнеса, цвет бренда и контактный телефон
             </p>
           </Card>
-          <div className="col-span-1">
-            <Arrow></Arrow>
-          </div>
         </div>
-        <div className="flex items-center gap-6 w-1/3">
-          <Card className="px-6 py-8 ">
+        <div className="flex justify-center">
+          <Arrow></Arrow>
+        </div>
+        <div className="flex items-center gap-6 w-full">
+          <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
               <h1 className="uppercase text-primary text-title font-bold">
                 02
@@ -58,16 +56,16 @@ const Roadmap = () => {
                 <Clock2></Clock2>
               </div>
             </div>
-            <p className="text-gray text-base">
+            <p className="text-gray text-16px">
               Подберите готовое решение для вашего бизнеса
             </p>
           </Card>
-          <div className="col-span-1 hidden desktop:flex">
-            <Arrow></Arrow>
-          </div>
         </div>
-        <div className="flex items-center gap-6 w-1/3">
-          <Card className="px-6 py-8">
+        <div className="flex tablet:hidden desktop:flex justify-center">
+          <Arrow></Arrow>
+        </div>
+        <div className="flex items-center gap-6 w-full">
+          <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
               <h1 className="uppercase text-primary text-title font-bold">
                 03
@@ -77,16 +75,16 @@ const Roadmap = () => {
                 <Clock3></Clock3>
               </div>
             </div>
-            <p className="text-gray text-base">
+            <p className="text-gray text-16px">
               Загрузите товары в каталог через удобный интерфейс
             </p>
           </Card>
-          <div className="">
-            <Arrow></Arrow>
-          </div>
         </div>
-        <div className="flex items-center gap-6 w-1/3">
-          <Card className="px-6 py-8 ">
+        <div className="flex justify-center">
+          <Arrow></Arrow>
+        </div>
+        <div className="flex items-center gap-6 w-full">
+          <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
               <h1 className="uppercase text-primary text-title font-bold">
                 04
@@ -96,16 +94,16 @@ const Roadmap = () => {
                 <Clock4></Clock4>
               </div>
             </div>
-            <p className="text-gray text-base">
+            <p className="text-gray text-16px">
               Скорректируйте форму и выберите способы оплаты
             </p>
           </Card>
-          <div className="col-span-1 hidden desktop:flex">
-            <Arrow></Arrow>
-          </div>
         </div>
-        <div className="flex items-center gap-6 w-1/3">
-          <Card className="px-6 py-8 ">
+        <div className="col-span-1 flex tablet:hidden desktop:flex justify-center">
+          <Arrow></Arrow>
+        </div>
+        <div className="flex items-center gap-6 w-full">
+          <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
               <h1 className="uppercase text-primary text-title font-bold">
                 05
@@ -115,15 +113,15 @@ const Roadmap = () => {
                 <Clock5></Clock5>
               </div>
             </div>
-            <p className="text-gray text-base">
+            <p className="text-gray text-16px">
               Оплатите подписку и получите личную ссылку для инстаграм био
             </p>
           </Card>
-          <div className="">
-            <FinalArrow></FinalArrow>
-          </div>
         </div>
-        <Card className="px-6 py-8 bg-darkGray  flex flex-col gap-3 w-1/3">
+        <div className="flex justify-center">
+          <FinalArrow isRoadmap></FinalArrow>
+        </div>
+        <Card className="px-6 py-8 bg-darkGray  flex flex-col gap-3 w-full desktop:col-span-2">
           <div className="flex flex-col relative">
             <p className="font-bold text-white text-xl">
               Попробуйте прямо сейчас
@@ -133,11 +131,11 @@ const Roadmap = () => {
             </div>
           </div>
           <div>
-            <p className="text-white text-base">
+            <p className="text-white text-16px">
               Все возможности сервиса в бесплатной демо-версии
             </p>
           </div>
-          <Button className="w-fit flex items-center group relative font-bold text-base font-rubik uppercase text-white py-5">
+          <Button className="w-fit flex items-center group relative font-bold text-16px font-rubik uppercase text-white py-5">
             Начать
             <span className="transform transition-transform duration-300 group-hover:translate-x-2">
               <LinkerLogo bg={false}></LinkerLogo>

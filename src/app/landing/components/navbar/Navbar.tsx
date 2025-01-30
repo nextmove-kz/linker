@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "./svg/Logo";
 import Link from "next/link";
 import SignIn from "./svg/SignIn";
+import Sidebar from "../Sidebar";
 
 const Navbar = () => {
   return (
@@ -27,6 +28,9 @@ const Navbar = () => {
       <Link href={"#"} className="desktop:flex hidden">
         <SignIn></SignIn>
       </Link>
+      <div className="desktop:hidden flex items-center justify-center">
+        <Sidebar></Sidebar>
+      </div>
     </div>
   );
 };
