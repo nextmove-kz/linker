@@ -33,7 +33,7 @@ const SettingsDialog = ({
 }: FormDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const Submit = async (e: FormEvent<HTMLFormElement>) => {
+  const addProductToCart = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
@@ -50,7 +50,7 @@ const SettingsDialog = ({
       </DrawerTrigger>
       <DrawerTitle></DrawerTitle>
       <DrawerContent className="max-w-[400px] flex mx-auto">
-        <form onSubmit={Submit} className="w-full">
+        <form onSubmit={addProductToCart} className="w-full">
           <DrawerHeader>
             {showImage && (
               <ProductImage
@@ -72,12 +72,14 @@ const SettingsDialog = ({
             {settings.map((set) =>
               set.type === "single" ? (
                 <SettingsSingleChoice
+                  required={set.required || false}
                   key={set.id}
                   name={set.name}
                   settings={set}
                 />
               ) : (
                 <SettingsMultiChoice
+                  required={set.required || false}
                   key={set.id}
                   name={set.name}
                   settings={set}

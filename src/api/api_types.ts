@@ -244,6 +244,7 @@ export type SettingsRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
+	required?: boolean
 	type: SettingsTypeOptions
 	updated?: IsoDateString
 	variants?: RecordIdString[]

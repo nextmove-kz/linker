@@ -100,7 +100,7 @@ export default function Home() {
           {shoppingData && shoppingData.length > 0 && (
             <div className="fixed bottom-6 left-1/2 flex gap-2 w-full max-w-[400px] transform -translate-x-1/2 justify-end px-4">
               <Link href={`/${id}/form`}>
-                <Button className="rounded-full h-14 w-14 bg-purple-500 hover:bg-purple-600">
+                <Button className="rounded-full h-14 w-14 bg-primary hover:bg-purple-600">
                   <ArrowRight size={32} />
                 </Button>
               </Link>

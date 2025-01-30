@@ -139,9 +139,11 @@ export function ProductImage({
   id: string;
   settings?: boolean;
 }) {
-  const photoContainer = `select-none object-cover border rounded min-w-32 ${
+  const photoContainer = `select-none object-cover rounded min-w-32 ${
     !settings && "h-32"
-  } flex items-center justify-center bg-gray-50 ${settings && "aspect-square"}`;
+  } flex items-center justify-center bg-gray-50 ${
+    settings && "aspect-square"
+  } relative`;
 
   if (!photo) {
     return (
@@ -160,7 +162,10 @@ export function ProductImage({
         alt={alt}
         width={128}
         height={128}
-        className="rounded w-full h-full aspect-square object-cover select-none"
+        className={`rounded w-full h-full aspect-square object-cover select-none ${
+          !settings &&
+          "hover:absolute hover:w-[98%] hover:h-[98%] transition-all duration-200 cursor-pointer"
+        }`}
       />
     </div>
   );
