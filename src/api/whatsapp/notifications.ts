@@ -2,9 +2,9 @@
 
 import { BusinessRecord, OrderItemsRecord, OrdersRecord } from "../api_types";
 
-const url = "https://whblinker.netlify.app/api/business-notification";
+const url = "https://whblinker.netlify.app/api/";
 
-type NotificationData = {
+type BusinessNotificationData = {
   phone: string;
   id: string;
   orderItems: string;
@@ -12,12 +12,85 @@ type NotificationData = {
   paymentMethod: string;
 };
 
+type ClientAcceptNotificationData = {
+  phone: string;
+  business: string;
+  id: string;
+  orderItems: string;
+  orderDetails: string;
+  paymentMethod: string;
+};
+
+type ClientDeclineNotificationData = {
+  phone: string;
+  business: string;
+  id: string;
+  orderItems: string;
+};
+
+export const orderDeclineNotification = async (
+  orderData: OrdersRecord,
+  business: BusinessRecord,
+  orderItems: OrderItemsRecord[]
+ ) => {
+   const bodyObject: ClientDeclineNotificationData = {
+     phone: "78" + business.phone_number.slice(2),
+     business: business.displayName || "",
+     id: orderData.id,
+     orderItems: orderItems.map(productString).join("; \r"),
+   };
+
+   console.log(bodyObject);
+
+   const clientNotificationResponse = await fetch(
+     url + "client_decline",
+     {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify(bodyObject),
+     }
+   );
+   console.log("notification res: ", clientNotificationResponse);
+ }
+
+
+export const orderAcceptNotification = async (
+ orderData: OrdersRecord,
+ business: BusinessRecord,
+ orderItems: OrderItemsRecord[]
+) => {
+  const bodyObject: ClientAcceptNotificationData = {
+    phone: "78" + business.phone_number.slice(2),
+    business: business.displayName || "",
+    id: orderData.id,
+    orderItems: orderItems.map(productString).join("; \r"),
+    orderDetails: orderData.details.replaceAll("\n", "; \r"),
+    paymentMethod: orderData.payment,
+  };
+
+  console.log(bodyObject);
+
+  const clientNotificationResponse = await fetch(
+    url + "client_success",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyObject),
+    }
+  );
+  console.log("notification res: ", clientNotificationResponse);
+}
+
 export const sendBusinessNotification = async (
   orderData: OrdersRecord,
   business: BusinessRecord,
   orderItems: OrderItemsRecord[]
 ) => {
-  const bodyObject: NotificationData = {
+  const bodyObject: BusinessNotificationData = {
     phone: "78" + business.phone_number.slice(2),
     id: orderData.id,
     orderItems: orderItems.map(productString).join("; \r"),
@@ -27,14 +100,14 @@ export const sendBusinessNotification = async (
 
   console.log(bodyObject);
 
-  const res = await fetch(url, {
+  const businessNotificationResponse = await fetch(url + "business-notification", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(bodyObject),
   });
-  console.log(res);
+  console.log("notification res: ", businessNotificationResponse);
 };
 
 const productString = (product: OrderItemsRecord) => {
