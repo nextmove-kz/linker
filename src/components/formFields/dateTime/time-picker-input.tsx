@@ -126,6 +126,6 @@ const TimePickerInput = React.forwardRef<
   }
 );
 
-TimePickerInput.displayName = "TimePickerInput";
+TimePickerInput.display_name = "TimePickerInput";
 
 export { TimePickerInput };

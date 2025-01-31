@@ -35,7 +35,7 @@ export const orderDeclineNotification = async (
 ) => {
   const bodyObject: ClientDeclineNotificationData = {
     phone: "78" + orderData.phone.slice(2),
-    business: business.displayName || "",
+    business: business.display_name || "",
     id: orderData.id,
     orderItems: orderItems.map(productString).join("; \r"),
   };
@@ -59,7 +59,7 @@ export const orderAcceptNotification = async (
 ) => {
   const bodyObject: ClientAcceptNotificationData = {
     phone: "78" + orderData.phone.slice(2),
-    business: business.displayName || "",
+    business: business.display_name || "",
     id: orderData.id,
     orderItems: orderItems.map(productString).join("; \r"),
     orderDetails: orderData.details.replaceAll("\n", "; \r"),
