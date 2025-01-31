@@ -36,7 +36,7 @@ const ProgressBar = ({
   )}?text=${encodeURIComponent(text)}`;
 
   return (
-    <div className="rounded-lg bg-white p-2 py-10 shadow-md">
+    <div className="rounded-lg bg-white p-2 py-4 shadow-md">
       <h2 className="mb-4 text-lg font-semibold">Заказ #{order}</h2>
 
       <div className="mb-6">

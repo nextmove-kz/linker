@@ -44,7 +44,7 @@ export default async function OrderInfoPage({ params }: OrderInfoParams) {
     id: order.id,
     status: order.status!,
     payment: order.payment,
-    businessName: order.expand?.business?.displayName || "",
+    businessName: order.expand?.business?.display_name || "",
     items: order.expand?.items || [],
     details: order.details,
     totalSum,
