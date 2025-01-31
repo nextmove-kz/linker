@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   useShoppingBasketQuery,
   useShoppingBasketOperations,
 } from "./useShoppingBasket";
 import { ProductsRecord } from "@/api/api_types";
-import { useParams } from "next/navigation";
 
 export function useProductQuantity(
   product: ProductsRecord,
@@ -12,6 +12,7 @@ export function useProductQuantity(
   initialShoppingId: string | undefined,
   businessId: string
 ) {
+  const router = useRouter();
   const [isActive, setIsActive] = useState(initialCount > 0);
   const [shoppingId, setShoppingId] = useState<string | null | undefined>(
     initialShoppingId
@@ -37,16 +38,31 @@ export function useProductQuantity(
     }
   }, [shoppingData, product.id]);
 
-  async function handleUpdateBasket(newCount: number) {
+  async function handleUpdateBasket({
+    newCount,
+    variants,
+  }: {
+    newCount: number;
+    variants?: string[];
+  }) {
     try {
       const result = await updateShoppingBasket({
         newCount,
         productId: product.id,
         shoppingId,
+        variantsId: variants,
       });
 
       if (newCount === 0) {
         setIsActive(false);
+
+        const updatedCart =
+          shoppingData?.filter((item) => item.id !== shoppingId) || [];
+
+        if (updatedCart.length === 0) {
+          router.push(`/${businessId}/catalog`);
+          return;
+        }
       }
 
       setShoppingId(result?.shoppingId ?? null);
@@ -57,18 +73,23 @@ export function useProductQuantity(
   }
 
   const plus = () => {
-    handleUpdateBasket(count + 1);
+    handleUpdateBasket({ newCount: count + 1 });
   };
 
   const minus = () => {
     if (count > 0) {
-      handleUpdateBasket(count - 1);
+      handleUpdateBasket({ newCount: count - 1 });
     }
   };
 
   const Initial = () => {
     setIsActive(true);
-    handleUpdateBasket(1);
+    handleUpdateBasket({ newCount: 1 });
+  };
+
+  const createWithSettings = (variants: string[]) => {
+    setIsActive(true);
+    handleUpdateBasket({ newCount: 1, variants });
   };
 
   return {
@@ -78,5 +99,6 @@ export function useProductQuantity(
     plus,
     minus,
     Initial,
+    createWithSettings,
   };
 }

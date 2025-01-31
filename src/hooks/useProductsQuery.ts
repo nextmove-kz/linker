@@ -11,7 +11,10 @@ export function useProductsQuery(id: string) {
     queryFn: async () => {
       const result = await clientPocketBase
         .collection("products")
-        .getFullList<ProductsRecord>({ filter: `business.name = "${id}"` });
+        .getFullList<ProductsRecord>({
+          filter: `business.name = "${id}" && archive = false`,
+          expand: "settings.variants",
+        });
 
       const imageCount = result?.filter((item) => item.photo).length;
       setHasImages(imageCount > 0);
