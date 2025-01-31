@@ -136,14 +136,17 @@ const Roadmap = () => {
               Все возможности сервиса в бесплатной демо-версии
             </p>
           </div>
-          <Link href={"#price"}>
-            <Button className="w-fit flex items-center group relative font-bold text-16px font-rubik uppercase text-white py-5">
+          <Button
+            asChild
+            className="w-fit flex items-center group relative font-bold text-16px font-rubik uppercase text-white py-5"
+          >
+            <Link href={"#price"}>
               Начать
               <span className="transform transition-transform duration-300 group-hover:translate-x-2">
                 <LinkerLogo bg={false}></LinkerLogo>
               </span>
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </Card>
       </div>
     </div>

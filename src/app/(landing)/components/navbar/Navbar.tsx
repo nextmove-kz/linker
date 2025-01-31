@@ -26,7 +26,7 @@ const Navbar = () => {
         </Link>
       </div>
       <Link href={"#"} className="desktop:flex hidden">
-        {/* <SignIn></SignIn> */}
+        <SignIn></SignIn>
       </Link>
       <div className="desktop:hidden flex items-center justify-center z-50">
         <Sidebar></Sidebar>

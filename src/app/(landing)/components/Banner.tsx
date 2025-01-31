@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
 import Logo from "./svg/Logo";
+import Link from "next/link";
 
 const Banner = () => {
   return (
@@ -19,9 +20,10 @@ const Banner = () => {
         <div className="flex desktop:w-1/2 gap-6 justify-center tablet:flex-row flex-col w-full">
           <Button
             variant={"outline"}
+            asChild
             className="boder border-primary font-medium tablet:w-1/2 w-full  py-5 h-full  bg-violet100 hover:bg-primary hover:text-white font-rubik text-base text-primary"
           >
-            Демо версия
+            <Link href={"/asylfood"}>Демо версия</Link>
           </Button>
           <Button className="uppercase tablet:w-1/2 w-full py-5 h-full font-rubik font-bold text-base text-white">
             Подключить Linker
