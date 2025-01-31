@@ -42,7 +42,7 @@ export const orderDeclineNotification = async (
 
   console.log(bodyObject);
 
-  const clientNotificationResponse = await fetch(url + "client_decline", {
+  const clientNotificationResponse = await fetch(url + "client-decline", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export const orderAcceptNotification = async (
 
   console.log(bodyObject);
 
-  const clientNotificationResponse = await fetch(url + "client_success", {
+  const clientNotificationResponse = await fetch(url + "client-success", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
