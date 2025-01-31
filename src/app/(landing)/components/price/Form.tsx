@@ -1,6 +1,6 @@
 "use client";
 import AddressField from "@/components/formFields/AddressField";
-import { InputField } from "@/components/formFields/FormInput";
+import InputField from "@/components/formFields/FormInput";
 import TextAreaField from "@/components/formFields/TextAreaField";
 import PhoneField from "@/components/formFields/phone/PhoneField";
 import {
