@@ -155,6 +155,9 @@ export default function PaymentPage() {
       if (!method) return;
 
       const orderItems = await createItemsFromCart(basket);
+      // Разберемся позже с unknown, нужно будет выделить phone
+      // @ts-ignore
+      const phone: string = details[0].orderData["Контактный номер_phone"];
       const detailsMessage = compileMessage(
         details[0].orderData as OrdersRecord
       );
@@ -166,6 +169,7 @@ export default function PaymentPage() {
         device_id: deviceId,
         status: "pending",
         payment: method.getPaymentData(formData),
+        phone: phone,
       });
 
       basket.forEach((item) =>
