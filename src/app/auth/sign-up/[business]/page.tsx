@@ -81,8 +81,8 @@ export default function SignupForm() {
           <path
             d="M147 92L206.293 151.293C206.683 151.683 206.683 152.317 206.293 152.707L147 212"
             stroke="white"
-            stroke-width="42"
-            stroke-linecap="round"
+            strokeWidth="42"
+            strokeLinecap="round"
           />
           <circle cx="118" cy="152" r="22" fill="white" />
         </svg>

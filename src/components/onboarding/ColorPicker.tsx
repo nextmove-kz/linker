@@ -23,7 +23,7 @@ const ColorPicker = ({ label, name }: { label?: string; name: string }) => {
         value={color}
         required
         onChange={handleInputChange}
-        placeholder="Enter a hex color (e.g., #7b39ed)"
+        placeholder="Введите hex цвета (например, #7b39ed)"
       />
     </div>
   );
