@@ -37,7 +37,7 @@ export const orderDeclineNotification = async (
     phone: "78" + orderData.phone.slice(2),
     business: business.display_name || "",
     id: orderData.id,
-    orderItems: orderItems.map(productString).join("; \r"),
+    orderItems: orderItems.map(productString).join("; \r").replaceAll("\n", ""),
   };
 
   console.log(bodyObject);
@@ -66,7 +66,7 @@ export const orderAcceptNotification = async (
     paymentMethod: orderData.payment,
   };
 
-  console.log(bodyObject);
+  console.log(JSON.stringify(bodyObject));
 
   const clientNotificationResponse = await fetch(url + "client-success", {
     method: "POST",
@@ -86,7 +86,7 @@ export const sendBusinessNotification = async (
   const bodyObject: BusinessNotificationData = {
     phone: "78" + business.phone_number?.slice(2),
     id: orderData.id,
-    orderItems: orderItems.map(productString).join("; \r"),
+    orderItems: orderItems.map(productString).join("; \r").replaceAll("\n", ""),
     orderDetails: orderData.details.replaceAll("\n", "; \r"),
     paymentMethod: orderData.payment,
   };
