@@ -61,7 +61,7 @@ export const orderAcceptNotification = async (
     phone: "78" + orderData.phone.slice(2),
     business: business.display_name || "",
     id: orderData.id,
-    orderItems: orderItems.map(productString).join("; \r"),
+    orderItems: orderItems.map(productString).join("; \r").replaceAll("\n", ""),
     orderDetails: orderData.details.replaceAll("\n", "; \r"),
     paymentMethod: orderData.payment,
   };
