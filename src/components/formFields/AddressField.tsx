@@ -18,13 +18,11 @@ export default function AddressField({
       <Input name={name + "_street"} placeholder="Улица" required={required} />
       <div className="flex gap-2">
         <Input name={name + "_house"} placeholder="Дом" required={required} />
-        {accuracy_level === "apartment" && (
-          <Input
-            name={name + "_apartment"}
-            placeholder="Квартира"
-            required={required}
-          />
-        )}
+        <Input
+          name={name + "_apartment"}
+          placeholder="Квартира"
+          required={required}
+        />
       </div>
     </FormField>
   );
