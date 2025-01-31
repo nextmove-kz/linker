@@ -209,7 +209,7 @@ export type OrdersRecord = {
 	items: RecordIdString[]
 	payment: string
 	phone: string
-	status?: OrdersStatusOptions
+	status: OrdersStatusOptions
 	updated?: IsoDateString
 }
 
