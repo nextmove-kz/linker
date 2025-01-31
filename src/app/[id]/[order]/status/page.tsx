@@ -70,7 +70,7 @@ const StatusPage = async ({
       <ProgressBar order={order} statusSteps={statusSteps} data={data} />
 
       {/* LIST OF PRODUCTS BLOCK*/}
-      <ProductList data={data} totalSum={totalSum} />
+      <ProductList items={data.expand.items} totalSum={totalSum} />
 
       {/* ORDER DEATAILS BLOCK*/}
       <div className="rounded-lg bg-white p-6 shadow-md">
