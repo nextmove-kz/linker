@@ -26,7 +26,7 @@ export default function PaymentCard({
     >
       <div className="flex flex-col items-center space-y-4">
         <Icon className="w-6 h-6" />
-        <h2 className="text-md font-semibold">{name}</h2>
+        <h2 className="text-md font-semibold select-none">{name}</h2>
       </div>
     </div>
   );

@@ -1,147 +1,238 @@
 "use client";
 
-import Branding from "@/components/branding";
-import { InputField } from "@/components/formFields/FormInput";
-import PhoneField from "@/components/formFields/phone/PhoneField";
-import PaymentCard from "@/components/payment/PaymentCard";
-import { Button } from "@/components/ui/button";
-import {
-  CircleDollarSignIcon as Money,
-  ReceiptText as Bill,
-  ArrowLeftRight as Transfer,
-} from "lucide-react";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useDeviceId } from "@/hooks/useDeviceId";
 import clientPocketBase from "@/api/client_pb";
+import {
+  CircleDollarSignIcon,
+  ReceiptText,
+  ArrowLeftRight,
+  Check,
+} from "lucide-react";
+import Branding from "@/components/branding";
+import PaymentCard from "@/components/payment/PaymentCard";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import InputField from "@/components/formFields/FormInput";
+import PhoneField from "@/components/formFields/phone/PhoneField";
+import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
+import { createItemsFromCart, usePaymentFormData } from "./utils";
+import { ExpandedShoppingRecord } from "@/api/custom_types";
+import { compileMessage } from "@/lib/utils";
+import { OrdersRecord } from "@/api/api_types";
+import CashInput from "@/components/payment/CashInput";
+import { sendBusinessNotification } from "@/api/whatsapp/notifications";
+
+type PaymentMethodId = "kaspi-pt" | "cash" | "kaspi-transfer";
 
 const paymentMethods = [
-  { id: "kaspi-pt", name: "Каспи платеж", icon: Bill },
-  { id: "cash", name: "Наличные", icon: Money },
-  { id: "kaspi-transfer", name: "Каспи перевод", icon: Transfer },
+  {
+    id: "kaspi-pt" as const,
+    name: "Каспи платеж",
+    icon: ReceiptText,
+    getPaymentData: (formData: FormData) =>
+      `Каспи Платежом. На номер: ${
+        formData.get("Ваш номер для платежа_phone") || ""
+      }`,
+  },
+  {
+    id: "cash" as const,
+    name: "Наличные",
+    icon: CircleDollarSignIcon,
+    getPaymentData: (formData: FormData) =>
+      `Наличными. Сдача с суммы: ${
+        formData.get("Сдача с какой суммы?_text") || ""
+      }`,
+  },
+  {
+    id: "kaspi-transfer" as const,
+    name: "Каспи перевод",
+    icon: ArrowLeftRight,
+    getPaymentData: () => "Оплачено переводом на каспи",
+  },
 ];
 
-const PaymentPage = () => {
-  const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-  const params = useParams();
-  const router = useRouter();
+function PaymentInputs({
+  selectedMethod,
+  paymentConfirmed,
+  phoneNumber,
+  setPaymentConfirmed,
+  totalSum,
+}: {
+  selectedMethod: PaymentMethodId | null;
+  paymentConfirmed: boolean;
+  phoneNumber: string;
+  setPaymentConfirmed: (checked: boolean) => void;
+  totalSum: number;
+}) {
+  if (!selectedMethod) return null;
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  switch (selectedMethod) {
+    case "kaspi-pt":
+      return <PhoneField name="Ваш номер для платежа" />;
+    case "cash":
+      return (
+        <CashInput
+          name="Сдача с какой суммы?"
+          placeholder="10000"
+          required
+          totalSum={totalSum}
+        />
+      );
+    case "kaspi-transfer":
+      return (
+        <div className="flex flex-col gap-4">
+          <div className="text-md flex flex-col gap-2">
+            <span className="text-gray-500">Каспи перевод</span>
+            <span className="select-none">
+              Номер для перевода:{" "}
+              <span className="text-primary font-bold select-text">
+                {phoneNumber}
+              </span>
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="payment-confirmed"
+              checked={paymentConfirmed}
+              onCheckedChange={(checked) =>
+                setPaymentConfirmed(checked as boolean)
+              }
+              required
+            />
+            <label
+              htmlFor="payment-confirmed"
+              className="text-sm font-medium leading-none select-none"
+            >
+              Я провел оплату
+            </label>
+          </div>
+        </div>
+      );
+  }
+}
+
+export default function PaymentPage() {
+  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodId | null>(
+    null
+  );
+  // TODO: Формирование видов оплаты из базы данных
+  // TODO: Акцент на том что это финальный этап заказа
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const params = useParams<{ id: string }>();
+  const { phoneNumber, totalSum, anyLoading } = usePaymentFormData(params.id);
+  const router = useRouter();
+  const deviceId = useDeviceId();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     try {
-      const formDataObject = Object.fromEntries(formData.entries());
-      const data = JSON.stringify(
-        getPaymentData(selectedMethod || "", formDataObject)
-      );
+      const business = await clientPocketBase
+        .collection("business")
+        .getFirstListItem(`name = "${params.id}"`);
 
-      const business = await fetchFirstItem(
-        "business",
-        `name = "${params.id}"`
-      );
-      const details = await fetchFirstItem(
-        "details",
-        `business = "${business.id}"`
-      );
-      const items = await fetchFirstItem(
-        "shoppingBasket",
-        `business = "${business.id}"`
-      );
+      const { items: details } = await clientPocketBase
+        .collection("details")
+        .getList(0, 1, {
+          filter: `business = "${business.id}" && device_id = "${deviceId}"`,
+        });
 
-      if (!business || !details || !items) {
-        console.error("Ошибка: не удалось загрузить необходимые данные.");
-        return;
+      const { items: basket, totalItems } = await clientPocketBase
+        .collection("shopping_cart")
+        .getList<ExpandedShoppingRecord>(0, 100, {
+          filter: `product.business = "${business.id}" && device_id = "${deviceId}"`,
+          expand: "product,selected_variants",
+        });
+
+      if (!business || !details || totalItems === 0) {
+        router.push(`/${params.id}`);
       }
 
-      // console.log("CHECK: ", items.id, details.id, business.id, data);
+      const method = paymentMethods.find((m) => m.id === selectedMethod);
+      if (!method) return;
 
-      const result = await clientPocketBase.collection("orders").create({
+      const orderItems = await createItemsFromCart(basket);
+      // Разберемся позже с unknown, нужно будет выделить phone
+      // @ts-ignore
+      const phone: string = details[0].orderData["Контактный номер_phone"];
+      const detailsMessage = compileMessage(
+        details[0].orderData as OrdersRecord
+      );
+
+      const order = await clientPocketBase.collection("orders").create({
         business: business.id,
-        details: details.id,
-        items: items.id,
-        device_id: "1234123412341234123412341234",
-        status: false,
-        payment: data,
+        details: detailsMessage,
+        items: orderItems.map((item) => item.id),
+        device_id: deviceId,
+        status: "pending",
+        payment: method.getPaymentData(formData),
+        phone: phone,
       });
 
-      console.log(result);
-      router.push(`/${params.id}/${result.id}/status`);
+      basket.forEach((item) =>
+        clientPocketBase.collection("shopping_cart").delete(item.id)
+      );
+
+      await sendBusinessNotification(order, business, orderItems);
+
+      router.push(`/${params.id}/${order.id}/status`);
     } catch (error) {
-      console.error("Failed to create order:", error);
+      router.push(`/${params.id}`);
     }
   };
 
-  const fetchFirstItem = async (collection: string, filter: string) => {
-    const response = await clientPocketBase
-      .collection(collection)
-      .getList(0, 1, { filter });
-    return response.items[0] || null;
-  };
-
-  const getPaymentData = (method: string, formData: Record<string, any>) => {
-    switch (method) {
-      case "kaspi-pt":
-        return { phoneNumber: formData["Ваш номер для платежа_phone"] || "" };
-      case "cash":
-        return { amount: formData["Сдача с какой суммы?"] || "" };
-      case "kaspi-transfer":
-        return { transfer: "kaspi-transfer" };
-      default:
-        return {};
-    }
-  };
+  if (anyLoading) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
-      <Branding sectionId={1} />
-      <h1 className="text-2xl font-bold text-gray-900 truncate">
-        Оплата заказа
-      </h1>
-      <div className="grid grid-cols-2 gap-2">
-        {paymentMethods.map((method) => (
-          <PaymentCard
-            key={method.id}
-            id={method.id}
-            name={method.name}
-            icon={method.icon}
-            selected={selectedMethod === method.id}
-            onSelect={() => setSelectedMethod(method.id)}
-          />
-        ))}
-      </div>
-      <div className="pt-2">
-        {selectedMethod === "kaspi-pt" && (
-          <form
-            onSubmit={onSubmit}
-            className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto"
-          >
-            <PhoneField name="Ваш номер для платежа" />
-            <Button type="submit" className="mt-2">
-              Продолжить
-            </Button>
-          </form>
-        )}
-        {selectedMethod === "cash" && (
-          <form
-            onSubmit={onSubmit}
-            className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto"
-          >
-            <InputField name="Сдача с какой суммы?" placeholder="100" />
-            <Button type="submit" className="mt-2">
-              Продолжить
-            </Button>
-          </form>
-        )}
-        {selectedMethod === "kaspi-transfer" && (
-          <div className="flex flex-col p-2 max-w-[400px] gap-4 mx-auto text-sm">
-            <span>Каспи перевод</span>
-            <span>Номер для перевода: +7 (890) 123-45-67</span>
-            <Button className="mt-2">Продолжить</Button>
+    <ActiveOrderCheck>
+      <div className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto">
+        <Branding sectionId={2} />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between py-2">
+            <span className="text-gray-500">Сумма к оплате</span>
+            <span className="text-xl text-gray-900 font-bold">
+              {totalSum!.toLocaleString()} ₸
+            </span>
           </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {paymentMethods.map((method) => (
+            <PaymentCard
+              key={method.id}
+              id={method.id}
+              name={method.name}
+              icon={method.icon}
+              selected={selectedMethod === method.id}
+              onSelect={() => setSelectedMethod(method.id)}
+            />
+          ))}
+        </div>
+        {selectedMethod && (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <PaymentInputs
+              selectedMethod={selectedMethod}
+              paymentConfirmed={paymentConfirmed}
+              setPaymentConfirmed={setPaymentConfirmed}
+              phoneNumber={phoneNumber!}
+              totalSum={totalSum!}
+            />
+            <Button
+              type="submit"
+              className="mt-2"
+              disabled={
+                selectedMethod === "kaspi-transfer" && !paymentConfirmed
+              }
+            >
+              Завершить заказ <Check className="w-4 h-4" />
+            </Button>
+          </form>
         )}
       </div>
-    </div>
+    </ActiveOrderCheck>
   );
-};
-
-export default PaymentPage;
+}

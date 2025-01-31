@@ -1,30 +1,20 @@
 import Counter from "../shared/Counter";
 import FormField from "./FormField";
+import { BaseFieldProps } from "./FormFieldRenderer";
 
-type QuantityFieldProps = {
-  name?: string;
-  defaultValue?: number;
-  min?: number;
-  max?: number;
-  onChange?: (value: number) => void;
-};
+interface QuantityFieldProps extends BaseFieldProps {
+  default_value?: number;
+  max_value?: number;
+}
 
-export function QuantityField({
+export default function QuantityField({
   name = "Количество",
-  defaultValue,
-  min,
-  max,
-  onChange,
+  default_value,
+  max_value = 99,
 }: QuantityFieldProps) {
   return (
     <FormField name={name}>
-      <Counter
-        defaultValue={defaultValue}
-        onChange={onChange}
-        min={min}
-        max={max}
-        name={name}
-      />
+      <Counter defaultValue={default_value} max={max_value} name={name} />
     </FormField>
   );
 }

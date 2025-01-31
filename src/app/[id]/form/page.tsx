@@ -1,100 +1,39 @@
 "use client";
-import clientPocketBase from "@/api/client_pb";
-import Branding from "@/components/branding";
-import AddressField from "@/components/formFields/AddressField";
-import { DateTimeField } from "@/components/formFields/dateTime/DateTimeField";
-import DropdownField from "@/components/formFields/DropdownField";
-import { InputField } from "@/components/formFields/FormInput";
-import ImageUploader from "@/components/formFields/ImageUploader";
-import MultiChoice from "@/components/formFields/MultiChoice";
-import PhoneField from "@/components/formFields/phone/PhoneField";
-import { QuantityField } from "@/components/formFields/QuantityField";
-import SingleChoice from "@/components/formFields/SingleChoice";
-import TextAreaField from "@/components/formFields/TextAreaField";
 
 import { Button } from "@/components/ui/button";
-import { useParams, useRouter } from "next/navigation";
+import Branding from "@/components/branding";
+import { useUniversalSubmit } from "./utils";
+import { useParams } from "next/navigation";
+import { useBusinessFields } from "@/hooks/useBusinessFields";
+import { FormFieldRenderer } from "@/components/formFields/FormFieldRenderer";
+import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 
 export default function FormPage() {
-  const router = useRouter();
-  const id = useParams().id;
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  const { id: businessId } = useParams<{ id: string }>();
+  const { data: fields, isLoading, isError } = useBusinessFields(businessId);
 
-    const fileInputs = e.currentTarget.querySelectorAll('input[type="file"]');
-    const files: File[] = [];
+  const onSubmit = useUniversalSubmit();
 
-    fileInputs.forEach((input) => {
-      const fileList = (input as HTMLInputElement).files;
-      if (fileList) {
-        for (let i = 0; i < fileList.length; i++) {
-          files.push(fileList[i]);
-        }
-      }
-    });
-
-    const formDataJson: Record<string, any> = {};
-    formData.forEach((value, key) => {
-      if (!formDataJson[key]) {
-        formDataJson[key] = value;
-      } else if (Array.isArray(formDataJson[key])) {
-        formDataJson[key].push(value);
-      } else {
-        formDataJson[key] = [formDataJson[key], value];
-      }
-    });
-    const data = {
-      orderData: Object.fromEntries(formData.entries()),
-      finished: false,
-      attachments: files,
-    };
-    try {
-      const businessResponse = await clientPocketBase
-        .collection("business")
-        .getList(0, 1, { filter: `name = "${id}"` });
-      const business = businessResponse.items[0].id;
-      const result = await clientPocketBase.collection("details").create({
-        orderData: formData,
-        attachments: files,
-        business: business,
-      });
-      console.log(result);
-      router.push(`/${id}/payment`);
-    } catch (error) {
-      console.error("Order error:", error);
-      return { error: "Failed to create order" };
-    }
-  };
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
-    <form
-      className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto"
-      onSubmit={onSubmit}
-    >
-      <Branding sectionId={1} />
-      <AddressField />
-      <PhoneField />
-      <QuantityField min={0} />
-      <DateTimeField />
-      <InputField name="Проверка" />
-      <TextAreaField />
-      <DropdownField
-        name="Выпадающее меню"
-        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
-      />
-      <MultiChoice
-        name="Множественный выбор"
-        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
-      />
-      <SingleChoice
-        name="Единичный выбор"
-        items={["Пункт 1", "Пункт 2", "Пункт 3"]}
-      />
-      <ImageUploader />
-      <Button type="submit" className="mt-6">
-        Перейти к оплате
-      </Button>
-    </form>
+    <ActiveOrderCheck>
+      <form
+        className="flex flex-col gap-4 max-w-[400px] p-2 mx-auto"
+        onSubmit={onSubmit}
+      >
+        <Branding sectionId={1} />
+
+        {fields?.map((field) => {
+          return <FormFieldRenderer key={field.id} field={field} />;
+        })}
+
+        <Button type="submit" className="mt-6">
+          Перейти к оплате
+        </Button>
+      </form>
+    </ActiveOrderCheck>
   );
 }

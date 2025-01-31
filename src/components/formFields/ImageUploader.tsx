@@ -5,14 +5,23 @@ import { useRef, useState } from "react";
 import FormField from "./FormField";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
-import { Input } from "../ui/input";
 
 interface ImageFile extends File {
   preview: string;
 }
 
+type ImageUploaderProps = {
+  name?: string;
+  required?: boolean;
+  multiple?: boolean;
+};
+
 // ТРОТИЛ ВЗРЫВООПАСНО
-const ImageUploader = ({ name = "Изображение" }: { name?: string }) => {
+const ImageUploader = ({
+  name = "Изображение",
+  required,
+  multiple = false,
+}: ImageUploaderProps) => {
   const [files, setFiles] = useState<ImageFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,7 +45,6 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ) as ImageFile[];
       setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
-      console.log(files);
     }
   };
 
@@ -96,7 +104,7 @@ const ImageUploader = ({ name = "Изображение" }: { name?: string }) =
             onChange={handleFileChange}
             className="hidden"
             ref={fileInputRef}
-            multiple
+            multiple={multiple}
             name={name + "_files"}
             id={name + "_files"}
           />
