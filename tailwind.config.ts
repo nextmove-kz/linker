@@ -8,10 +8,20 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens: {
-      xs: "400px",
-    },
     extend: {
+      screens: {
+        sm: "360px",
+        tablet: "640px",
+        desktop: "960px",
+      },
+      fontSize: {
+        title: "2rem",
+        md: "1.125rem",
+        price: "1.5rem",
+      },
+      fontFamily: {
+        rubik: ["var(--font-rubik)"],
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -53,6 +63,11 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        violet100: "#F2ECFE",
+        darkGray: "#262626",
+        orange: "#FF6D29",
+        gray: "#79747E",
+        borderColor: "#EEEEEE",
       },
       borderRadius: {
         lg: "var(--radius)",
