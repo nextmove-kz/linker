@@ -41,7 +41,22 @@ export default function SignupForm() {
       const formData = new FormData(e.currentTarget);
       const data = Object.fromEntries(formData);
       console.log(data);
-      const result = await clientPocketBase.collection("business").create(data);
+
+      // const business = await clientPocketBase
+      //   .collection("business")
+      //   .getOne(businessID as string, {
+      //     name: data.name,
+      //     display_name: data.display_name,
+      //     phone_number: data.phone_number,
+      //     instagram: data.instagram,
+      //     address: data.address,
+      //     description: data.description,
+      //     color: data.color,
+      //   });
+
+      console.log("dasdfaf", data);
+
+      // const result = await clientPocketBase.collection("business").create(data);
       // console.log(result);
       // console.log(clientPocketBase.authStore.isValid);
       // console.log(clientPocketBase.authStore.token);
