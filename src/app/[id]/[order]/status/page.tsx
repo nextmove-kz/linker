@@ -80,8 +80,8 @@ const StatusPage = async ({
               Детали заказа
             </AccordionTrigger>
             <AccordionContent>
-              <pre>{message}</pre>
-              <pre>{data.payment}</pre>
+              <pre className="font-sans">{message}</pre>
+              <pre className="font-sans">{data.payment}</pre>
               {/* {(data.expand.details?.attachments?.length || 0) > 0 && (
                 <ImageDialog
                   name="Открыть изображения"
