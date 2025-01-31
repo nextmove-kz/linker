@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import LinkerVector from "./svg/LinkerVector";
 import FinalArrow from "./svg/arrow/FinalArrow";
 import LinkerLogo from "./svg/LinkerLogo";
+import Link from "next/link";
 
 const Roadmap = () => {
   return (
@@ -135,12 +136,14 @@ const Roadmap = () => {
               Все возможности сервиса в бесплатной демо-версии
             </p>
           </div>
-          <Button className="w-fit flex items-center group relative font-bold text-16px font-rubik uppercase text-white py-5">
-            Начать
-            <span className="transform transition-transform duration-300 group-hover:translate-x-2">
-              <LinkerLogo bg={false}></LinkerLogo>
-            </span>
-          </Button>
+          <Link href={"#price"}>
+            <Button className="w-fit flex items-center group relative font-bold text-16px font-rubik uppercase text-white py-5">
+              Начать
+              <span className="transform transition-transform duration-300 group-hover:translate-x-2">
+                <LinkerLogo bg={false}></LinkerLogo>
+              </span>
+            </Button>
+          </Link>
         </Card>
       </div>
     </div>

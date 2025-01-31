@@ -9,26 +9,26 @@ const Navbar = () => {
     <div className="flex justify-between items-center ">
       <Logo></Logo>
       <div className="desktop:flex hidden justify-between w-7/12">
-        <Link href={"#"} className="text-gray">
+        <Link href={"#advantages"} className="text-gray">
           Преимущества
         </Link>
-        <Link href={"#"} className="text-gray">
+        <Link href={"#aboutProject"} className="text-gray">
           О проекте
         </Link>
-        <Link href={"#"} className="text-gray">
+        <Link href={"#forwhom"} className="text-gray">
           Кому подойдет
         </Link>
-        <Link href={"#"} className="text-gray">
+        <Link href={"#price"} className="text-gray">
           Cтоимость
         </Link>
-        <Link href={"#"} className="text-gray">
+        <Link href={"#questions"} className="text-gray">
           Контакты
         </Link>
       </div>
       <Link href={"#"} className="desktop:flex hidden">
-        <SignIn></SignIn>
+        {/* <SignIn></SignIn> */}
       </Link>
-      <div className="desktop:hidden flex items-center justify-center">
+      <div className="desktop:hidden flex items-center justify-center z-50">
         <Sidebar></Sidebar>
       </div>
     </div>

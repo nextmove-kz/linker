@@ -6,7 +6,10 @@ import Logo from "./navbar/svg/Logo";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Socials2 from "./svg/Socials2";
-
+import LinkerLogo from "./svg/LinkerLogo";
+import Telegram from "./postQuestions/svg/Telegram";
+import Instagram from "./postQuestions/svg/Instagram";
+import Gmail from "./postQuestions/svg/Gmail";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,29 +41,60 @@ const Sidebar = () => {
         }`}
       >
         <div className="p-4 flex flex-col gap-5">
-          <Logo></Logo>
-          <Separator />
+          <div className="flex justify-end">
+            <Button variant={"ghost"} onClick={toggleSidebar}>
+              <X />
+            </Button>
+          </div>
           <div className="flex flex-col gap-5">
-            <Link href={"#"} className="text-gray">
+            <Link
+              href={"#advantages"}
+              className="text-gray"
+              onClick={toggleSidebar}
+            >
               Преимущества
             </Link>
-            <Link href={"#"} className="text-gray">
+            <Link
+              href={"#aboutProject"}
+              className="text-gray"
+              onClick={toggleSidebar}
+            >
               О проекте
             </Link>
-            <Link href={"#"} className="text-gray">
+            <Link
+              href={"#forwhom"}
+              className="text-gray"
+              onClick={toggleSidebar}
+            >
               Кому подойдет
             </Link>
-            <Link href={"#"} className="text-gray">
+            <Link href={"#price"} className="text-gray" onClick={toggleSidebar}>
               Cтоимость
             </Link>
-            <Link href={"#"} className="text-gray">
+            <Link
+              href={"#questions"}
+              className="text-gray"
+              onClick={toggleSidebar}
+            >
               Контакты
             </Link>
           </div>
-          <h1 className="text-darkGray text-md font-bold">
+          <h1 className="text-darkGray font-bold">
             Прямая связь с разработчиками проекта
           </h1>
-          <Socials2></Socials2>
+          <div className="flex gap-4">
+            <Link href={"https://t.me/lukivan8"}>
+              <Telegram width={40} height={40}></Telegram>
+            </Link>
+            <Link
+              href={"https://www.instagram.com/linkerkz?igsh=NzhheDVhNWNtNXQ2"}
+            >
+              <Instagram width={40} height={40}></Instagram>
+            </Link>
+            <Link href={"mailto:lukivan888@gmail.com"}>
+              <Gmail width={40} height={40}></Gmail>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

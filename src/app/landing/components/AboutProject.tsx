@@ -9,7 +9,10 @@ import Bell from "./svg/Bell";
 
 const AboutProject = () => {
   return (
-    <div className="flex desktop:flex-row flex-col gap-5">
+    <div
+      className="flex desktop:flex-row flex-col gap-5 desktop:scroll-m-8 scroll-m-32"
+      id="aboutProject"
+    >
       <div className="desktop:w-6/12 sm:h-auto min-h-[600px] w-full bg-darkGray rounded-2xl relative p-7">
         <div className="flex flex-col gap-2">
           <p className="bg-violet100 text-primary shadow-none px-6 py-2 rounded-full w-fit">

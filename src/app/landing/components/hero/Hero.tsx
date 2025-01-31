@@ -11,6 +11,7 @@ import CheckMark from "../advantages/svg/CheckMark";
 import CloseCircle from "../advantages/svg/CloseCircle";
 import CheckCircle from "./svg/CheckCircle";
 import LinkerLogo from "../svg/LinkerLogo";
+import Link from "next/link";
 
 Image;
 const Hero = () => {
@@ -33,14 +34,16 @@ const Hero = () => {
           заявки через удобную форму, получайте оплату онлайн и управляйте
           заказами в одном месте
         </p>
-        <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase group relative desktop:flex hidden">
-          <span className="flex items-center gap-2">
-            Начать сейчас
-            <span className="transform transition-transform duration-300 group-hover:translate-x-3">
-              <LinkerLogo bg={false} />
+        <Link href={"#price"}>
+          <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase group relative desktop:flex hidden">
+            <span className="flex items-center gap-2">
+              Начать сейчас
+              <span className="transform transition-transform duration-300 group-hover:translate-x-3">
+                <LinkerLogo bg={false} />
+              </span>
             </span>
-          </span>
-        </Button>
+          </Button>
+        </Link>
       </div>
 
       <div className="w-1/2 flex justify-center">
@@ -101,14 +104,16 @@ const Hero = () => {
         заявки через удобную форму, получайте оплату онлайн и управляйте
         заказами в одном месте
       </p>
-      <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase relative desktop:hidden flex">
-        <span className="flex items-center gap-2">
-          Начать сейчас
-          <span className="">
-            <LinkerLogo bg={false} />
+      <Link href={"#price"}>
+        <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase relative desktop:hidden flex">
+          <span className="flex items-center gap-2">
+            Начать сейчас
+            <span className="">
+              <LinkerLogo bg={false} />
+            </span>
           </span>
-        </span>
-      </Button>
+        </Button>
+      </Link>
     </div>
   );
 };

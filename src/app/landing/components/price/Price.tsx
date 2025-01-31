@@ -7,6 +7,8 @@ import Star from "../svg/Star";
 import Ellipse from "./svg/Ellipse";
 import Square from "./svg/Square";
 import { use, useState } from "react";
+import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import Form from "./Form";
 const Price = () => {
   const [choose, setChoose] = useState(0);
 
@@ -14,7 +16,10 @@ const Price = () => {
     setChoose(value === "price1" ? 0 : 1);
   };
   return (
-    <div className="bg-primary rounded-3xl p-5 tablet:p-10 flex gap-10 justify-between flex-col relative">
+    <div
+      className="bg-primary rounded-3xl p-5 tablet:p-10 flex gap-10 justify-between flex-col relative desktop:scroll-m-8 scroll-m-32"
+      id="price"
+    >
       <div className="absolute top-0 left-0 desktop:flex hidden">
         <Ellipse width={280} height={329}></Ellipse>
       </div>
@@ -154,9 +159,14 @@ const Price = () => {
             </Label>
           </RadioGroup>
           <div className="flex justify-end">
-            <Button className="w-full tablet:w-fit py-8 uppercase font-bold font-rubik">
-              Подключить Linker
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="w-full tablet:w-fit py-8 uppercase font-bold font-rubik">
+                  Подключить Linker
+                </Button>
+              </AlertDialogTrigger>
+              <Form variant={choose}></Form>
+            </AlertDialog>
           </div>
         </div>
       </div>

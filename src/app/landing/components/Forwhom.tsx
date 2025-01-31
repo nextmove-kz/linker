@@ -8,7 +8,10 @@ import Step4 from "./forwhom/Step4";
 
 const Forwhom = () => {
   return (
-    <div className="flex justify-center flex-col gap-10">
+    <div
+      className="flex justify-center flex-col gap-10 desktop:scroll-m-8 scroll-m-32"
+      id="forwhom"
+    >
       <div className="flex flex-col gap-5 items-center">
         <p className="bg-violet100 text-primary shadow-none px-8 py-3  rounded-full">
           Для кого

@@ -1,13 +1,19 @@
 import React from "react";
-import Socials2 from "../svg/Socials2";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Vector from "./svg/Vector";
 import Ellipse from "./svg/Ellipse";
+import Telegram from "./svg/Telegram";
+import Instagram from "./svg/Instagram";
+import Gmail from "./svg/Gmail";
+import Link from "next/link";
 
 const Questions = () => {
   return (
-    <div className="rounded-3xl tablet:p-10 p-5 bg-darkGray flex justify-between gap-5 flex-col desktop:flex-row relative">
+    <div
+      className="rounded-3xl tablet:p-10 p-5 bg-darkGray flex justify-between gap-5 flex-col desktop:flex-row relative desktop:scroll-m-8 scroll-m-32"
+      id="questions"
+    >
       <div className="absolute top-0 z-10 left-0">
         <Vector></Vector>
       </div>
@@ -22,7 +28,20 @@ const Questions = () => {
           </h1>
         </div>
         <div className="flex-col gap-2 desktop:flex hidden">
-          <Socials2></Socials2>
+          {/* <Socials2></Socials2> */}
+          <div className="flex gap-4">
+            <Link href={"https://t.me/lukivan8"}>
+              <Telegram width={60} height={60}></Telegram>
+            </Link>
+            <Link
+              href={"https://www.instagram.com/linkerkz?igsh=NzhheDVhNWNtNXQ2"}
+            >
+              <Instagram width={60} height={60}></Instagram>
+            </Link>
+            <Link href={"mailto:lukivan888@gmail.com"}>
+              <Gmail width={60} height={60}></Gmail>
+            </Link>
+          </div>
           <p className="text-white text-base">Или свяжитесь с нами напрямую</p>
         </div>
       </div>
@@ -46,7 +65,19 @@ const Questions = () => {
         </div>
       </div>
       <div className="flex-col gap-2 desktop:hidden flex z-40">
-        <Socials2></Socials2>
+        <div className="flex gap-4">
+          <Link href={"https://t.me/lukivan8"}>
+            <Telegram width={60} height={60}></Telegram>
+          </Link>
+          <Link
+            href={"https://www.instagram.com/linkerkz?igsh=NzhheDVhNWNtNXQ2"}
+          >
+            <Instagram width={60} height={60}></Instagram>
+          </Link>
+          <Link href={"mailto:lukivan888@gmail.com"}>
+            <Gmail width={60} height={60}></Gmail>
+          </Link>
+        </div>
         <p className="text-white font-medium sm:text-base tablet:text-md desktop:text-[20px]">
           Или свяжитесь с нами напрямую
         </p>

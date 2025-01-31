@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import LinkerWhite from "../svg/LinkerWhite";
 import Vector from "./svg/Vector";
+import Link from "next/link";
+import Telegram from "./svg/Telegram";
+import Instagram from "./svg/Instagram";
 
 const Footer = () => {
   return (
@@ -20,8 +23,19 @@ const Footer = () => {
                 Автоматизация заказов из Instagram
               </p>
             </div>
-            <div className="flex tablet:flex-row flex-col gap-5 items-start">
-              <Socials></Socials>
+            <div className="flex tablet:flex-row flex-col gap-5  tablet:items-center items-start">
+              <div className="flex gap-5">
+                <Link href={"https://t.me/lukivan8"}>
+                  <Telegram></Telegram>
+                </Link>
+                <Link
+                  href={
+                    "https://www.instagram.com/linkerkz?igsh=NzhheDVhNWNtNXQ2"
+                  }
+                >
+                  <Instagram></Instagram>
+                </Link>
+              </div>
               <div>
                 <p className="text-white font-bold text-md">Напишите нам</p>
                 <p className="text-white">lukivan888@gmail.com</p>
@@ -63,7 +77,7 @@ const Footer = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2 desktop:w-2/5 tablet:w-1/2 w-full z-50">
+        <div className="flex flex-col gap-2 desktop:w-2/5 tablet:w-1/2 w-full z-40">
           <h1 className="text-white font-bold font-rubik text-[20px] tablet:text-[24px] uppercase">
             Будьте в курсе!
           </h1>
