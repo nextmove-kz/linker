@@ -158,6 +158,7 @@ export default function PaymentPage() {
       // Разберемся позже с unknown, нужно будет выделить phone
       // @ts-ignore
       const phone: string = details[0].orderData["Контактный номер_phone"];
+      console.log(phone);
       const detailsMessage = compileMessage(
         details[0].orderData as OrdersRecord
       );
@@ -169,7 +170,11 @@ export default function PaymentPage() {
         device_id: deviceId,
         status: "pending",
         payment: method.getPaymentData(formData),
-        phone: phone,
+        phone: phone
+          .replaceAll(" ", "")
+          .replaceAll("-", "")
+          .replaceAll("(", "")
+          .replaceAll(")", ""),
       });
 
       basket.forEach((item) =>
