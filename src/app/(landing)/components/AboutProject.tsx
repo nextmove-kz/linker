@@ -30,7 +30,7 @@ const AboutProject = () => {
             <Instagram></Instagram>
           </div>
           <Image
-            src={"/iphone.png"}
+            src={"/images/iphone.png"}
             alt={"Image 3"}
             width={400}
             height={300}
@@ -90,7 +90,7 @@ const AboutProject = () => {
             </div>
           </Card>
         </div>
-        <div className="w-full h-full bg-[url('/preview.png')] rounded-2xl bg-cover bg-center px-6 py-8 text-white">
+        <div className="w-full h-full bg-[url('/images/preview.png')] rounded-2xl bg-cover bg-center px-6 py-8 text-white">
           <p className="font-bold desktop:w-1/2 tablet:w-2/3 w-3/4">
             Всё это объединено в интуитивно понятный конструктор, не требующий
             технических навыков для настройки

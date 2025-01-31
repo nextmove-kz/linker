@@ -31,9 +31,11 @@ export default function NotFound() {
         <p className="text-xl text-gray-500 mb-8">
           Уупс! Страница, которую вы ищете, не существует.
         </p>
-        <Link href="/" className="px-6 py-3">
-          <Button>На главную</Button>
-        </Link>
+        <Button asChild>
+          <Link href="/" className="px-6 py-3">
+            На главную
+          </Link>
+        </Button>
       </div>
     </div>
   );

@@ -72,12 +72,12 @@ const OrderAccept = async ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="mb-6">
           <p className="text-sm text-gray-500">Order id: #{id}</p>
         </div>
-        <Link href="/" passHref>
-          <Button className="w-full">
+        <Button className="w-full" asChild>
+          <Link href="/" passHref>
             Вернуться на главную
             <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
     </div>
   );

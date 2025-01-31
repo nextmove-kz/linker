@@ -33,12 +33,11 @@ const Forwhom = () => {
       <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 items-start justify-center gap-6">
         <div className="flex w-full flex-col gap-3">
           <Image
-            src={"/forwhom_image1.png"}
+            src={"/images/forwhom_image1.png"}
             alt={"Image 1"}
             width={300}
             height={300}
-            objectFit="cover"
-            className="rounded-md w-full h-full"
+            className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
             <h1 className="font-bold text-xl text-darkGray">Подарки</h1>
@@ -50,12 +49,11 @@ const Forwhom = () => {
         </div>
         <div className="flex flex-col gap-3">
           <Image
-            src={"/forwhom_image2.png"}
+            src={"/images/forwhom_image2.png"}
             alt={"Image 3"}
             width={300}
             height={300}
-            objectFit="cover"
-            className="rounded-md w-full h-full"
+            className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
             <h1 className="font-bold text-xl text-darkGray">
@@ -69,12 +67,11 @@ const Forwhom = () => {
         </div>
         <div className="flex flex-col gap-3">
           <Image
-            src={"/forwhom_image3.png"}
+            src={"/images/forwhom_image3.png"}
             alt={"Image 3"}
             width={300}
             height={300}
-            objectFit="cover"
-            className="rounded-md  w-full h-full"
+            className="rounded-md  w-full h-full object-cover"
           ></Image>
           <div>
             <h1 className="font-bold text-xl text-darkGray">Кулинария</h1>
@@ -85,12 +82,11 @@ const Forwhom = () => {
         </div>
         <div className="flex flex-col gap-3">
           <Image
-            src={"/forwhom_image4.png"}
+            src={"/images/forwhom_image4.png"}
             alt={"Image 4"}
             width={300}
             height={300}
-            objectFit="cover"
-            className="rounded-md w-full h-full"
+            className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
             <h1 className="font-bold text-xl text-darkGray">

@@ -69,7 +69,7 @@ const Hero = () => {
 
             <div className="absolute tablet:top-5 top-14 desktop:top-0 z-40 left-0 w-[60px] h-[60px] tablet:w-[77px] tablet:h-[77px] desktop:w-[100px] desktop:h-[100px]">
               <Image
-                src={"/insta.png"}
+                src={"/images/insta.png"}
                 alt="gjkf"
                 width={100}
                 height={100}
@@ -92,7 +92,7 @@ const Hero = () => {
             <Image
               width={485}
               height={515}
-              src={"/woman.png"}
+              src={"/images/woman.png"}
               alt="gkfj"
               className="absolute bottom-[18%] tablet:bottom-[13%] desktop:bottom-[7%] z-30 object-cover"
             ></Image>
@@ -104,16 +104,19 @@ const Hero = () => {
         заявки через удобную форму, получайте оплату онлайн и управляйте
         заказами в одном месте
       </p>
-      <Link href={"#price"}>
-        <Button className="py-7 w-fit px-8 font-bold font-rubik uppercase relative desktop:hidden flex">
+      <Button
+        className="py-7 w-fit px-8 font-bold font-rubik uppercase relative desktop:hidden flex"
+        asChild
+      >
+        <Link href={"#price"}>
           <span className="flex items-center gap-2">
             Начать сейчас
             <span className="">
               <LinkerLogo bg={false} />
             </span>
           </span>
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </div>
   );
 };
