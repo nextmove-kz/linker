@@ -46,20 +46,18 @@ const ProgressBar = ({
 
       <div className="mb-6 flex justify-between">
         {data.status !== "declined" ? (
-          <div>
-            {statusSteps.map((step, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <step.icon
-                  className={`h-10 w-10 ${
-                    index <= currentStatusStep()
-                      ? "text-primary"
-                      : "text-gray-300"
-                  }`}
-                />
-                <span className="mt-2 text-xs text-gray-500">{step.label}</span>
-              </div>
-            ))}
-          </div>
+          statusSteps.map((step, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <step.icon
+                className={`h-10 w-10 ${
+                  index <= currentStatusStep()
+                    ? "text-primary"
+                    : "text-gray-300"
+                }`}
+              />
+              <span className="mt-2 text-xs text-gray-500">{step.label}</span>
+            </div>
+          ))
         ) : (
           <div className="flex flex-col justify-center items-center w-full">
             <CircleX className="text-red-500 w-14 h-14" />
