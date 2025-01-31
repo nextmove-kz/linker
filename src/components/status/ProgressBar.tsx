@@ -30,7 +30,7 @@ const ProgressBar = ({
   const text =
     "Здравствуйте! Я хотел бы получить больше информации по своему заказу.";
 
-  const whatsappUrl = `https://wa.me/${businessPhone.replace(
+  const whatsappUrl = `https://wa.me/${businessPhone?.replace(
     /\D/g,
     ""
   )}?text=${encodeURIComponent(text)}`;
