@@ -67,8 +67,8 @@ export default function SignupForm() {
     }
   };
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto">
-      <div className="flex mb-4 gap-2">
+    <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
+      <div className="flex mb-4 gap-4 items-center">
         <svg
           width="50"
           height="50"
@@ -86,105 +86,73 @@ export default function SignupForm() {
           />
           <circle cx="118" cy="152" r="22" fill="white" />
         </svg>
-        <h1 className="text-3xl font-semibold text-center mt-auto">
-          Регистрация бизнеса
-        </h1>
+        <h1 className="text-3xl font-semibold">Регистрация бизнеса</h1>
       </div>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>Зарегестрируйте свой бизнес</CardTitle>
-          <CardDescription>Настройте бизнес для начала</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="display_name">Название бизнеса</Label>
-              <Input
-                id="display_name"
-                name="display_name"
-                required
-                placeholder="Asyl Food"
-              />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="name">ID бизнеса</Label>
-              <Input id="name" name="name" required placeholder="asylfood" />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone_number">Контактный номер</Label>
-              <PhoneInput name="phone_number" />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="instagram">instagram URL</Label>
-              <Input
-                id="instagram"
-                name="instagram"
-                required
-                placeholder="https://www.instagram.com/example/"
-              />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="address">Адрес</Label>
-              <Input
-                id="address"
-                name="address"
-                required
-                placeholder="Адрес бизнеса"
-              />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Описание</Label>
+      <div className="w-full max-w-md mx-auto">
+        <div className="mb-2">
+          <p className="text-gray-600">Настройте бизнес для начала</p>
+        </div>
+        <Separator />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="display_name">Название бизнеса</Label>
+            <Input
+              id="display_name"
+              name="display_name"
+              required
+              placeholder="Asyl Food"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="name">ID бизнеса</Label>
+            <Input id="name" name="name" required placeholder="asylfood" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="phone_number">Контактный номер</Label>
+            <PhoneInput name="phone_number" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="instagram">instagram URL</Label>
+            <Input
+              id="instagram"
+              name="instagram"
+              required
+              placeholder="https://www.instagram.com/example/"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="address">Адрес</Label>
+            <Input
+              id="address"
+              name="address"
+              required
+              placeholder="Адрес бизнеса"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Описание</Label>
+            <Textarea
+              id="description"
+              name="description"
+              required
+              placeholder="Описание для бизнеса"
+            />
+          </div>
+          <div className="space-y-2">
+            <ColorPickerModal
+              name="color"
+              label="Выберите цвет"
+              trigger="Выбрать акцент"
+            />
+          </div>
 
-              <Textarea
-                id="description"
-                name="description"
-                required
-                placeholder="Описание для бизнеса"
-              />
-              {/* {errors.businessName && (
-              <p className="text-sm text-red-500">{errors.businessName}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <ColorPickerModal
-                name="color"
-                label="Выберите цвет"
-                trigger="Выбрать акцент"
-              />
-            </div>
+          <Separator className="my-6" />
 
-            <Separator />
-            {/* <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Signing Up..." : "Sign Up"}
-          </Button> */}
-            <Button type="submit" className="w-full">
-              Зарегистрироваться
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter>
-          {/* {state && state.success && (
-          <Alert className="w-full">
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )} */}
-        </CardFooter>
-      </Card>
+          <Button type="submit" className="w-full">
+            Зарегистрироваться
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -40,8 +40,8 @@ export default function SignUpForm() {
     }
   };
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto">
-      <div className="flex mb-4 gap-2">
+    <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
+      <div className="flex mb-4 gap-2 items-center">
         <svg
           width="50"
           height="50"
@@ -54,88 +54,72 @@ export default function SignUpForm() {
           <path
             d="M147 92L206.293 151.293C206.683 151.683 206.683 152.317 206.293 152.707L147 212"
             stroke="white"
-            stroke-width="42"
-            stroke-linecap="round"
+            strokeWidth="42"
+            strokeLinecap="round"
           />
           <circle cx="118" cy="152" r="22" fill="white" />
         </svg>
-        <h1 className="text-3xl font-semibold text-center mt-auto">
+        <h1 className="text-3xl font-semibold text-center">
           Регистрация бизнеса
         </h1>
       </div>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle>Зарегестрируйте свой бизнес</CardTitle>
-          <CardDescription>Создайте учетную запись для начала</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Почта</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="example@mail.com"
-              />
-              {/* {errors.email && (
-              <p className="text-sm text-red-500">{errors.email}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Пароль</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Введите пароль"
-                required
-              />
-              {/* {errors.password && (
-              <p className="text-sm text-red-500">{errors.password}</p>
-            )} */}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="passwordConfirm">Подтвердите пароль</Label>
-              <Input
-                id="passwordConfirm"
-                name="passwordConfirm"
-                type="password"
-                placeholder="Введите пароль еще раз"
-                required
-              />
-              {/* {errors.passwordConfirm && (
-              <p className="text-sm text-red-500">{errors.passwordConfirm}</p>
-            )} */}
-            </div>
-            <Separator />
-            {/* <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Signing Up..." : "Sign Up"}
-          </Button> */}
-            <Button type="submit" className="w-full">
-              Зарегистрироваться
-            </Button>
-            <span className="flex justify-center text-gray-500 gap-1">
-              Уже есть аккаунт?
-              <Link
-                href="/auth/sign-in"
-                className="flex underline text-blue-500"
-              >
-                Войти
-                <ArrowUpRight className=" h-4 w-4" />
-              </Link>
-            </span>
-          </form>
-        </CardContent>
-        <CardFooter>
-          {/* {state && state.success && (
-          <Alert className="w-full">
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )} */}
-        </CardFooter>
-      </Card>
+
+      <div className="w-full max-w-md mx-auto space-y-6">
+        <div className="space-y-2">
+          <p className="text-sm text-gray-500">
+            Создайте учетную запись для начала
+          </p>
+        </div>
+        <Separator />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Почта</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="example@mail.com"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Пароль</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Введите пароль"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="passwordConfirm">Подтвердите пароль</Label>
+            <Input
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              placeholder="Введите пароль еще раз"
+              required
+            />
+          </div>
+          <Separator className="my-6" />
+          <Button type="submit" className="w-full">
+            Зарегистрироваться
+          </Button>
+        </form>
+        <div className="text-center text-sm">
+          <span className="text-gray-500">
+            Уже есть аккаунт?{" "}
+            <Link
+              href="/auth/sign-in"
+              className="text-blue-500 hover:underline inline-flex items-center"
+            >
+              Войти
+              <ArrowUpRight className="h-4 w-4 ml-1" />
+            </Link>
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
