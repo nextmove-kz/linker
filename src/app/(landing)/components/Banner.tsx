@@ -12,7 +12,7 @@ const Banner = () => {
           Доверьте заказы Linker
         </h1>
         <div className="tablet:w-2/3 w-full text-center">
-          <p className="text-gray font-medium sm:text-[14px] tablet:text-md desktop:text-xl">
+          <p className="text-gray font-medium sm:text-[14px] tablet:text-md desktop:text-xl font-manrope">
             Сфокусируйтесь на развитии бизнеса, а рутину оставьте Linker.
             Начните пользоваться сервисом уже сегодня и почувствуйте разницу
           </p>

@@ -33,14 +33,14 @@ const Price = () => {
         <Square width={120} height={389}></Square>
       </div>
       <div className="flex flex-col gap-4">
-        <p className="bg-violet100 text-primary shadow-none px-8 py-3 w-[126px] rounded-full">
+        <p className="bg-violet100 text-primary shadow-none px-8 py-3 w-fit rounded-full">
           Тарифы
         </p>
         <h1 className="text-white font-bold sm:text-[20px] tablet:text-[28px] desktop:text-title font-rubik uppercase">
           Лучшая цена для каждого бизнеса
         </h1>
         <div>
-          <p className="sm:text-[14px] tablet:text-base desktop:text-[18px] text-white">
+          <p className="sm:text-[14px] tablet:text-base desktop:text-[18px] text-white font-manrope font-medium">
             Никаких сложных тарифных сеток и скрытых условий. Выберите
             подходящий вариант и начните экономить время уже сегодня - доступ ко
             всем функциям включен в каждый тариф
@@ -54,7 +54,7 @@ const Price = () => {
               <div className="w-[24px] h-[24px] flex justify-center items-center">
                 <CheckCircle />
               </div>
-              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md">
+              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md font-manrope font-medium">
                 Встроенная онлайн оплата
               </p>
             </div>
@@ -62,7 +62,7 @@ const Price = () => {
               <div className="w-[24px] h-[24px] flex justify-center items-center">
                 <CheckCircle />
               </div>
-              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md">
+              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md font-manrope font-medium">
                 Настраиваемые формы заказа под ваш бизнес
               </p>
             </div>
@@ -70,7 +70,7 @@ const Price = () => {
               <div className="w-[24px] h-[24px] flex justify-center items-center">
                 <CheckCircle />
               </div>
-              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md">
+              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md font-manrope font-medium">
                 Автоматический сбор заказов через форму
               </p>
             </div>
@@ -78,7 +78,7 @@ const Price = () => {
               <div className="w-[24px] h-[24px] flex justify-center items-center">
                 <CheckCircle />
               </div>
-              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md">
+              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md font-manrope font-medium">
                 Мгновенные уведомления
               </p>
             </div>
@@ -86,7 +86,7 @@ const Price = () => {
               <div className="w-[24px] h-[24px] flex justify-center items-center">
                 <CheckCircle />
               </div>
-              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md">
+              <p className="text-darkGray sm:text-[14px] tablet:text-base desktop:text-md font-manrope font-medium">
                 Регулярные обновления и новые функции
               </p>
             </div>
@@ -100,8 +100,10 @@ const Price = () => {
           >
             <Label
               htmlFor="price1"
-              className={`rounded-2xl border-2 py-8 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
-                choose === 0 ? "border-primary" : "border-borderColor"
+              className={`rounded-2xl border-2 hover:border-primary py-8 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
+                choose === 0
+                  ? "border-primary text-primary"
+                  : "border-borderColor"
               }`}
             >
               <div className="flex items-center gap-5">
@@ -110,7 +112,7 @@ const Price = () => {
                   id="price1"
                   className="hidden tablet:flex"
                 />
-                <h1 className="uppercase sm:text-[18px] tablet:text-[20px] desktop:text-24px">
+                <h1 className="font-manrope font-semibold uppercase sm:text-[18px] tablet:text-[20px] desktop:text-24px">
                   Основной
                 </h1>
               </div>
@@ -118,13 +120,21 @@ const Price = () => {
                 <h1 className="font-bold font-rubik sm:text-[20px] tablet:text-[28px] desktop:text-title">
                   17 000 ₸
                 </h1>
-                <p className="text-gray sm:text-base desktop:text-md">/месяц</p>
+                <p
+                  className={`font-manrope font-medium text-gray sm:text-base desktop:text-md ${
+                    choose === 0 && "text-primary"
+                  }`}
+                >
+                  /месяц
+                </p>
               </div>
             </Label>
             <Label
               htmlFor="price2"
-              className={`relative rounded-2xl border-2 py-7 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
-                choose === 1 ? "border-primary" : "border-borderColor"
+              className={`relative rounded-2xl border-2 hover:border-primary py-7 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
+                choose === 1
+                  ? "border-primary text-primary"
+                  : "border-borderColor"
               }`}
             >
               <div className="absolute flex gap-2 items-center bg-white p-3 right-0 -top-9 rotate-3 shadow-md rounded-xl">
@@ -140,10 +150,10 @@ const Price = () => {
                   className="hidden tablet:flex"
                 />
                 <div className="flex flex-col gap-1">
-                  <h1 className="uppercase sm:text-[18px] tablet:text-[20px] desktop:text-24px">
+                  <h1 className="font-manrope font-semibold uppercase sm:text-[18px] tablet:text-[20px] desktop:text-24px">
                     Навсегда
                   </h1>
-                  <h1 className="sm:text-[12px] tablet:text-[14px] desktop:text-base text-primary">
+                  <h1 className="font-manrope font-medium sm:text-[12px] tablet:text-[14px] desktop:text-base text-primary">
                     *Окупается за 8 месяцев
                   </h1>
                 </div>
@@ -152,7 +162,11 @@ const Price = () => {
                 <h1 className="font-bold font-rubik sm:text-[20px] tablet:text-[28px] desktop:text-title">
                   150 000 ₸
                 </h1>
-                <p className="text-gray sm:text-base desktop:text-md">
+                <p
+                  className={`font-manrope font-medium text-gray sm:text-base desktop:text-md ${
+                    choose === 1 && "text-primary"
+                  }`}
+                >
                   /безлимит
                 </p>
               </div>

@@ -41,22 +41,22 @@ const AboutProject = () => {
         <div className="flex tablet:flex-row flex-col justify-between gap-5 w-full">
           <Card className="p-5 tablet:w-1/2 w-full  flex flex-col gap-3">
             <ShoppingCart></ShoppingCart>
-            <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray">
+            <h1 className="sm:text-[18px] font-manrope desktop:text-xl font-bold text-darkGray">
               Каталог товаров/услуг
             </h1>
             <div>
-              <p className="text-gray sm:text-[14px] desktop:text-base">
+              <p className="text-gray sm:text-[14px] font-manrope font-medium desktop:text-base">
                 Со всеми стандартными функциями популярных сервисов доставки
               </p>
             </div>
           </Card>
           <Card className="p-5 tablet:w-1/2 w-full  flex flex-col gap-3">
             <Wallet></Wallet>
-            <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray">
+            <h1 className="sm:text-[18px] desktop:text-xl font-bold font-manrope text-darkGray">
               Гибкая система оплаты
             </h1>
             <div>
-              <p className="text-gray sm:text-[14px] desktop:text-base">
+              <p className="text-gray sm:text-[14px] font-manrope font-medium desktop:text-base">
                 Оплата онлайн картой или наличными
               </p>
             </div>
@@ -66,12 +66,12 @@ const AboutProject = () => {
           <Card className="p-5 tablet:w-1/2 w-full  flex flex-col gap-3">
             <Text></Text>
             <div>
-              <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray">
+              <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray font-manrope">
                 Настраиваемая форма заказа
               </h1>
             </div>
             <div>
-              <p className="text-gray sm:text-[14px] desktop:text-base">
+              <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
                 С набором предустановленных полей под специфику каждого бизнеса
               </p>
             </div>
@@ -79,19 +79,19 @@ const AboutProject = () => {
           <Card className="p-5 tablet:w-1/2 w-full  flex flex-col gap-3">
             <Bell></Bell>
             <div>
-              <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray">
+              <h1 className="sm:text-[18px] desktop:text-xl font-bold text-darkGray font-manrope">
                 Двойная система уведомлений о заказах
               </h1>
             </div>
             <div>
-              <p className="text-gray sm:text-[14px] desktop:text-base">
+              <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
                 В мессенджеры и личный кабинет с панелью управления заказами
               </p>
             </div>
           </Card>
         </div>
         <div className="w-full h-full bg-[url('/images/preview.png')] rounded-2xl bg-cover bg-center px-6 py-8 text-white">
-          <p className="font-bold desktop:w-1/2 tablet:w-2/3 w-3/4">
+          <p className="font-bold font-manrope desktop:w-1/2 tablet:w-2/3 w-3/4">
             Всё это объединено в интуитивно понятный конструктор, не требующий
             технических навыков для настройки
           </p>

@@ -28,7 +28,6 @@ const Questions = () => {
           </h1>
         </div>
         <div className="flex-col gap-2 desktop:flex hidden">
-          {/* <Socials2></Socials2> */}
           <div className="flex gap-4">
             <Link href={"https://t.me/lukivan8"}>
               <Telegram width={60} height={60}></Telegram>
@@ -47,7 +46,7 @@ const Questions = () => {
       </div>
       <div className="flex flex-col items-start desktop:w-1/2 w-full z-40">
         <div className="flex flex-col gap-5 tablet:w-2/3 w-full">
-          <h1 className="text-white font-medium sm:text-base tablet:text-md desktop:text-xl">
+          <h1 className="text-white font-medium sm:text-base tablet:text-md desktop:text-xl font-manrope">
             Наш специалист ответит на все вопросы и поможет с подключением
           </h1>
           <Input placeholder="Имя" className="bg-white p-6"></Input>
@@ -58,7 +57,7 @@ const Questions = () => {
           <Button className="font-bold font-rubik uppercase text-base p-6">
             Получить консультацию
           </Button>
-          <p className="text-xs text-white">
+          <p className="text-xs text-white font-manrope">
             Нажимая кнопку «Получить консультацию», вы соглашаетесь на условия
             обработки персональных данных
           </p>
@@ -78,7 +77,7 @@ const Questions = () => {
             <Gmail width={60} height={60}></Gmail>
           </Link>
         </div>
-        <p className="text-white font-medium sm:text-base tablet:text-md desktop:text-[20px]">
+        <p className="text-white font-medium sm:text-base tablet:text-md desktop:text-[20px] font-manrope">
           Или свяжитесь с нами напрямую
         </p>
       </div>

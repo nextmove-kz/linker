@@ -21,6 +21,7 @@ export default {
       },
       fontFamily: {
         rubik: ["var(--font-rubik)"],
+        manrope: ["var(--font-manrope)"],
       },
       colors: {
         background: "hsl(var(--background))",

@@ -34,7 +34,9 @@ const Advantages = () => {
               <h1 className="sm:text-[24px] tablet:text-[28px] desktop:text-title font-rubik font-bold text-darkGray w-3/4">
                 До появления Linker
               </h1>
-              <p className="text-gray">Автоматизированно</p>
+              <p className="text-gray font-bold font-manrope">
+                Автоматизированно
+              </p>
               <div className="flex items-center gap-4">
                 <p className="text-orange sm:text-title desktop:text-[48px] font-bold font-rubik">
                   ~ 10%
@@ -56,7 +58,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CloseCircle></CloseCircle>
                 </div>
-                <p className="text-darkGray sm:text-[14px] desktop:text-base">
+                <p className="text-darkGray sm:text-[14px] desktop:text-base font-manrope">
                   4 -6 часов на обработку заказов в день
                 </p>
               </div>
@@ -64,7 +66,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CloseCircle></CloseCircle>
                 </div>
-                <p className="text-darkGray sm:text-[14px] desktop:text-base">
+                <p className="text-darkGray sm:text-[14px] desktop:text-base font-manrope">
                   15-20 сообщений на один заказ
                 </p>
               </div>
@@ -74,7 +76,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CloseCircle></CloseCircle>
                 </div>
-                <p className="text-darkGray sm:text-[14px] desktop:text-base">
+                <p className="text-darkGray sm:text-[14px] desktop:text-base font-manrope">
                   Ручной сбор информации и деталей заказа
                 </p>
               </div>
@@ -82,7 +84,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CloseCircle></CloseCircle>
                 </div>
-                <p className="text-darkGray sm:text-[14px] desktop:text-base">
+                <p className="text-darkGray sm:text-[14px] desktop:text-base font-manrope">
                   Упущенные клиенты из-за долгого ответа
                 </p>
               </div>
@@ -92,7 +94,7 @@ const Advantages = () => {
             <div className="w-[40px] h-[40px] tablet:w-[60px] tablet:h-[60px] flex justify-center items-center">
               <EmojiSad></EmojiSad>
             </div>
-            <p className="text-orange desktop:text-xl tablet:text-[18px] sm:text-[16px] w-1/2 tablet:w-1/3">
+            <p className="text-orange desktop:text-xl font-rubik font-medium tablet:text-[18px] sm:text-[16px] w-1/2 tablet:w-1/3">
               Распыляетесь на переписки
             </p>
           </div>
@@ -108,7 +110,9 @@ const Advantages = () => {
                   <LinkerVector></LinkerVector>
                 </div>
               </div>
-              <p className="text-white">Автоматизированно</p>
+              <p className="text-white font-bold font-manrope">
+                Автоматизированно
+              </p>
               <div className="flex items-center gap-4">
                 <p className="text-white sm:text-title desktop:text-[48px] font-bold font-rubik">
                   ~ 90%
@@ -129,7 +133,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CheckMark></CheckMark>
                 </div>
-                <p className="text-white sm:text-[14px] desktop:text-base">
+                <p className="text-white sm:text-[14px] desktop:text-base font-manrope">
                   15 минут на подключение сервиса
                 </p>
               </div>
@@ -137,7 +141,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CheckMark></CheckMark>
                 </div>
-                <p className="text-white sm:text-[14px] desktop:text-base">
+                <p className="text-white sm:text-[14px] desktop:text-base font-manrope">
                   Автоматический сбор заказов через форму
                 </p>
               </div>
@@ -147,7 +151,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CheckMark></CheckMark>
                 </div>
-                <p className="text-white sm:text-[14px] desktop:text-base">
+                <p className="text-white sm:text-[14px] desktop:text-base font-manrope">
                   Встроенная система онлайн оплаты
                 </p>
               </div>
@@ -155,7 +159,7 @@ const Advantages = () => {
                 <div className="w-[24px] h-[24px] flex items-center justify-center">
                   <CheckMark></CheckMark>
                 </div>
-                <p className="text-white sm:text-[14px] desktop:text-base">
+                <p className="text-white sm:text-[14px] desktop:text-base font-manrope">
                   Уведомления в привычных мессенджерах
                 </p>
               </div>
@@ -166,7 +170,7 @@ const Advantages = () => {
               <EmojiNormal></EmojiNormal>
             </div>
 
-            <p className="text-white desktop:text-xl tablet:text-[18px] sm:text-[16px] w-1/2 tablet:w-1/3">
+            <p className="text-white desktop:text-xl font-rubik font-medium tablet:text-[18px] sm:text-[16px] w-1/2 tablet:w-1/3">
               Сфокусированы на продукте
             </p>
           </div>

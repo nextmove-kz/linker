@@ -23,7 +23,7 @@ const Forwhom = () => {
           </p>
         </div>
         <div className="text-center w-full flex justify-center">
-          <p className="text-gray sm:text-[14px] tablet:text-[16px] desktop:text-[18px] tablet:w-2/3 w-full">
+          <p className="text-gray font-manrope font-medium sm:text-[14px] tablet:text-[16px] desktop:text-md tablet:w-2/3 w-full">
             Решаем проблему ручного приёма заказов и экономим время для тех, кто
             продаёт свои товары или изделия в Instagram и управляет бизнесом в
             одиночку
@@ -40,8 +40,10 @@ const Forwhom = () => {
             className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
-            <h1 className="font-bold text-xl text-darkGray">Подарки</h1>
-            <p className="text-gray sm:text-[14px] desktop:text-base">
+            <h1 className="font-bold font-manrope text-md tablet:text-xl text-darkGray">
+              Подарки
+            </h1>
+            <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
               Свечи, шопперы, клубника в шоколаде, упаковка подарков,
               интерьерные украшения
             </p>
@@ -56,10 +58,10 @@ const Forwhom = () => {
             className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
-            <h1 className="font-bold text-xl text-darkGray">
+            <h1 className="font-bold font-manrope text-md tablet:text-xl text-darkGray">
               Аксессуары и декор
             </h1>
-            <p className="text-gray sm:text-[14px] desktop:text-base">
+            <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
               Керамика, украшения, аксессуары из бисера, текстиля и других
               материалов
             </p>
@@ -74,8 +76,10 @@ const Forwhom = () => {
             className="rounded-md  w-full h-full object-cover"
           ></Image>
           <div>
-            <h1 className="font-bold text-xl text-darkGray">Кулинария</h1>
-            <p className="text-gray sm:text-[14px] desktop:text-base">
+            <h1 className="font-bold font-manrope text-md tablet:text-xl text-darkGray">
+              Кулинария
+            </h1>
+            <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
               Торты, пирожные, десерты ручной работы
             </p>
           </div>
@@ -89,10 +93,10 @@ const Forwhom = () => {
             className="rounded-md w-full h-full object-cover"
           ></Image>
           <div>
-            <h1 className="font-bold text-xl text-darkGray">
+            <h1 className="font-bold font-manrope text-md tablet:text-xl text-darkGray">
               Косметика и многое другое
             </h1>
-            <p className="text-gray sm:text-[14px] desktop:text-base">
+            <p className="text-gray sm:text-[14px] desktop:text-base font-manrope font-medium">
               Мыло, бомбочки для ванн, крема, а также другие крафтовые товары
             </p>
           </div>
@@ -100,7 +104,7 @@ const Forwhom = () => {
       </div>
 
       <div className="flex flex-col gap-5">
-        <h1 className="text-xl text-darkGray desktop:justify-start justify-center font-bold flex">
+        <h1 className="text-md tablet:text-xl text-darkGray desktop:justify-start justify-center font-bold flex font-manrope">
           Как это работает?
         </h1>
         <div className="flex desktop:items-stretch items-center justify-between w-full desktop:flex-row flex-col gap-14">
@@ -109,7 +113,7 @@ const Forwhom = () => {
               <Step1 />
             </div>
             <div>
-              <p className="text-darkGray text-base tablet:text-md">
+              <p className="text-darkGray text-base tablet:text-md font-manrope font-medium">
                 Клиенты переходят по вашей уникальной ссылке
               </p>
             </div>
@@ -122,7 +126,7 @@ const Forwhom = () => {
               <Step2 />
             </div>
             <div>
-              <p className="text-darkGray text-base tablet:text-md">
+              <p className="text-darkGray text-base tablet:text-md font-manrope font-medium">
                 Выбирают товары, оплачивают заказ
               </p>
             </div>
@@ -135,22 +139,20 @@ const Forwhom = () => {
               <Step3 />
             </div>
             <div>
-              <p className="text-darkGray text-base tablet:text-md">
+              <p className="text-darkGray text-base tablet:text-md font-manrope font-medium">
                 Вы занимаетесь оформлением и отправкой
               </p>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-3 desktop:justify-end justify-center">
-          <div className="h-[32px] w-[32px] flex justify-center items-center">
-            <Step4 />
-          </div>
-
-          <div>
-            <p className="text-base text-gray">
-              Делайте то, что любите, а заботу
+        <div className="flex w-full desktop:justify-end justify-center">
+          <div className="flex items-center gap-3  desktop:w-1/4 tablet:w-1/2 w-3/4">
+            <div className="h-[32px] w-[32px] flex justify-center items-center">
+              <Step4 />
+            </div>
+            <p className="text-base text-gray font-manrope font-medium">
+              Делайте то, что любите, а заботу о клиентах доверьте Linker
             </p>
-            <p className="text-base text-gray">о клиентах доверьте Linker</p>
           </div>
         </div>
       </div>
