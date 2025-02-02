@@ -16,20 +16,20 @@ import Link from "next/link";
 Image;
 const Hero = () => {
   return (
-    <div className="flex desktop:flex-row flex-col desktop:justify-between desktop:gap-0 gap-10 items-center">
-      <div className="flex flex-col desktop:w-1/2 gap-6 w-full">
+    <div className="flex desktop:flex-row flex-col desktop:justify-between desktop:gap-0 tabletgap-10 items-center">
+      <div className="flex flex-col desktop:w-1/2 tablet:gap-6 w-full">
         <div className="relative">
           <div className="absolute flex gap-2 items-center bg-white py-2 px-6 left-0 -top-12 -rotate-3 shadow-md rounded-xl">
-            <p className="text-orange text-base font-bold">
+            <p className="text-orange text-[14px] tablet:text-base font-bold font-manrope">
               Экономим 1000+ часов в год
             </p>
           </div>
-          <h1 className="desktop:text-[40px] tablet:text-[32px] sm:text-[24px] font-bold font-rubik uppercase">
+          <h1 className="desktop:text-[40px] tablet:text-[32px] sm:text-[24px] text-center desktop:text-start font-bold font-rubik uppercase">
             Автоматизируйте заказы в Instagram за
             <span className="text-orange"> 15 минут</span>
           </h1>
         </div>
-        <p className="text-md text-gray desktop:flex hidden">
+        <p className="desktop:text-md text-[14px] tablet:text-base text-gray desktop:flex hidden font-manrope font-medium">
           От 20 сообщений до потока готовых заказов за пару кликов. Принимайте
           заявки через удобную форму, получайте оплату онлайн и управляйте
           заказами в одном месте

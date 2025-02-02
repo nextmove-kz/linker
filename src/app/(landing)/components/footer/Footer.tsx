@@ -19,7 +19,7 @@ const Footer = () => {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
               <LinkerWhite></LinkerWhite>
-              <p className="text-white sm:text-[14px] tablet:text-base">
+              <p className="text-white sm:text-[14px] tablet:text-base font-manrope font-normal">
                 Автоматизация заказов из Instagram
               </p>
             </div>
@@ -37,8 +37,10 @@ const Footer = () => {
                 </Link>
               </div>
               <div>
-                <p className="text-white font-bold text-md">Напишите нам</p>
-                <p className="text-white">lukivan888@gmail.com</p>
+                <p className="text-white font-bold text-md font-manrope">
+                  Напишите нам
+                </p>
+                <p className="text-white font-manrope">lukivan888@gmail.com</p>
               </div>
             </div>
           </div>
@@ -54,18 +56,18 @@ const Footer = () => {
             <div className="flex flex-col gap-3 justify-center items-center">
               <div className="flex tablet:flex-col flex-row gap-2">
                 <div className="flex flex-col gap-2">
-                  <p className="text-white text-[14px] desktop:text-base">
+                  <p className="text-white text-[14px] desktop:text-base font-manrope">
                     Преимущества
                   </p>
-                  <p className="text-white text-[14px] desktop:text-base">
+                  <p className="text-white text-[14px] desktop:text-base font-manrope">
                     О проекте
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <p className="text-white text-[14px] desktop:text-base">
+                  <p className="text-white text-[14px] desktop:text-base font-manrope">
                     Кому подойдет
                   </p>
-                  <p className="text-white text-[14px] desktop:text-base">
+                  <p className="text-white text-[14px] desktop:text-base font-manrope">
                     Стоимость
                   </p>
                 </div>
@@ -81,7 +83,7 @@ const Footer = () => {
           <h1 className="text-white font-bold font-rubik text-[20px] tablet:text-[24px] uppercase">
             Будьте в курсе!
           </h1>
-          <p className="text-white text-[14px] tablet:text-base">
+          <p className="text-white text-[14px] tablet:text-base font-manrope">
             Подпишитесь на нашу рассылку, чтобы не пропускать новости и
             обновления
           </p>
@@ -92,7 +94,7 @@ const Footer = () => {
                 Отправить
               </Button>
             </div>
-            <p className="text-white text-[12px]">
+            <p className="text-white text-[12px] font-manrope font-medium">
               Нажимая кнопку «Отправить», вы соглашаетесь на условия обработки
               персональных данных
             </p>
@@ -100,9 +102,11 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex justify-around text-white text-xs tablet:flex-row flex-col gap-3 tablet:gap-0 w-full text-center">
-        <p>При поддержке КарТУ</p>
-        <p>Политика конфиденциальности</p>
-        <p>© Все права защищены. Linker.kz 2025</p>
+        <p className="font-manrope text-[14px]">При поддержке КарТУ</p>
+        <p className="font-manrope text-[14px]">Политика конфиденциальности</p>
+        <p className="font-manrope text-[14px]">
+          © Все права защищены. Linker.kz 2025
+        </p>
       </div>
     </div>
   );

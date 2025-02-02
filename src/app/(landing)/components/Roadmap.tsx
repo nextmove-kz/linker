@@ -30,15 +30,17 @@ const Roadmap = () => {
         <div className="flex items-center gap-6 w-full">
           <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
-              <h1 className="uppercase text-primary text-title font-bold">
+              <h1 className="uppercase text-primary text-[24px] tablet:text-[28px] desktop:text-title font-bold font-manrope">
                 01
               </h1>
-              <p className="font-bold text-xl">Регистрация</p>
+              <p className="font-bold text-md tablet:text-xl font-manrope">
+                Регистрация
+              </p>
               <div className="absolute right-0 -top-4">
                 <Clock1></Clock1>
               </div>
             </div>
-            <p className="text-gray text-16px">
+            <p className="text-gray text-[14px] tablet:text-[16px] font-manrope font-medium">
               Укажите название бизнеса, цвет бренда и контактный телефон
             </p>
           </Card>
@@ -49,15 +51,17 @@ const Roadmap = () => {
         <div className="flex items-center gap-6 w-full">
           <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
-              <h1 className="uppercase text-primary text-title font-bold">
+              <h1 className="uppercase text-primary text-[24px] tablet:text-[28px] desktop:text-title font-bold font-manrope">
                 02
               </h1>
-              <p className="font-bold text-xl">Выбор шаблона</p>
+              <p className="font-bold text-md tablet:text-xl font-manrope">
+                Выбор шаблона
+              </p>
               <div className="absolute right-0 -top-4">
                 <Clock2></Clock2>
               </div>
             </div>
-            <p className="text-gray text-16px">
+            <p className="text-gray text-[14px] tablet:text-[16px] font-manrope font-medium">
               Подберите готовое решение для вашего бизнеса
             </p>
           </Card>
@@ -68,15 +72,17 @@ const Roadmap = () => {
         <div className="flex items-center gap-6 w-full">
           <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
-              <h1 className="uppercase text-primary text-title font-bold">
+              <h1 className="uppercase text-primary text-[24px] tablet:text-[28px] desktop:text-title font-bold font-manrope">
                 03
               </h1>
-              <p className="font-bold text-xl">Добавление товаров</p>
+              <p className="font-bold text-md tablet:text-xl font-manrope">
+                Добавление товаров
+              </p>
               <div className="absolute right-0 -top-4">
                 <Clock3></Clock3>
               </div>
             </div>
-            <p className="text-gray text-16px">
+            <p className="text-gray text-[14px] tablet:text-[16px] font-manrope font-medium">
               Загрузите товары в каталог через удобный интерфейс
             </p>
           </Card>
@@ -87,15 +93,17 @@ const Roadmap = () => {
         <div className="flex items-center gap-6 w-full">
           <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
-              <h1 className="uppercase text-primary text-title font-bold">
+              <h1 className="uppercase text-primary text-[24px] tablet:text-[28px] desktop:text-title font-bold font-manrope">
                 04
               </h1>
-              <p className="font-bold text-xl">Настройка формы заказа</p>
+              <p className="font-bold text-md tablet:text-xl font-manrope">
+                Настройка формы заказа
+              </p>
               <div className="absolute right-0 -top-4">
                 <Clock4></Clock4>
               </div>
             </div>
-            <p className="text-gray text-16px">
+            <p className="text-gray text-[14px] tablet:text-[16px] font-manrope font-medium">
               Скорректируйте форму и выберите способы оплаты
             </p>
           </Card>
@@ -106,15 +114,17 @@ const Roadmap = () => {
         <div className="flex items-center gap-6 w-full">
           <Card className="px-6 py-8 w-full tablet:w-auto">
             <div className="flex flex-col relative">
-              <h1 className="uppercase text-primary text-title font-bold">
+              <h1 className="uppercase text-primary text-[24px] tablet:text-[28px] desktop:text-title font-bold font-manrope">
                 05
               </h1>
-              <p className="font-bold text-xl">Оплата</p>
+              <p className="font-bold text-md tablet:text-xl font-manrope">
+                Оплата
+              </p>
               <div className="absolute right-0 -top-4">
                 <Clock5></Clock5>
               </div>
             </div>
-            <p className="text-gray text-16px">
+            <p className="text-gray text-[14px] tablet:text-[16px] font-manrope font-medium">
               Оплатите подписку и получите личную ссылку для инстаграм био
             </p>
           </Card>
@@ -124,7 +134,7 @@ const Roadmap = () => {
         </div>
         <Card className="px-6 py-8 bg-darkGray  flex flex-col gap-3 w-full desktop:col-span-2">
           <div className="flex flex-col relative">
-            <p className="font-bold text-white text-xl">
+            <p className="font-bold text-md tablet:text-xl font-manrope text-white">
               Попробуйте прямо сейчас
             </p>
             <div className="absolute right-0 -top-4">
@@ -132,7 +142,7 @@ const Roadmap = () => {
             </div>
           </div>
           <div>
-            <p className="text-white text-16px">
+            <p className="text-white text-[14px] tablet:text-[16px] font-manrope font-medium">
               Все возможности сервиса в бесплатной демо-версии
             </p>
           </div>

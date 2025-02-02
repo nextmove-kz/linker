@@ -9,19 +9,19 @@ const Navbar = () => {
     <div className="flex justify-between items-center ">
       <Logo></Logo>
       <div className="desktop:flex hidden justify-between w-7/12">
-        <Link href={"#advantages"} className="text-gray">
+        <Link href={"#advantages"} className="text-gray font-manrope">
           Преимущества
         </Link>
-        <Link href={"#aboutProject"} className="text-gray">
+        <Link href={"#aboutProject"} className="text-gray font-manrope">
           О проекте
         </Link>
-        <Link href={"#forwhom"} className="text-gray">
+        <Link href={"#forwhom"} className="text-gray font-manrope">
           Кому подойдет
         </Link>
-        <Link href={"#price"} className="text-gray">
+        <Link href={"#price"} className="text-gray font-manrope">
           Cтоимость
         </Link>
-        <Link href={"#questions"} className="text-gray">
+        <Link href={"#questions"} className="text-gray font-manrope">
           Контакты
         </Link>
       </div>
