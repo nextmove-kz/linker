@@ -16,7 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Lock, Mail } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 
@@ -41,7 +41,7 @@ export default function SignUpForm() {
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
-      <div className="flex mb-4 gap-2 items-center">
+      <div className="flex gap-2 items-center w-full">
         <svg
           width="50"
           height="50"
@@ -59,55 +59,71 @@ export default function SignUpForm() {
           />
           <circle cx="118" cy="152" r="22" fill="white" />
         </svg>
-        <h1 className="text-3xl font-semibold text-center">
-          Регистрация бизнеса
-        </h1>
-      </div>
-
-      <div className="w-full max-w-md mx-auto space-y-6">
-        <div className="space-y-2">
-          <p className="text-sm text-gray-500">
+        <div className="flex flex-col ml-3">
+          <h1 className="text-xl font-semibold text-center">
+            Регистрация бизнеса
+          </h1>
+          <p className="text-sm text-gray-500 flex justify-center items-center">
             Создайте учетную запись для начала
           </p>
         </div>
-        <Separator />
+      </div>
+
+      <div className="w-full max-w-md mx-auto space-y-6">
+        <div className="space-y-2"></div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Почта</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="example@mail.com"
-            />
+            <Label htmlFor="email" className="text-sm font-medium">
+              Почта
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                placeholder="example@mail.com"
+                className="pl-10"
+              />
+            </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Пароль</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Введите пароль"
-              required
-            />
-          </div>
+            <Label htmlFor="password" className="text-sm font-medium">
+              Пароль
+            </Label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Введите пароль"
+                required
+                className="pl-10"
+              />
+            </div>
+          </div>{" "}
           <div className="space-y-2">
             <Label htmlFor="passwordConfirm">Подтвердите пароль</Label>
-            <Input
-              id="passwordConfirm"
-              name="passwordConfirm"
-              type="password"
-              placeholder="Введите пароль еще раз"
-              required
-            />
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Input
+                id="passwordConfirm"
+                name="passwordConfirm"
+                type="password"
+                placeholder="Введите пароль еще раз"
+                required
+                className="pl-10"
+              />
+            </div>
           </div>
-          <Separator className="my-6" />
           <Button type="submit" className="w-full">
             Зарегистрироваться
           </Button>
         </form>
         <div className="text-center text-sm">
+          <Separator className="my-6" />
           <span className="text-gray-500">
             Уже есть аккаунт?{" "}
             <Link
