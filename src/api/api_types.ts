@@ -104,7 +104,7 @@ export type BusinessRecord = {
 	color?: string
 	created?: IsoDateString
 	description?: string
-	display_name?: string
+	displayName?: string
 	email: string
 	emailVisibility?: boolean
 	id: string
@@ -207,14 +207,9 @@ export type OrdersRecord = {
 	device_id: string
 	id: string
 	items: RecordIdString[]
-<<<<<<< HEAD
-	payment?: null | Tpayment
-	phone?: string
-=======
 	payment: string
 	phone: string
->>>>>>> 64893b27c2c6abaa8078a4a8bf91ad03685d693d
-	status?: OrdersStatusOptions
+	status: OrdersStatusOptions
 	updated?: IsoDateString
 }
 
@@ -258,7 +253,6 @@ export type SettingsRecord = {
 	created?: IsoDateString
 	id: string
 	name?: string
-	required?: boolean
 	type: SettingsTypeOptions
 	updated?: IsoDateString
 	variants?: RecordIdString[]

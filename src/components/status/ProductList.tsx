@@ -1,10 +1,10 @@
 import { ExpandedOrderItems, ExpandedOrderRecord } from "@/api/custom_types";
 
 const ProductList = ({
-  data,
+  items,
   totalSum,
 }: {
-  data: ExpandedOrderRecord;
+  items: ExpandedOrderItems[];
   totalSum: number;
 }) => {
   return (
@@ -12,7 +12,7 @@ const ProductList = ({
       <h2 className="mb-4 text-lg font-semibold">Заказ</h2>
 
       <div className="mb-2 flex flex-col gap-4 text-sm">
-        {data.expand.items.map((item: ExpandedOrderItems) => {
+        {items.map((item: ExpandedOrderItems) => {
           return (
             <div key={item.id} className="flex justify-between w-full">
               <div className="flex flex-col">

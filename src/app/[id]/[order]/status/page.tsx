@@ -1,4 +1,12 @@
-import { Package, CheckCircle, MoveRight } from "lucide-react";
+import {
+  Package,
+  CheckCircle,
+  MoveRight,
+  MapPinCheckInside,
+  PackageSearch,
+  CircleCheck,
+  CircleX,
+} from "lucide-react";
 import { pocketbase } from "@/api/pocketbase";
 import { OrdersRecord } from "@/api/api_types";
 import {
@@ -45,9 +53,11 @@ const StatusPage = async ({
   const message = data.details;
 
   const statusSteps = [
-    { icon: Package, label: "Заказ принят" },
+    { icon: PackageSearch, label: "Заказ в обработке" },
     { icon: MoveRight, label: "" },
-    { icon: CheckCircle, label: "Заказ завершен" },
+    { icon: CircleCheck, label: "Заказ принят" },
+    { icon: MoveRight, label: "" },
+    { icon: MapPinCheckInside, label: "Заказ завершен" },
   ];
   return (
     <div className="flex flex-col gap-4 max-w-[400px] p-2 py-8 mx-auto">
@@ -60,7 +70,7 @@ const StatusPage = async ({
       <ProgressBar order={order} statusSteps={statusSteps} data={data} />
 
       {/* LIST OF PRODUCTS BLOCK*/}
-      <ProductList data={data} totalSum={totalSum} />
+      <ProductList items={data.expand.items} totalSum={totalSum} />
 
       {/* ORDER DEATAILS BLOCK*/}
       <div className="rounded-lg bg-white p-6 shadow-md">
@@ -70,7 +80,10 @@ const StatusPage = async ({
               Детали заказа
             </AccordionTrigger>
             <AccordionContent>
-              <pre>{message}</pre>
+              <pre className="font-sans">{message}</pre>
+              <br />
+              <span>Оплата:</span>
+              <pre className="font-sans">{data.payment}</pre>
               {/* {(data.expand.details?.attachments?.length || 0) > 0 && (
                 <ImageDialog
                   name="Открыть изображения"

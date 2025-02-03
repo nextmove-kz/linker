@@ -1,6 +1,7 @@
 import { ExpandedOrderRecord } from "@/api/custom_types";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { CircleX } from "lucide-react";
 
 const ProgressBar = ({
   order,
@@ -15,8 +16,10 @@ const ProgressBar = ({
     switch (data.status) {
       case "pending":
         return 0;
-      case "finished":
+      case "accepted":
         return 2;
+      case "finished":
+        return 4;
       default:
         return 0;
     }
@@ -27,13 +30,13 @@ const ProgressBar = ({
   const text =
     "Здравствуйте! Я хотел бы получить больше информации по своему заказу.";
 
-  const whatsappUrl = `https://wa.me/${businessPhone.replace(
+  const whatsappUrl = `https://wa.me/${businessPhone?.replace(
     /\D/g,
     ""
   )}?text=${encodeURIComponent(text)}`;
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-md">
+    <div className="rounded-lg bg-white p-2 py-4 shadow-md">
       <h2 className="mb-4 text-lg font-semibold">Заказ #{order}</h2>
 
       <div className="mb-6">
@@ -42,16 +45,25 @@ const ProgressBar = ({
       </div>
 
       <div className="mb-6 flex justify-between">
-        {statusSteps.map((step, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <step.icon
-              className={`h-12 w-12 ${
-                index <= currentStatusStep() ? "text-primary" : "text-gray-300"
-              }`}
-            />
-            <span className="mt-2 text-xs text-gray-500">{step.label}</span>
+        {data.status !== "declined" ? (
+          statusSteps.map((step, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <step.icon
+                className={`h-10 w-10 ${
+                  index <= currentStatusStep()
+                    ? "text-primary"
+                    : "text-gray-300"
+                }`}
+              />
+              <span className="mt-2 text-xs text-gray-500">{step.label}</span>
+            </div>
+          ))
+        ) : (
+          <div className="flex flex-col justify-center items-center w-full">
+            <CircleX className="text-red-500 w-14 h-14" />
+            <span className="text-sm text-red-500">Заказ отклонен</span>
           </div>
-        ))}
+        )}
       </div>
       <Link href={whatsappUrl} target="_blank" rel="noopener noreferrer">
         <Button className="w-full">Связаться с бизнесом</Button>
