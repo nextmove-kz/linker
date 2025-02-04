@@ -49,7 +49,7 @@ export default function SignupForm() {
         .collection("business")
         .update(businessID as string, {
           name: data.name,
-          displayName: data.display_name,
+          display_name: data.display_name,
           phone_number: data.phone_number,
           instagram: data.instagram,
           address: data.address,
@@ -95,10 +95,10 @@ export default function SignupForm() {
       <div className="w-full max-w-md mx-auto">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="displayName">Название бизнеса</Label>
+            <Label htmlFor="display_name">Название бизнеса</Label>
             <Input
-              id="displayName"
-              name="displayName"
+              id="display_name"
+              name="display_name"
               required
               placeholder="Asyl Food"
             />

@@ -101,15 +101,15 @@ export type SuperusersRecord = {
 
 export type BusinessRecord = {
 	address?: string
-	color?: string
+	color: string
 	created?: IsoDateString
 	description?: string
-	displayName?: string
+	display_name: string
 	email: string
 	emailVisibility?: boolean
 	id: string
 	instagram?: string
-	name?: string
+	name: string
 	password: string
 	phone_number?: string
 	tokenKey: string

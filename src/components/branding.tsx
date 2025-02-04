@@ -40,7 +40,7 @@ export default function Branding({ sectionId }: { sectionId: number }) {
 
       if (businesses.items.length > 0) {
         const business = businesses.items[0];
-        return business.display_name || "Без названия";
+        return business.displayName || "Без названия";
       } else {
         router.replace("/not-found");
       }
