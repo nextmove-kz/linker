@@ -33,7 +33,7 @@ export default function SignUpForm() {
       // console.log(clientPocketBase.authStore.isValid);
       // console.log(clientPocketBase.authStore.token);
       // console.log(clientPocketBase.authStore.record?.id);
-      router.push(`/auth/sign-in${result.id}`);
+      router.push(`/auth/sign-up/${result.id}`);
     } catch (error) {
       console.error("Error during authentication:", error);
       throw new Error("Authentication failed");

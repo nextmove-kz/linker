@@ -20,8 +20,8 @@ import Link from "next/link";
 export default function SignInForm() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
-      <div className="space-y-1 flex flex-col">
-        <h1 className="text-3xl font-semibold text-center mb-2">
+      <div className="flex flex-col">
+        <h1 className="text-2xl font-semibold text-center mb-2">
           Вход в Linker
         </h1>
         <p className="text-center text-gray-500 text-sm">
@@ -31,7 +31,7 @@ export default function SignInForm() {
       <div className="w-full max-w-md mx-auto mt-4">
         <div className="flex justify-center mb-2">
           <div className="bg-purple-100 p-3 rounded-full">
-            <LogIn className="h-10 w-10 text-primary" />
+            <LogIn className="h-6 w-6 text-primary" />
           </div>
         </div>
         <form action={signIn} className="space-y-6">

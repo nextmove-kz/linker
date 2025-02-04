@@ -12,10 +12,14 @@ const ColorPickerModal = ({
   trigger,
   label,
   name,
+  selectedColor,
+  onColorChange,
 }: {
   trigger: string;
   label?: string;
   name: string;
+  selectedColor: string;
+  onColorChange: (color: string) => void;
 }) => {
   return (
     <Dialog>
@@ -24,7 +28,11 @@ const ColorPickerModal = ({
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
-        <ColorPicker name={name} />
+        <ColorPicker
+          name={name}
+          selectedColor={selectedColor}
+          onColorChange={onColorChange}
+        />
       </DialogContent>
     </Dialog>
   );
