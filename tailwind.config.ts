@@ -9,6 +9,37 @@ export default {
   ],
   theme: {
     extend: {
+      keyframes: {
+        "up-animation": {
+          "0%": {
+            transform: "translateY(288px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+        "left-animation": {
+          "0%": {
+            transform: "translateX(-500px)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
+        "down-animation": {
+          "0%": {
+            transform: "translateY(-96px)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+      },
+      animation: {
+        "up-animation": "up-animation 0.3s linear forwards",
+        "left-animation": "left-animation 0.3s linear forwards",
+        "down-animation": "down-animation 0.3s linear forwards",
+      },
       screens: {
         sm: "360px",
         tablet: "640px",
