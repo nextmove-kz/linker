@@ -150,14 +150,6 @@ export default function SignupForm() {
               onColorChange={setSelectedColor}
             />
           </div>
-          {/* <div className="space-y-2">
-            <ColorPickerModal
-              name="color"
-              label="Выберите цвет"
-              trigger="Выбрать акцент"
-            />
-          </div> */}
-
           <Separator className="my-6" />
 
           <Button type="submit" className="w-full">

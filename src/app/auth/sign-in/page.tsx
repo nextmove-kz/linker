@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,13 +13,40 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
-import { signIn } from "@/app/actions";
 import { LogIn, Mail, Lock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { signIn } from "@/app/actions";
+import { pocketbase } from "@/api/pocketbase";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function SignInForm() {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = Object.fromEntries(formData);
+      console.log(data);
+      const authData = await clientPocketBase
+        .collection("business")
+        .authWithPassword(data.email as string, data.password as string);
+
+      router.push(`/`);
+    } catch (error) {
+      console.error("Error during authentication:", error);
+      // toast({
+      //   title: "Ошибка авторизации",
+      //   description: "Пожалуйста, попробуйте еще раз",
+      // });
+      throw new Error("Authentication failed");
+    }
+  };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
       <div className="flex flex-col">
@@ -34,7 +63,7 @@ export default function SignInForm() {
             <LogIn className="h-6 w-6 text-primary" />
           </div>
         </div>
-        <form action={signIn} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm font-medium">
               Почта
@@ -66,7 +95,7 @@ export default function SignInForm() {
                 className="pl-10"
               />
             </div>
-          </div>{" "}
+          </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Checkbox id="remember" name="remember" />

@@ -16,10 +16,8 @@ export async function signIn(formData: FormData) {
           console.log("User authenticated successfully");
           console.log(pb.authStore.token);
           console.log(pb.authStore.record?.id);
+            redirect("/asylfood/catalog");
 
-          // TODO: доделать редирект
-          // redirect("/");
-          // return;
         }
       } catch (error) {
         console.error("Error during authentication:", error);
