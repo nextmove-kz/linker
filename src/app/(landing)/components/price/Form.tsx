@@ -19,7 +19,6 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   const formData = new FormData(e.currentTarget);
   const data = Object.fromEntries(formData.entries());
-  console.log(data);
 };
 
 export default function Form({ variant }: { variant: number }) {

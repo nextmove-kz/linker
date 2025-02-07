@@ -1,20 +1,9 @@
 "use client";
 
-//TODO: доделать страницу регистрации(использовать server action)
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
-import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Lock, Mail } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -24,20 +13,13 @@ export default function SignUpForm() {
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const formData = new FormData(e.currentTarget);
-      const data = Object.fromEntries(formData);
-      console.log(data);
-      const result = await clientPocketBase.collection("business").create(data);
-      // console.log(result);
-      // console.log(clientPocketBase.authStore.isValid);
-      // console.log(clientPocketBase.authStore.token);
-      // console.log(clientPocketBase.authStore.record?.id);
-      router.push(`/auth/sign-up/${result.id}`);
-    } catch (error) {
-      console.error("Error during authentication:", error);
-      throw new Error("Authentication failed");
-    }
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    const result = await clientPocketBase.collection("business").create(data);
+
+    router.push(`/auth/sign-up/details/${result.id}`);
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">

@@ -1,68 +1,31 @@
 "use client";
 
-//TODO: доделать страницу регистрации(использовать server action)
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { HexColorPicker } from "react-colorful";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import clientPocketBase from "@/api/client_pb";
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useParams, useRouter } from "next/navigation";
-import PhoneInput from "@/components/formFields/phone/PhoneInput";
-import ColorPicker from "@/components/onboarding/ColorPicker";
+import { useParams } from "next/navigation";
 import ColorPickerModal from "@/components/onboarding/ColorPickerModal";
 import { Textarea } from "@/components/ui/textarea";
-import { BusinessResponse } from "../../../../api/api_types";
 import PhoneInputAuth from "@/components/onboarding/PhoneInputAuth";
 
+const BRANDING_COLOR = "#7b39ed";
+
 export default function SignupForm() {
-  const businessID = useParams().business;
-  const [selectedColor, setSelectedColor] = useState("#7b39ed");
+  const businessId = useParams<{ business: string }>().business;
+  const [selectedColor, setSelectedColor] = useState(BRANDING_COLOR);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const formData = new FormData(e.currentTarget);
-      const data = Object.fromEntries(formData);
-      console.log("POPOOPOPOPOPOPOPOPOPOPOPPO", data);
 
-      const businessResponse = await clientPocketBase
-        .collection("business")
-        .update(businessID as string, {
-          name: data.name,
-          display_name: data.display_name,
-          phone_number: data.phone_number,
-          instagram: data.instagram,
-          address: data.address,
-          description: data.description,
-          color: selectedColor,
-        });
+    const formData = new FormData(e.currentTarget);
+    const data = { ...Object.fromEntries(formData), color: selectedColor };
 
-      console.log("dasdfaf", businessResponse);
-    } catch (error) {
-      console.error("Error during registration:", error);
-      throw new Error("Registration failed");
-    }
+    await clientPocketBase.collection("business").update(businessId, data);
   };
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
       <div className="flex gap-2 items-center w-full mb-8">
