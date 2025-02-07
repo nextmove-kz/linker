@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleDeviceId } from "./middleware/deviceId";
-import { getBusiness, isLoggedIn } from "./api/auth/sign-in";
+import { isLoggedIn } from "./api/auth/sign-in";
 
 export async function middleware(request: NextRequest) {
   const auth = await isLoggedIn();
@@ -13,11 +13,11 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/order') && !auth) {
     return NextResponse.rewrite(new URL('/not-found', request.url))
   } else if ((!request.nextUrl.pathname.endsWith('/') && !request.nextUrl.pathname.endsWith('/[id]')) && !auth) {
-    return NextResponse.redirect(new URL('/auth/sign-in', request.url))
+    return NextResponse.redirect(new URL('/auth/sign-in'))
   }
   return response
 }
 
 export const config = {
-  matcher: ["/((?!api).)*", "/api", "/auth/sign-up/details/:businessId", "/order/(.*)"]
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)', "/auth/sign-up/details/[business]", "/order/(.*)"]
 };
