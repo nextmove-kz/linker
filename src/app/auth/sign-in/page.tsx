@@ -8,9 +8,12 @@ import { LogIn, Mail, Lock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ClientResponseError } from "pocketbase";
 
 export default function SignInForm() {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,15 +21,30 @@ export default function SignInForm() {
       const formData = new FormData(e.currentTarget);
       const data = Object.fromEntries(formData);
 
-      const authData = await clientPocketBase
+      await clientPocketBase
         .collection("business")
         .authWithPassword(data.email as string, data.password as string);
 
       router.push(`/`);
     } catch (error) {
-      // TODO: НОРМАЛЬНО ОБРАБОТАТЬ ОШИБКУ СУКА
       console.error("Error during authentication:", error);
-      throw new Error("Authentication failed");
+
+      let message = "Произошла непредвиденная ошибка";
+      if (error instanceof ClientResponseError) {
+        switch (error.status) {
+          case 400:
+            message = "Неверный email или пароль";
+            break;
+          case 500:
+            message = "Ошибка сервера. Попробуйте позже";
+            break;
+          default:
+            message = "Ошибка аутентификации";
+        }
+      } else if (error instanceof Error) {
+        message = "Ошибка сети. Проверьте подключение";
+      }
+      setErrorMessage(message);
     }
   };
 
@@ -87,6 +105,9 @@ export default function SignInForm() {
           <Button type="submit" className="w-full">
             Войти
           </Button>
+          {errorMessage && (
+            <div className="text-red-600 text-sm">{errorMessage}</div>
+          )}
         </form>
         <Separator className="my-6" />
         <div className="flex justify-center mt-2">
