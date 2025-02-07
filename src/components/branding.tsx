@@ -26,7 +26,7 @@ export default function Branding({
   setTotalsum,
 }: {
   sectionId: number;
-  setTotalsum: (sum: number) => void;
+  setTotalsum?: (sum: number) => void;
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -46,7 +46,7 @@ export default function Branding({
     }, 0) || 0;
 
   useEffect(() => {
-    setTotalsum(totalSum);
+    setTotalsum && setTotalsum(totalSum);
   }, [totalSum, setTotalsum]);
 
   const getData = async () => {
