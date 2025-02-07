@@ -4,11 +4,15 @@ import PhoneInput from "./PhoneInput";
 
 type PhoneFieldProps = {
   name?: string;
+  required?: boolean;
 };
 
-export default function PhoneField({ name = "Телефон" }: PhoneFieldProps) {
+export default function PhoneField({
+  name = "Телефон",
+  required = false,
+}: PhoneFieldProps) {
   return (
-    <FormField name={name}>
+    <FormField required={required} name={name}>
       <PhoneInput name={name} />
     </FormField>
   );

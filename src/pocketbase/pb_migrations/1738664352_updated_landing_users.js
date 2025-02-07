@@ -1,15 +1,18 @@
 /// <reference path="../pb_data/types.d.ts" />
 migrate((app) => {
-  const collection = app.findCollectionByNameOrId("_pb_users_auth_")
+  const collection = app.findCollectionByNameOrId("pbc_1335443150")
 
-  // update field
+  // remove field
+  collection.fields.removeById("number1146066909")
+
+  // add field
   collection.fields.addAt(2, new Field({
     "autogeneratePattern": "",
     "hidden": false,
-    "id": "text3786665039",
-    "max": 21,
+    "id": "text2794286213",
+    "max": 0,
     "min": 0,
-    "name": "display_name",
+    "name": "user_phone",
     "pattern": "",
     "presentable": false,
     "primaryKey": false,
@@ -20,23 +23,24 @@ migrate((app) => {
 
   return app.save(collection)
 }, (app) => {
-  const collection = app.findCollectionByNameOrId("_pb_users_auth_")
+  const collection = app.findCollectionByNameOrId("pbc_1335443150")
 
-  // update field
+  // add field
   collection.fields.addAt(2, new Field({
-    "autogeneratePattern": "",
     "hidden": false,
-    "id": "text3786665039",
-    "max": 21,
-    "min": 0,
-    "name": "display_name",
-    "pattern": "",
+    "id": "number1146066909",
+    "max": null,
+    "min": null,
+    "name": "user_phone",
+    "onlyInt": false,
     "presentable": false,
-    "primaryKey": false,
     "required": false,
     "system": false,
-    "type": "text"
+    "type": "number"
   }))
+
+  // remove field
+  collection.fields.removeById("text2794286213")
 
   return app.save(collection)
 })

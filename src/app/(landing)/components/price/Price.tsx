@@ -8,7 +8,8 @@ import Ellipse from "./svg/Ellipse";
 import Square from "./svg/Square";
 import { use, useState } from "react";
 import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import Form from "./Form";
+import Form from "./FormDialog";
+import FormDialog from "./FormDialog";
 const Price = () => {
   const [choose, setChoose] = useState(0);
 
@@ -100,7 +101,7 @@ const Price = () => {
           >
             <Label
               htmlFor="price1"
-              className={`rounded-2xl border-2 hover:border-primary py-8 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
+              className={`cursor-pointer rounded-2xl border-2 hover:border-primary py-8 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
                 choose === 0
                   ? "border-primary text-primary"
                   : "border-borderColor"
@@ -131,7 +132,7 @@ const Price = () => {
             </Label>
             <Label
               htmlFor="price2"
-              className={`relative rounded-2xl border-2 hover:border-primary py-7 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
+              className={`cursor-pointer relative rounded-2xl border-2 hover:border-primary py-7 px-6 gap-3 tablet:gap-10 flex tablet:flex-row flex-col tablet:items-center items-start justify-between ${
                 choose === 1
                   ? "border-primary text-primary"
                   : "border-borderColor"
@@ -140,7 +141,7 @@ const Price = () => {
               <div className="absolute flex gap-2 items-center bg-white p-3 right-0 -top-9 rotate-3 shadow-md rounded-xl">
                 <Star></Star>
                 <p className="text-orange uppercase sm:text-[14px] desktop:text-base">
-                  Осталось 34/50 мест
+                  Осталось 30 мест
                 </p>
               </div>
               <div className="flex items-center gap-5">
@@ -154,13 +155,13 @@ const Price = () => {
                     Навсегда
                   </h1>
                   <h1 className="font-manrope font-medium sm:text-[12px] tablet:text-[14px] desktop:text-base text-primary">
-                    *Окупается за 8 месяцев
+                    *Окупается за 1 год!
                   </h1>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <h1 className="font-bold font-rubik sm:text-[20px] tablet:text-[28px] desktop:text-title">
-                  150 000 ₸
+                  200 000 ₸
                 </h1>
                 <p
                   className={`font-manrope font-medium text-gray sm:text-base desktop:text-md ${
@@ -173,14 +174,11 @@ const Price = () => {
             </Label>
           </RadioGroup>
           <div className="flex justify-end">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="w-full tablet:w-fit py-8 uppercase font-bold font-rubik">
-                  Подключить Linker
-                </Button>
-              </AlertDialogTrigger>
-              <Form variant={choose}></Form>
-            </AlertDialog>
+            <FormDialog variant={choose}>
+              <Button className="w-full tablet:w-fit py-8 uppercase font-bold font-rubik">
+                Подключить Linker
+              </Button>
+            </FormDialog>
           </div>
         </div>
       </div>
