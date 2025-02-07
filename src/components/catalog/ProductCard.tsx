@@ -1,5 +1,5 @@
 "use client";
-import { ProductsRecord, SettingVariantRecord } from "@/api/api_types";
+import { ProductsRecord } from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Counter from "./Counter";

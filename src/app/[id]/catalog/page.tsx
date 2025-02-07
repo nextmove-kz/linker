@@ -1,5 +1,4 @@
 "use client";
-
 import Branding from "@/components/branding";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -10,13 +9,13 @@ import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { getCategorizedProducts, getCount } from "./utils";
-import { useMemo } from "react";
-import { ArrowRight } from "lucide-react";
+import { useMemo, useState } from "react";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 import { CatalogSkeleton } from "@/components/catalog/CatalogSkeleton";
 import { ImagePreloader } from "@/components/catalog/ImagePreloader";
 
 export default function Home() {
+  const [totalsum, setTotalsum] = useState<number>();
   const { id } = useParams<{ id: string }>();
   const { data: shoppingData, isLoading: isShoppingLoading } =
     useShoppingBasketQuery(id);
@@ -45,7 +44,7 @@ export default function Home() {
         <div className="w-full max-w-[400px] flex flex-col pb-10 relative">
           <div className="h-28" />
           <div className="bg-white fixed border-b border-b-black h-28 w-full max-w-[400px]">
-            <Branding sectionId={0} />
+            <Branding sectionId={0} setTotalsum={setTotalsum} />
             <ScrollArea className="whitespace-nowrap rounded-md w-full">
               <div className="flex space-x-4 pb-2">
                 {categories?.map((category) => (
@@ -98,10 +97,10 @@ export default function Home() {
             <p className="text-muted-foreground py-2">Конец каталога</p>
           </div>
           {shoppingData && shoppingData.length > 0 && (
-            <div className="fixed bottom-6 left-1/2 flex gap-2 w-full max-w-[400px] transform -translate-x-1/2 justify-end px-4">
-              <Link href={`/${id}/form`}>
-                <Button className="rounded-full h-14 w-14 bg-purple-500 hover:bg-purple-600">
-                  <ArrowRight size={32} />
+            <div className="fixed bottom-0 py-5 justify-center items-center rounded-t-3xl bg-violet100 flex gap-2 w-full max-w-[400px] px-4">
+              <Link href={`/${id}/form`} className="w-full">
+                <Button className="rounded-xl bg-primary hover:bg-purple-600 w-full p-6 font-rubik text-[17px]">
+                  Заказ &middot; {totalsum} ₸
                 </Button>
               </Link>
             </div>
