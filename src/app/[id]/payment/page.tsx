@@ -158,7 +158,6 @@ export default function PaymentPage() {
       // Разберемся позже с unknown, нужно будет выделить phone
       // @ts-ignore
       const phone: string = details[0].orderData["Контактный номер_phone"];
-      console.log(phone);
       const detailsMessage = compileMessage(
         details[0].orderData as OrdersRecord
       );
