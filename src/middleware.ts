@@ -1,18 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { handleDeviceId } from "./middleware/deviceId";
-import { handleBusinessRedirect } from "./middleware/businessRedirect";
+import { getBusiness, isLoggedIn } from "./api/auth/sign-in";
 
 export async function middleware(request: NextRequest) {
+  const auth = await isLoggedIn();
+  const path = request.nextUrl.pathname;
+
   let response = NextResponse.next();
 
   response = await handleDeviceId(request, response);
 
-  const redirectResponse = await handleBusinessRedirect(request);
-  if (redirectResponse) return redirectResponse;
-
-  return response;
+  if (request.nextUrl.pathname.startsWith('/order') && !auth) {
+    return NextResponse.rewrite(new URL('/not-found', request.url))
+  } else if ((!request.nextUrl.pathname.startsWith('/') && !request.nextUrl.pathname.startsWith('/[id]')) && !auth) {
+    return NextResponse.redirect(new URL('/auth/sign-in', request.url))
+  }
+  else {
+    return response
+  }
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|public/).*)"],
+  matcher: ["/((?!api).)*", "/api", "/auth/sign-up/details/:businessId", "/order/(.*)"]
 };
