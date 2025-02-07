@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/order') && !auth) {
     return NextResponse.rewrite(new URL('/not-found', request.url))
   } else if ((!request.nextUrl.pathname.endsWith('/') && !request.nextUrl.pathname.endsWith('/[id]')) && !auth) {
-    return NextResponse.redirect(new URL('/auth/sign-in', request.url))
+    return NextResponse.redirect(new URL('/auth/sign-in')
   }
   return response
 }
