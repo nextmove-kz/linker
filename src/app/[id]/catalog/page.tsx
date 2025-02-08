@@ -9,12 +9,14 @@ import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { getCategorizedProducts, getCount } from "./utils";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 import { CatalogSkeleton } from "@/components/catalog/CatalogSkeleton";
 import { ImagePreloader } from "@/components/catalog/ImagePreloader";
 
 export default function Home() {
+  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [activeCategory, setActiveCategory] = useState<string>();
   const [totalsum, setTotalsum] = useState<number>();
   const { id } = useParams<{ id: string }>();
   const { data: shoppingData, isLoading: isShoppingLoading } =
@@ -34,6 +36,36 @@ export default function Home() {
     };
   }, [productData]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      let currentCategory = activeCategory;
+      categories.forEach((category) => {
+        const element = document.getElementById(category);
+        if (element) {
+          const { top } = element.getBoundingClientRect();
+          if (top >= 0 && top < 120) {
+            currentCategory = category;
+          }
+        }
+      });
+      if (currentCategory && currentCategory !== activeCategory) {
+        setActiveCategory(currentCategory);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [categories, activeCategory]);
+
+  useEffect(() => {
+    if (activeCategory && categoryRefs.current[activeCategory]) {
+      categoryRefs.current[activeCategory]?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+      });
+    }
+  }, [activeCategory]);
+
   const isLoading = isShoppingLoading || isProductsLoading;
 
   return (
@@ -48,15 +80,24 @@ export default function Home() {
             <ScrollArea className="whitespace-nowrap rounded-md w-full">
               <div className="flex space-x-4 pb-2">
                 {categories?.map((category) => (
-                  <Link
-                    href={`#${category}`}
+                  <div
                     key={category}
+                    ref={(el) => {
+                      categoryRefs.current[category] = el;
+                    }}
                     className="select-none"
                   >
-                    <Button className="font-bold uppercase" variant="ghost">
-                      {category}
-                    </Button>
-                  </Link>
+                    <Link href={`#${category}`}>
+                      <Button
+                        className={`font-bold uppercase ${
+                          activeCategory === category && "bg-primary text-white"
+                        }`}
+                        variant="ghost"
+                      >
+                        {category}
+                      </Button>
+                    </Link>
+                  </div>
                 ))}
               </div>
               <ScrollBar orientation="horizontal" />
