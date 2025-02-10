@@ -76,6 +76,7 @@ const ShoppingCard = ({
             </div>
             <div className="rounded-md text-xs text-ellipsis space-y-0.5">
               {product.expand.selected_variants?.map((variant) => {
+                console.log(variant);
                 if (variant.expand.setting.type === "single") {
                   return (
                     <div className="flex items-center gap-1" key={variant.id}>

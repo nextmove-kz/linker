@@ -13,8 +13,9 @@ export default function Counter({
   return (
     <div className="flex items-center gap-2 select-none">
       <Button
-        className="w-24 gap-0 justify-between border-primary text-primary p-0"
+        className="w-24 gap-0 justify-between border-primary text-primary p-0 bg-transparent"
         variant="outline"
+        type="button"
       >
         <div className="w-1/3" onClick={minus}>
           -

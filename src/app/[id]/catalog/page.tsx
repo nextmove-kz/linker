@@ -87,10 +87,10 @@ export default function Home() {
                     }}
                     className="select-none"
                   >
-                    <Link href={`#${category}`}>
+                    <Link href={`#${category}`} replace={true} as="">
                       <Button
                         className={`font-bold uppercase ${
-                          activeCategory === category && "bg-primary text-white"
+                          activeCategory === category && "bg-secondary"
                         }`}
                         variant="ghost"
                       >

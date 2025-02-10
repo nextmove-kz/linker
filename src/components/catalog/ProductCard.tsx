@@ -12,16 +12,6 @@ import { ExpandedSettings } from "@/api/custom_types";
 import SettingsDialog from "./SettingsDialog";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { useEffect, useState } from "react";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./drawer";
 export default function Card({
   product,
   initialCount,
@@ -35,15 +25,8 @@ export default function Card({
 }) {
   const { id } = useParams<{ id: string }>();
   const [image] = useAtom(hasImages);
-  const {
-    count,
-    isActive,
-    isLoading,
-    plus,
-    minus,
-    Initial,
-    createWithSettings,
-  } = useProductQuantity(product, initialCount, initialShoppingId, id);
+  const { count, isActive, isLoading, plus, minus, createWithSettings } =
+    useProductQuantity(product, initialCount, initialShoppingId, id);
   const [pricePreview, setPricePreview] = useState<string | null>(null);
   const { data: shoppingCartData, isLoading: isCartLoading } =
     useShoppingBasketQuery(id);
@@ -77,6 +60,8 @@ export default function Card({
     const variants = Object.values(formEntries).map((value) =>
       value.toString()
     );
+    console.log(variants);
+
     await createWithSettings(variants);
   };
 
@@ -87,61 +72,23 @@ export default function Card({
           !image ? "border shadow-sm p-3" : "flex gap-2"
         } rounded-lg`}
       >
-        <Drawer>
-          <DrawerTrigger>
-            {image && (
-              <ProductImage
-                photo={product.photo}
-                alt={product.title}
-                id={product.id}
-              />
-            )}
-          </DrawerTrigger>
-          <DrawerContent className="max-w-[400px] flex mx-auto h-[70vh] select-none border-none">
-            <DrawerTitle className="hidden"></DrawerTitle>
-            <div className="h-[300px] w-full select-none pointer-events-none">
-              <ProductImage
-                photo={product.photo}
-                alt={product.title}
-                id={product.id}
-              />
-            </div>
-            <div className="p-5">
-              <h1 className="text-gray">Описание:</h1>
-              {product.description || "Без описания"}
-            </div>
-            <DrawerFooter className="bg-slate-200 rounded-t-3xl">
-              <div className="flex justify-between">
-                <h1 className="text-[20px] font-rubik">{product.title}</h1>
-                {!count && (
-                  <div className="font-rubik font-bold text-primary">
-                    {product.price} ₸
-                  </div>
-                )}
-              </div>
-              {count > 0 && isActive ? (
-                <div className="flex gap-3 items-center justify-between">
-                  <Counter count={count} plus={plus} minus={minus} />
-                  {pricePreview && (
-                    <span className="text-primary font-rubik font-bold">
-                      Итого: {pricePreview}
-                    </span>
-                  )}
-                </div>
-              ) : (
-                <div className="flex gap-4 items-center">
-                  <Button
-                    onClick={Initial}
-                    className="w-full select-none"
-                    disabled={isLoading}
-                  >
-                    Добавить
-                  </Button>
-                </div>
-              )}
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+        <SettingsDialog
+          pricePreview={pricePreview}
+          initialCount={count}
+          initialShoppingId={initialShoppingId}
+          product={product}
+          settings={settings}
+          showImage={image}
+          onSubmit={handleFormSubmit}
+        >
+          <button>
+            <ProductImage
+              photo={product.photo}
+              alt={product.title}
+              id={product.id}
+            />
+          </button>
+        </SettingsDialog>
         <div className="flex w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-bold leading-none">{product.title}</p>
@@ -161,22 +108,20 @@ export default function Card({
                   <span className="text-gray-500">{pricePreview}</span>
                 )}
               </div>
-            ) : settings ? (
+            ) : (
               <SettingsDialog
+                pricePreview={pricePreview}
+                initialCount={count}
+                initialShoppingId={initialShoppingId}
                 product={product}
                 settings={settings}
-                isLoading={isLoading}
                 showImage={image}
                 onSubmit={handleFormSubmit}
-              />
-            ) : (
-              <Button
-                onClick={Initial}
-                className="w-24 select-none"
-                disabled={isLoading}
               >
-                {product.price} ₸
-              </Button>
+                <Button className="w-24 select-none" disabled={isLoading}>
+                  {product.price} ₸
+                </Button>
+              </SettingsDialog>
             )}
           </div>
         </div>
@@ -196,7 +141,7 @@ export function ProductImage({
   id: string;
   settings?: boolean;
 }) {
-  const photoContainer = `select-none object-cover border rounded min-w-32 ${
+  const photoContainer = `select-none object-cover rounded-2xl min-w-32 ${
     !settings && "h-32"
   } flex items-center justify-center bg-gray-50 ${settings && "aspect-square"}`;
 
@@ -217,7 +162,7 @@ export function ProductImage({
     //     alt={alt}
     //     width={128}
     //     height={128}
-    //     className="rounded w-full h-full aspect-square object-cover select-none"
+    //     className="rounded-2xl w-full h-full aspect-square object-cover select-none"
     //   />
     // </div>
     <Image
@@ -225,7 +170,7 @@ export function ProductImage({
       alt={alt}
       width={128}
       height={128}
-      className="rounded-2xl w-full h-full aspect-square object-cover select-none min-w-32 min-h-32"
+      className="rounded-2xl w-full h-full aspect-square object-cover select-none min-w-32 min-h-32 pointer-events-none"
     />
   );
 }
