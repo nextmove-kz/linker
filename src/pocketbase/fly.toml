@@ -5,6 +5,7 @@
 
 app = 'pocketbase-linker'
 primary_region = 'waw'
+swap_size_mb = 512
 
 [http_service]
   internal_port = 8080
