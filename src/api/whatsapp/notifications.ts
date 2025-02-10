@@ -1,6 +1,13 @@
 "use server";
 
-import { BusinessRecord, OrderItemsRecord, OrdersRecord } from "../api_types";
+import { da } from "date-fns/locale";
+import {
+  BusinessRecord,
+  LandingUsersRecord,
+  OrderItemsRecord,
+  OrdersRecord,
+} from "../api_types";
+import { log } from "console";
 
 const url = "https://whblinker.netlify.app/api/";
 
@@ -113,4 +120,18 @@ const productString = (product: OrderItemsRecord) => {
   }
 
   return `${baseString} (${product.selected_variants!})`;
+};
+
+export const notifyFounders = async (data: any) => {
+  console.log(JSON.stringify(data));
+
+  const notifyResponse = await fetch(url + "notify-founders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  ``;
+  console.log("notification res: ", notifyResponse);
 };

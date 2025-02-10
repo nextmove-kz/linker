@@ -1,7 +1,15 @@
 import { ChangeEvent, useState } from "react";
 import { Input } from "../../ui/input";
 
-export default function PhoneInput({ name }: { name?: string }) {
+export default function PhoneInput({
+  name,
+  bg,
+  padding,
+}: {
+  name?: string;
+  bg?: string;
+  padding?: number;
+}) {
   const [phone, setPhone] = useState("");
 
   const formatPhoneNumber = (value: string) => {
@@ -42,10 +50,10 @@ export default function PhoneInput({ name }: { name?: string }) {
     <Input
       value={phone}
       name={name + "_phone"}
-      required
       minLength={18}
       placeholder="+7 (___) ___-__-__"
       onChange={handleChange}
+      className={`bg-${bg} p-${padding}`}
     />
   );
 }

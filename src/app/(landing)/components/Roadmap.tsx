@@ -132,7 +132,7 @@ const Roadmap = () => {
         <div className="flex justify-center">
           <FinalArrow isRoadmap></FinalArrow>
         </div>
-        <Card className="px-6 py-8 bg-darkGray  flex flex-col gap-3 w-full desktop:col-span-2">
+        <Card className="px-6 py-6 bg-darkGray  flex flex-col gap-3 w-full desktop:col-span-2">
           <div className="flex flex-col relative">
             <p className="font-bold text-md tablet:text-xl font-manrope text-white">
               Попробуйте прямо сейчас

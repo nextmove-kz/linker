@@ -18,6 +18,7 @@ export enum Collections {
 	FieldOptions = "field_options",
 	FieldSettings = "field_settings",
 	FieldTypes = "field_types",
+	LandingUsers = "landing_users",
 	OrderItems = "order_items",
 	Orders = "orders",
 	Products = "products",
@@ -101,15 +102,15 @@ export type SuperusersRecord = {
 
 export type BusinessRecord = {
 	address?: string
-	color: string
+	color?: string
 	created?: IsoDateString
 	description?: string
-	display_name: string
+	display_name?: string
 	email: string
 	emailVisibility?: boolean
 	id: string
 	instagram?: string
-	name: string
+	name?: string
 	password: string
 	phone_number?: string
 	tokenKey: string
@@ -180,6 +181,28 @@ export type FieldTypesRecord = {
 	display_name: string
 	id: string
 	name: string
+}
+
+export enum LandingUsersTariffOptions {
+	"main" = "main",
+	"lifetime" = "lifetime",
+}
+
+export enum LandingUsersConsultTypeOptions {
+	"subscription" = "subscription",
+	"question" = "question",
+}
+export type LandingUsersRecord = {
+	business_name?: string
+	consult_type?: LandingUsersConsultTypeOptions
+	created?: IsoDateString
+	email?: string
+	id: string
+	is_read?: boolean
+	name: string
+	phone: string
+	tariff?: LandingUsersTariffOptions
+	updated?: IsoDateString
 }
 
 export type OrderItemsRecord = {
@@ -289,6 +312,7 @@ export type DetailsResponse<TorderData = unknown, Texpand = unknown> = Required<
 export type FieldOptionsResponse<Texpand = unknown> = Required<FieldOptionsRecord> & BaseSystemFields<Texpand>
 export type FieldSettingsResponse<Texpand = unknown> = Required<FieldSettingsRecord> & BaseSystemFields<Texpand>
 export type FieldTypesResponse<Texpand = unknown> = Required<FieldTypesRecord> & BaseSystemFields<Texpand>
+export type LandingUsersResponse<Texpand = unknown> = Required<LandingUsersRecord> & BaseSystemFields<Texpand>
 export type OrderItemsResponse<Texpand = unknown> = Required<OrderItemsRecord> & BaseSystemFields<Texpand>
 export type OrdersResponse<Texpand = unknown> = Required<OrdersRecord> & BaseSystemFields<Texpand>
 export type ProductsResponse<Texpand = unknown> = Required<ProductsRecord> & BaseSystemFields<Texpand>
@@ -313,6 +337,7 @@ export type CollectionRecords = {
 	field_options: FieldOptionsRecord
 	field_settings: FieldSettingsRecord
 	field_types: FieldTypesRecord
+	landing_users: LandingUsersRecord
 	order_items: OrderItemsRecord
 	orders: OrdersRecord
 	products: ProductsRecord
@@ -336,6 +361,7 @@ export type CollectionResponses = {
 	field_options: FieldOptionsResponse
 	field_settings: FieldSettingsResponse
 	field_types: FieldTypesResponse
+	landing_users: LandingUsersResponse
 	order_items: OrderItemsResponse
 	orders: OrdersResponse
 	products: ProductsResponse
@@ -362,6 +388,7 @@ export type TypedPocketBase = PocketBase & {
 	collection(idOrName: 'field_options'): RecordService<FieldOptionsResponse>
 	collection(idOrName: 'field_settings'): RecordService<FieldSettingsResponse>
 	collection(idOrName: 'field_types'): RecordService<FieldTypesResponse>
+	collection(idOrName: 'landing_users'): RecordService<LandingUsersResponse>
 	collection(idOrName: 'order_items'): RecordService<OrderItemsResponse>
 	collection(idOrName: 'orders'): RecordService<OrdersResponse>
 	collection(idOrName: 'products'): RecordService<ProductsResponse>
