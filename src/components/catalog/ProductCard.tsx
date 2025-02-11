@@ -1,5 +1,10 @@
 "use client";
-import { ProductsRecord } from "@/api/api_types";
+import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
+  ShoppingCartRecord,
+} from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Counter from "./Counter";
@@ -8,16 +13,23 @@ import { hasImages } from "..//../hooks/jotai/atom";
 import { ImageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useProductQuantity } from "@/hooks/useUpdate";
-import { ExpandedSettings } from "@/api/custom_types";
+import {
+  ExpandedSettings,
+  ExpandedShoppingRecord,
+  ExpandedVariant,
+} from "@/api/custom_types";
 import SettingsDialog from "./SettingsDialog";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { useEffect, useState } from "react";
+
 export default function Card({
+  selectedVariants,
   product,
   initialCount,
   shoppingId: initialShoppingId,
   settings,
 }: {
+  selectedVariants: ExpandedVariant[] | undefined;
   product: ProductsRecord;
   initialCount: number;
   shoppingId: string | undefined;
@@ -60,8 +72,6 @@ export default function Card({
     const variants = Object.values(formEntries).map((value) =>
       value.toString()
     );
-    console.log(variants);
-
     await createWithSettings(variants);
   };
 
@@ -73,6 +83,7 @@ export default function Card({
         } rounded-lg`}
       >
         <SettingsDialog
+          selectedVariants={selectedVariants}
           pricePreview={pricePreview}
           initialCount={count}
           initialShoppingId={initialShoppingId}
@@ -110,6 +121,7 @@ export default function Card({
               </div>
             ) : (
               <SettingsDialog
+                selectedVariants={selectedVariants}
                 pricePreview={pricePreview}
                 initialCount={count}
                 initialShoppingId={initialShoppingId}

@@ -13,14 +13,20 @@ import { Separator } from "../ui/separator";
 import { ProductImage } from "./ProductCard";
 import SettingsMultiChoice from "./SettingsMultiChoice";
 import SettingsSingleChoice from "./SettingsSingleChoice";
-import { ProductsRecord } from "@/api/api_types";
-import { ExpandedSettings } from "@/api/custom_types";
+import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
+  ShoppingCartRecord,
+} from "@/api/api_types";
+import { ExpandedSettings, ExpandedVariant } from "@/api/custom_types";
 import Counter from "./Counter";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { useParams } from "next/navigation";
 import { ScrollArea } from "../ui/scroll-area";
 
 interface FormDialogProps {
+  selectedVariants: ExpandedVariant[] | undefined;
   pricePreview?: string | null;
   initialCount: number;
   initialShoppingId: string | undefined;
@@ -32,6 +38,7 @@ interface FormDialogProps {
 }
 
 const SettingsDialog = ({
+  selectedVariants,
   pricePreview,
   initialCount,
   initialShoppingId,
@@ -43,6 +50,7 @@ const SettingsDialog = ({
 }: FormDialogProps) => {
   const { id } = useParams<{ id: string }>();
   const [isOpen, setIsOpen] = useState(false);
+
   const {
     count,
     isActive,
@@ -82,24 +90,37 @@ const SettingsDialog = ({
                   {product.description}
                 </p>
               </DrawerHeader>
-              <Separator className="w-10/12 mx-auto" />
-              <div className="py-5 gap-3 flex flex-col">
-                {settings?.map((set) =>
-                  set.type === "single" ? (
-                    <SettingsSingleChoice
-                      key={set.id}
-                      name={set.name}
-                      settings={set}
-                    />
-                  ) : (
-                    <SettingsMultiChoice
-                      key={set.id}
-                      name={set.name}
-                      settings={set}
-                    />
-                  )
-                )}
-              </div>
+              <Separator className="" />
+              {!count ? (
+                <div className="py-5 gap-3 flex flex-col">
+                  {settings?.map((set) =>
+                    set.type === "single" ? (
+                      <SettingsSingleChoice
+                        key={set.id}
+                        name={set.name}
+                        settings={set}
+                      />
+                    ) : (
+                      <SettingsMultiChoice
+                        key={set.id}
+                        name={set.name}
+                        settings={set}
+                      />
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col py-2">
+                  <h1 className="text-sm font-semibold">Выбрано:</h1>
+                  {selectedVariants?.map((item) => {
+                    return (
+                      <p key={item.id} className="text-primary text-sm">
+                        {item.name}
+                      </p>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </ScrollArea>
 

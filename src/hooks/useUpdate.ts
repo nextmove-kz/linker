@@ -38,10 +38,6 @@ export function useProductQuantity(
     }
   }, [shoppingData, product.id]);
 
-  useEffect(() => {
-    console.log("USE EFFECT", count);
-  }, [count]);
-
   async function handleUpdateBasket({
     newCount,
     variants,

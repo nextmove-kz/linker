@@ -8,7 +8,7 @@ import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
-import { getCategorizedProducts, getCount } from "./utils";
+import { getCategorizedProducts, getCount, getSettingVariants } from "./utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 import { CatalogSkeleton } from "@/components/catalog/CatalogSkeleton";
@@ -19,6 +19,7 @@ export default function Home() {
   const [activeCategory, setActiveCategory] = useState<string>();
   const [totalsum, setTotalsum] = useState<number>();
   const { id } = useParams<{ id: string }>();
+
   const { data: shoppingData, isLoading: isShoppingLoading } =
     useShoppingBasketQuery(id);
   const { data: productData, isLoading: isProductsLoading } =
@@ -118,8 +119,14 @@ export default function Home() {
                     <h2 className="font-semibold mt-2">{category}</h2>
                     {products.map((product) => {
                       const count = getCount(shoppingData, product.id);
+                      const selectedVariants = getSettingVariants(
+                        shoppingData,
+                        product.id
+                      );
+
                       return (
                         <ProductCard
+                          selectedVariants={selectedVariants}
                           key={product.id}
                           product={product}
                           initialCount={count.amount}

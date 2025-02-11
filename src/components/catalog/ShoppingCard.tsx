@@ -11,9 +11,6 @@ import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { useParams } from "next/navigation";
-import { Divide } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "../ui/separator";
 import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
 
 type ExpandedShoppingRecord = ShoppingCartRecord & {
@@ -76,7 +73,6 @@ const ShoppingCard = ({
             </div>
             <div className="rounded-md text-xs text-ellipsis space-y-0.5">
               {product.expand.selected_variants?.map((variant) => {
-                console.log(variant);
                 if (variant.expand.setting.type === "single") {
                   return (
                     <div className="flex items-center gap-1" key={variant.id}>
