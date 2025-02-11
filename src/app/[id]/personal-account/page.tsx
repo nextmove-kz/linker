@@ -1,12 +1,13 @@
 import { pocketbase } from "@/api/pocketbase";
-import AccountStats from "@/components/personal-account/AccountStats";
-import ProfileSummary from "@/components/personal-account/ProfileSummary";
-import { BusinessResponse } from "../../../api/api_types";
 import ActiveOrders from "@/components/personal-account/ActiveOrders";
 import OrderHistory from "@/components/personal-account/OrderHistory";
-import { BriefcaseBusiness } from "lucide-react";
+import ProfileSummary from "@/components/personal-account/ProfileSummary";
 
-const Cabinet = async ({ params }: { params: Promise<{ id: string }> }) => {
+const PersonalBusinessPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
   const id = (await params).id;
   const pb = await pocketbase();
   const business = await pb.collection("business").getList(1, 1, {
@@ -44,8 +45,11 @@ const Cabinet = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       {/* INACTIVE ORDERS */}
       <OrderHistory business={business.items[0].id} />
+
+      {/* НЕ БЕЙТЕ ЕГО */}
+      {/* <QuickActions  /> */}
     </div>
   );
 };
 
-export default Cabinet;
+export default PersonalBusinessPage;

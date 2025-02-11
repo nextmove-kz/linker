@@ -1,8 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { BusinessRecord } from "@/api/api_types";
+import { Badge } from "@/components/ui/badge";
 import { PencilLine } from "lucide-react";
-import Instagram from "../../app/(landing)/components/postQuestions/svg/Instagram";
+import Link from "next/link";
 
 export default function ProfileSummary({
   business,
@@ -17,7 +16,9 @@ export default function ProfileSummary({
             <h2 className="text-xl font-semibold mb-2">
               {business.display_name}
             </h2>
-            <PencilLine className="" />
+            <Link href={`/auth/sign-up/details/${business.id}`}>
+              <PencilLine className="cursor-pointer" />
+            </Link>
           </div>
           <p className="text-sm text-gray-500">
             телефон: {business.phone_number}

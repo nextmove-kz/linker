@@ -1,7 +1,7 @@
-import { BusinessRecord, OrderItemsRecord } from "@/api/api_types";
+import { OrderItemsRecord } from "@/api/api_types";
 import { ExpandedOrderRecord } from "@/api/custom_types";
 import { pocketbase } from "@/api/pocketbase";
-import { History, Package } from "lucide-react";
+import { History } from "lucide-react";
 import Link from "next/link";
 
 const OrderHistory = async ({ business }: { business: string }) => {
@@ -29,11 +29,8 @@ const OrderHistory = async ({ business }: { business: string }) => {
           </div>
           <div className="flex flex-col gap-2">
             {orders.map((order) => (
-              <Link href={`/order/info/${order.id}`}>
-                <div
-                  className="cursor-pointer p-2 py-4 border hover:border-primary rounded-lg duration-200 p-4"
-                  key={order.id}
-                >
+              <Link href={`/order/info/${order.id}`} key={order.id}>
+                <div className="cursor-pointer py-4 border hover:border-primary rounded-lg duration-200 p-4">
                   <div className="flex justify-between">
                     <p className="font-mono">{order.phone}</p>
                     <p className="font-mono">
