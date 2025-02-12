@@ -5,6 +5,58 @@ import {
   AccordionTrigger,
 } from "./ui/LandingAccordion";
 
+type FAQItem = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+const faqItems: FAQItem[] = [
+  {
+    id: "item-1",
+    question: "Как будет происходить подключение?",
+    answer: `После вашей заявки мы свяжемся с вами, обсудим особенности вашего бизнеса и пожелания по форме заказа. 
+      Уже на следующий день вы получите готовый к работе сайт и доступ к личному кабинету. 
+      Мы поможем разместить ссылку в Instagram Bio и проведем короткое обучение по использованию системы.`,
+  },
+  {
+    id: "item-2",
+    question: "Не потеряю ли я клиентов при переходе с директа на Linker?",
+    answer: `Наоборот - сейчас клиенты часто уходят, не дождавшись ответа в директе. 
+      Профессиональная форма заказа работает круглосуточно, выглядит солидно и вызывает больше доверия, 
+      чем обычная переписка. Клиенты ценят удобство и скорость оформления заказа.`,
+  },
+  {
+    id: "item-3",
+    question: "Насколько стабильно работает система?",
+    answer: `Мы используем профессиональную облачную инфраструктуру с автоматическим масштабированием под нагрузку. 
+      Система работает с гарантированной доступностью 99.9%, а все данные хранятся с резервным копированием. 
+      У вас будет прямая связь с командой разработки и директором для оперативного решения любых вопросов.`,
+  },
+  {
+    id: "item-4",
+    question: "Как клиенты будут оплачивать заказы?",
+    answer: `В форме заказа доступны все привычные способы оплаты: 
+      Kaspi-переводы, банковские переводы и наличные при получении. 
+      В ближайшее время мы добавим онлайн оплату картой и автоматизацию платежей через популярные платежные системы.`,
+  },
+  {
+    id: "item-5",
+    question: "Что если мне нужно обсудить детали заказа с клиентом?",
+    answer: `В форме заказа можно добавить поле для комментариев, где клиент укажет особые пожелания. 
+      Вы получаете мгновенные уведомления о новых заказах в WhatsApp и можете связаться с клиентом для уточнения деталей. 
+      Вся переписка и история заказов сохраняется в едином кабинете.`,
+  },
+  {
+    id: "item-6",
+    question: "Мы не уверены, подойдет ли нам Linker",
+    answer: `Мы понимаем ваши сомнения и готовы подробно обсудить особенности именно вашего бизнеса. 
+      Свяжитесь с нами любым удобным способом — по WhatsApp или через форму на сайте. 
+      Мы детально расскажем о возможностях системы, предложим индивидуальные условия и ответим на все ваши вопросы. 
+      Для тех, кто сомневается, у нас есть специальные условия тестирования сервиса.`,
+  },
+];
+
 const GetQuestions = () => {
   return (
     <div className="flex flex-col gap-10">
@@ -20,56 +72,14 @@ const GetQuestions = () => {
       <Accordion type="single" collapsible className="w-full h-full">
         <div className="flex w-full flex-row desktop:gap-10 items-start justify-center">
           <div className="flex flex-col tablet:w-3/4 w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                Что такое Linker и как он работает?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>
-                Как Linker может помочь моему бизнесу?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It comes with default styles that matches the other
-                components&apos; aesthetic.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>
-                Подойдет ли Linker для моего бизнеса?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It&apos;s animated by default, but you can disable it if
-                you prefer.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-4">
-              <AccordionTrigger>
-                Смогу ли я сам разобраться с тем как работает LInker?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It adheres to the WAI-ARIA design pattern.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-5">
-              <AccordionTrigger>Как подключить подписку?</AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It comes with default styles that matches the other
-                components&apos; aesthetic.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-6">
-              <AccordionTrigger>
-                Могу ли я попробовать Linker бесплатно?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray">
-                Yes. It&apos;s animated by default, but you can disable it if
-                you prefer.
-              </AccordionContent>
-            </AccordionItem>
+            {faqItems.map((item, index) => (
+              <AccordionItem key={index} value={item.id}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent className="text-gray">
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
           </div>
         </div>
       </Accordion>
