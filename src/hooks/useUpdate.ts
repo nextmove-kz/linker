@@ -46,8 +46,6 @@ export function useProductQuantity(
     variants?: string[];
   }) {
     try {
-      console.log("handleUpdateBasket", newCount);
-
       const result = await updateShoppingBasket({
         newCount,
         productId: product.id,
