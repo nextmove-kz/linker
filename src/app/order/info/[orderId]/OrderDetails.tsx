@@ -17,6 +17,10 @@ import {
 export default function OrderDetails({ order }: { order: OrderInfoData }) {
   const router = useRouter();
 
+  const handleReturn = () => {
+    router.back();
+  };
+
   const handleFinishOrder = async () => {
     await clientPocketBase.collection("orders").update(order.id, {
       status: "finished",
@@ -65,7 +69,9 @@ export default function OrderDetails({ order }: { order: OrderInfoData }) {
           <span>{order.payment}</span>
         </div>
       </div>
-
+      <Button className="w-full" onClick={handleReturn}>
+        Вернуться назад
+      </Button>
       <ProductList items={order.items} totalSum={order.totalSum} />
       <div className="rounded-lg p-6 shadow-md">
         <h2 className=" text-lg font-semibold">Детали заказа</h2>
