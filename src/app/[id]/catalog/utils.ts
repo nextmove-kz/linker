@@ -3,7 +3,7 @@ import {
   SettingsRecord,
   ShoppingCartRecord,
 } from "@/api/api_types";
-import { ExpandedSettings } from "@/api/custom_types";
+import { ExpandedSettings, ExpandedShoppingRecord } from "@/api/custom_types";
 export type CategorizedProducts = Record<string, ExpandedProductsRecord[]>;
 type ExpandedProductsRecord = ProductsRecord & {
   expand?: { settings: ExpandedSettings[] };
@@ -42,4 +42,12 @@ export const getCount = (
     amount: record?.amount || 0,
     shoppingId: record?.id,
   };
+};
+
+export const getSettingVariants = (
+  shoppingData: ExpandedShoppingRecord[] | undefined,
+  productId: string
+) => {
+  const record = shoppingData?.find((record) => record.product === productId);
+  return record?.expand.selected_variants;
 };

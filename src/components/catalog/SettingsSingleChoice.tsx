@@ -1,3 +1,9 @@
+import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
+  ShoppingCartRecord,
+} from "@/api/api_types";
 import FormField from "../formFields/FormField";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";

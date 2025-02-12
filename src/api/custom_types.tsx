@@ -24,7 +24,7 @@ export type ExpandedOrderItems = OrderItemsRecord & {
   };
 };
 
-type ExpandedVariant = SettingVariantRecord & {
+export type ExpandedVariant = SettingVariantRecord & {
   expand: { setting: SettingsRecord };
 };
 

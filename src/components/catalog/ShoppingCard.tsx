@@ -11,9 +11,6 @@ import { useAtom } from "jotai";
 import { hasImages } from "..//../hooks/jotai/atom";
 import { useProductQuantity } from "@/hooks/useUpdate";
 import { useParams } from "next/navigation";
-import { Divide } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "../ui/separator";
 import { useShoppingBasketOperations } from "@/hooks/useShoppingBasket";
 
 type ExpandedShoppingRecord = ShoppingCartRecord & {

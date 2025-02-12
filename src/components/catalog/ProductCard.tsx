@@ -1,5 +1,10 @@
 "use client";
-import { ProductsRecord, SettingVariantRecord } from "@/api/api_types";
+import {
+  ProductsRecord,
+  SettingVariantRecord,
+  SettingsRecord,
+  ShoppingCartRecord,
+} from "@/api/api_types";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Counter from "./Counter";
@@ -8,17 +13,23 @@ import { hasImages } from "..//../hooks/jotai/atom";
 import { ImageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useProductQuantity } from "@/hooks/useUpdate";
-import { ExpandedSettings } from "@/api/custom_types";
+import {
+  ExpandedSettings,
+  ExpandedShoppingRecord,
+  ExpandedVariant,
+} from "@/api/custom_types";
 import SettingsDialog from "./SettingsDialog";
 import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Card({
+  selectedVariants,
   product,
   initialCount,
   shoppingId: initialShoppingId,
   settings,
 }: {
+  selectedVariants: ExpandedVariant[] | undefined;
   product: ProductsRecord;
   initialCount: number;
   shoppingId: string | undefined;
@@ -26,15 +37,8 @@ export default function Card({
 }) {
   const { id } = useParams<{ id: string }>();
   const [image] = useAtom(hasImages);
-  const {
-    count,
-    isActive,
-    isLoading,
-    plus,
-    minus,
-    Initial,
-    createWithSettings,
-  } = useProductQuantity(product, initialCount, initialShoppingId, id);
+  const { count, isActive, isLoading, plus, minus, createWithSettings } =
+    useProductQuantity(product, initialCount, initialShoppingId, id);
   const [pricePreview, setPricePreview] = useState<string | null>(null);
   const { data: shoppingCartData, isLoading: isCartLoading } =
     useShoppingBasketQuery(id);
@@ -78,13 +82,24 @@ export default function Card({
           !image ? "border shadow-sm p-3" : "flex gap-2"
         } rounded-lg`}
       >
-        {image && (
-          <ProductImage
-            photo={product.photo}
-            alt={product.title}
-            id={product.id}
-          />
-        )}
+        <SettingsDialog
+          selectedVariants={selectedVariants}
+          pricePreview={pricePreview}
+          initialCount={count}
+          initialShoppingId={initialShoppingId}
+          product={product}
+          settings={settings}
+          showImage={image}
+          onSubmit={handleFormSubmit}
+        >
+          <button>
+            <ProductImage
+              photo={product.photo}
+              alt={product.title}
+              id={product.id}
+            />
+          </button>
+        </SettingsDialog>
         <div className="flex w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <p className="text-lg font-bold leading-none">{product.title}</p>
@@ -104,22 +119,21 @@ export default function Card({
                   <span className="text-gray-500">{pricePreview}</span>
                 )}
               </div>
-            ) : settings ? (
+            ) : (
               <SettingsDialog
+                selectedVariants={selectedVariants}
+                pricePreview={pricePreview}
+                initialCount={count}
+                initialShoppingId={initialShoppingId}
                 product={product}
                 settings={settings}
-                isLoading={isLoading}
                 showImage={image}
                 onSubmit={handleFormSubmit}
-              />
-            ) : (
-              <Button
-                onClick={Initial}
-                className="w-24 select-none"
-                disabled={isLoading}
               >
-                {product.price} ₸
-              </Button>
+                <Button className="w-24 select-none" disabled={isLoading}>
+                  {product.price} ₸
+                </Button>
+              </SettingsDialog>
             )}
           </div>
         </div>
@@ -139,7 +153,7 @@ export function ProductImage({
   id: string;
   settings?: boolean;
 }) {
-  const photoContainer = `select-none object-cover border rounded min-w-32 ${
+  const photoContainer = `select-none object-cover rounded-2xl min-w-32 ${
     !settings && "h-32"
   } flex items-center justify-center bg-gray-50 ${settings && "aspect-square"}`;
 
@@ -154,14 +168,21 @@ export function ProductImage({
   const photoUrl = `${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/products/${id}/${photo}`;
 
   return (
-    <div className={photoContainer}>
-      <Image
-        src={photoUrl}
-        alt={alt}
-        width={128}
-        height={128}
-        className="rounded w-full h-full aspect-square object-cover select-none"
-      />
-    </div>
+    // <div className={photoContainer}>
+    //   <Image
+    //     src={photoUrl}
+    //     alt={alt}
+    //     width={128}
+    //     height={128}
+    //     className="rounded-2xl w-full h-full aspect-square object-cover select-none"
+    //   />
+    // </div>
+    <Image
+      src={photoUrl}
+      alt={alt}
+      width={128}
+      height={128}
+      className="rounded-2xl w-full h-full aspect-square object-cover select-none min-w-32 min-h-32 pointer-events-none"
+    />
   );
 }

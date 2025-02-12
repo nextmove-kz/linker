@@ -1,5 +1,4 @@
 "use client";
-
 import Branding from "@/components/branding";
 import ProductCard from "@/components/catalog/ProductCard";
 import { Button } from "@/components/ui/button";
@@ -9,15 +8,18 @@ import { useShoppingBasketQuery } from "@/hooks/useShoppingBasket";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
-import { getCategorizedProducts, getCount } from "./utils";
-import { useMemo } from "react";
-import { ArrowRight } from "lucide-react";
+import { getCategorizedProducts, getCount, getSettingVariants } from "./utils";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ActiveOrderCheck } from "@/components/shared/ActiveOrderCheck";
 import { CatalogSkeleton } from "@/components/catalog/CatalogSkeleton";
 import { ImagePreloader } from "@/components/catalog/ImagePreloader";
 
 export default function Home() {
+  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [activeCategory, setActiveCategory] = useState<string>();
+  const [totalsum, setTotalsum] = useState<number>();
   const { id } = useParams<{ id: string }>();
+
   const { data: shoppingData, isLoading: isShoppingLoading } =
     useShoppingBasketQuery(id);
   const { data: productData, isLoading: isProductsLoading } =
@@ -35,6 +37,36 @@ export default function Home() {
     };
   }, [productData]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      let currentCategory = activeCategory;
+      categories.forEach((category) => {
+        const element = document.getElementById(category);
+        if (element) {
+          const { top } = element.getBoundingClientRect();
+          if (top >= 0 && top < 120) {
+            currentCategory = category;
+          }
+        }
+      });
+      if (currentCategory && currentCategory !== activeCategory) {
+        setActiveCategory(currentCategory);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [categories, activeCategory]);
+
+  useEffect(() => {
+    if (activeCategory && categoryRefs.current[activeCategory]) {
+      categoryRefs.current[activeCategory]?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+      });
+    }
+  }, [activeCategory]);
+
   const isLoading = isShoppingLoading || isProductsLoading;
 
   return (
@@ -45,19 +77,28 @@ export default function Home() {
         <div className="w-full max-w-[400px] flex flex-col pb-10 relative">
           <div className="h-28" />
           <div className="bg-white fixed border-b border-b-black h-28 w-full max-w-[400px]">
-            <Branding sectionId={0} />
+            <Branding sectionId={0} setTotalsum={setTotalsum} />
             <ScrollArea className="whitespace-nowrap rounded-md w-full">
               <div className="flex space-x-4 pb-2">
                 {categories?.map((category) => (
-                  <Link
-                    href={`#${category}`}
+                  <div
                     key={category}
+                    ref={(el) => {
+                      categoryRefs.current[category] = el;
+                    }}
                     className="select-none"
                   >
-                    <Button className="font-bold uppercase" variant="ghost">
-                      {category}
-                    </Button>
-                  </Link>
+                    <Link href={`#${category}`} replace={true} as="">
+                      <Button
+                        className={`font-bold uppercase ${
+                          activeCategory === category && "bg-secondary"
+                        }`}
+                        variant="ghost"
+                      >
+                        {category}
+                      </Button>
+                    </Link>
+                  </div>
                 ))}
               </div>
               <ScrollBar orientation="horizontal" />
@@ -78,8 +119,14 @@ export default function Home() {
                     <h2 className="font-semibold mt-2">{category}</h2>
                     {products.map((product) => {
                       const count = getCount(shoppingData, product.id);
+                      const selectedVariants = getSettingVariants(
+                        shoppingData,
+                        product.id
+                      );
+
                       return (
                         <ProductCard
+                          selectedVariants={selectedVariants}
                           key={product.id}
                           product={product}
                           initialCount={count.amount}
@@ -98,10 +145,10 @@ export default function Home() {
             <p className="text-muted-foreground py-2">Конец каталога</p>
           </div>
           {shoppingData && shoppingData.length > 0 && (
-            <div className="fixed bottom-6 left-1/2 flex gap-2 w-full max-w-[400px] transform -translate-x-1/2 justify-end px-4">
-              <Link href={`/${id}/form`}>
-                <Button className="rounded-full h-14 w-14 bg-purple-500 hover:bg-purple-600">
-                  <ArrowRight size={32} />
+            <div className="fixed bottom-0 py-5 justify-center items-center rounded-t-3xl bg-violet100 flex gap-2 w-full max-w-[400px] px-4">
+              <Link href={`/${id}/form`} className="w-full">
+                <Button className="rounded-xl bg-primary hover:bg-purple-600 w-full p-6 font-rubik text-[17px]">
+                  Заказ &middot; {totalsum} ₸
                 </Button>
               </Link>
             </div>
