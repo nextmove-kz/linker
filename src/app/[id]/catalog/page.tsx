@@ -142,7 +142,7 @@ export default function Home() {
           )}
           <Separator />
           <div className="text-center">
-            <p className="text-muted-foreground py-2">Конец каталога</p>
+            <p className="text-muted-foreground py-2">Сделано с Linker.kz</p>
           </div>
           {shoppingData && shoppingData.length > 0 && (
             <div className="fixed bottom-0 py-5 justify-center items-center rounded-t-3xl bg-violet100 flex gap-2 w-full max-w-[400px] px-4">
