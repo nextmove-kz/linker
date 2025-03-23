@@ -24,10 +24,8 @@ export default function SignInForm() {
     const result = await authenticateBusiness(formData);
 
     if (result.success) {
-      // Navigate on success
       router.push("/");
     } else {
-      // Show error message
       setErrorMessage(result.error || "");
     }
 
