@@ -10,45 +10,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ClientResponseError } from "pocketbase";
+import { authenticateBusiness } from "@/api/auth/sign-in";
 
 export default function SignInForm() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  async function handleSubmit(formData: FormData) {
+    setIsPending(true);
+    setErrorMessage("");
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData);
+    const result = await authenticateBusiness(formData);
 
-    try {
-      await clientPocketBase
-        .collection("business")
-        .authWithPassword(data.email as string, data.password as string);
-
-      router.push(`/`);
-    } catch (error) {
-      console.error("Error during authentication:", error);
-
-      let message = "Произошла непредвиденная ошибка";
-      if (error instanceof ClientResponseError) {
-        switch (error.status) {
-          case 400:
-            message = "Неверный email или пароль";
-            break;
-          case 500:
-            message = "Ошибка сервера. Попробуйте позже";
-            break;
-          default:
-            message = "Ошибка аутентификации";
-        }
-      } else if (error instanceof Error) {
-        message = "Ошибка сети. Проверьте подключение";
-      }
-      setErrorMessage(message);
+    if (result.success) {
+      router.push("/");
+    } else {
+      setErrorMessage(result.error || "");
     }
-  };
 
+    setIsPending(false);
+  }
   return (
     <div className="flex flex-col justify-center items-center min-h-screen max-w-[400px] mx-auto p-4">
       <div className="flex flex-col">
@@ -65,7 +47,7 @@ export default function SignInForm() {
             <LogIn className="h-6 w-6 text-primary" />
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form action={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm font-medium">
               Почта
