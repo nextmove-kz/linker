@@ -50,7 +50,7 @@ export default function BusinessDetailsForm({
         </svg>
         <div className="flex flex-col ml-3">
           <h1 className="text-xl font-semibold text-center">
-            Регистрация бизнеса
+            Настройка бизнеса
           </h1>
           <p className="text-sm text-gray-500 flex justify-center items-center">
             Создайте учетную запись для начала

@@ -4,26 +4,63 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PocketBase, { ClientResponseError } from "pocketbase";
 
+const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
+
 export const isLoggedIn = async () => {
-  const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
-  return pb.authStore.isValid as unknown as Promise<boolean>;
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("pocketbase_auth")?.value;
+
+  if (!authToken) {
+    return false;
+  }
+
+  try {
+    pb.authStore.save(authToken, null);
+
+    await pb.collection("business").authRefresh();
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 export const getBusiness = async () => {
+  const cookieStore = await cookies();
+  const authToken = cookieStore.get("pocketbase_auth")?.value;
+
+  if (!authToken) {
+    return null;
+  }
+
   const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
-  return pb.authStore.record;
+
+  try {
+    pb.authStore.save(authToken, null);
+    await pb.collection("business").authRefresh();
+
+    return pb.authStore.model;
+  } catch {
+    return null;
+  }
 };
 
 export const logout = async () => {
-  const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
-  pb.authStore.clear();
+  const cookieStore = await cookies();
+
+  try {
+    cookieStore.delete("pocketbase_auth");
+
+    cookieStore.delete("business_id");
+
+    redirect("/auth/sign-in");
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
 };
 
 export async function authenticateBusiness(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-
-  const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_URL);
 
   try {
     const authData = await pb
