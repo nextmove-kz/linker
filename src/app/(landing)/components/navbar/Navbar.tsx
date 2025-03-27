@@ -25,9 +25,9 @@ const Navbar = () => {
           Контакты
         </Link>
       </div>
-{/*       <Link href={"#"} className="desktop:flex hidden">
+      <Link href={"#"} className="desktop:flex hidden">
         <SignIn></SignIn>
-      </Link> */}
+      </Link> 
       <div className="desktop:hidden flex items-center justify-center z-50">
         <Sidebar></Sidebar>
       </div>
