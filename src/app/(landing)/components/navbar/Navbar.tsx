@@ -27,11 +27,11 @@ const Navbar = () => {
           Контакты
         </Link>
       </div>
-      {(!isAuthenticated) && 
-      <Link href={"/auth/sign-in"} className="desktop:flex hidden">
-        <SignIn></SignIn>
-      </Link> 
-      }
+      {/* {!isAuthenticated && (
+        <Link href={"/auth/sign-in"} className="desktop:flex hidden">
+          <SignIn></SignIn>
+        </Link>
+      )} */}
       <div className="desktop:hidden flex items-center justify-center z-50">
         <Sidebar></Sidebar>
       </div>
