@@ -3,8 +3,10 @@ import Logo from "./svg/Logo";
 import Link from "next/link";
 import SignIn from "./svg/SignIn";
 import Sidebar from "../Sidebar";
+import { isLoggedIn } from "@/api/auth/sign-in";
 
 const Navbar = () => {
+  const isAuthenticated = await isLoggedIn();
   return (
     <div className="flex justify-between items-center ">
       <Logo></Logo>
@@ -25,9 +27,11 @@ const Navbar = () => {
           Контакты
         </Link>
       </div>
+      {(!isAuthenticated) && 
       <Link href={"/auth/sign-in"} className="desktop:flex hidden">
         <SignIn></SignIn>
       </Link> 
+      }
       <div className="desktop:hidden flex items-center justify-center z-50">
         <Sidebar></Sidebar>
       </div>
