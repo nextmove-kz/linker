@@ -97,7 +97,7 @@ export default function SignInForm() {
           <p className="text-sm text-gray-600">
             Нет аккаунта?{" "}
             <Link
-              href="/signup"
+              href="/auth/sign-up"
               className="text-blue-600 hover:underline font-medium"
             >
               Зарегистрироваться
