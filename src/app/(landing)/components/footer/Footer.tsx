@@ -102,7 +102,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="flex justify-around text-white text-xs tablet:flex-row flex-col gap-3 tablet:gap-0 w-full text-center">
-        <p className="font-manrope text-[14px]">При поддержке КарТУ</p>
+        <p className="font-manrope text-[14px]"></p>
         <p className="font-manrope text-[14px]">Политика конфиденциальности</p>
         <p className="font-manrope text-[14px]">
           © Все права защищены. Linker.kz 2025
