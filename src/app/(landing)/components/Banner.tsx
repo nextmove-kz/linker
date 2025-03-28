@@ -23,7 +23,7 @@ const Banner = () => {
             asChild
             className="boder border-primary font-medium tablet:w-1/2 w-full  py-5 h-full  bg-violet100 hover:bg-primary hover:text-white font-rubik text-base text-primary"
           >
-            <Link href={"/asylfood"}>Демо версия</Link>
+            <Link href={"/lucky_bakery/catalog"}>Демо версия</Link>
           </Button>
           <Button className="uppercase tablet:w-1/2 w-full py-5 h-full font-rubik font-bold text-base text-white">
             Подключить Linker
